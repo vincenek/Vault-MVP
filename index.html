@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VALT | Autonomous Budget Engine</title>
+    <style>
+        :root {
+            --primary: #2A2F45;
+            --secondary: #5B6A9D;
+            --accent: #7FD8BE;
+            --background: #F8F9FF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--primary);
+            line-height: 1.6;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid rgba(42,47,69,0.1);
+            padding-bottom: 2rem;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .transaction-form {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        }
+
+        input, select {
+            padding: 0.8rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .wallets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .wallet {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        #insights {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(123,216,190,0.1);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>VALT</h1>
+        <p>Autonomous Budget Engine</p>
+    </header>
+
+    <main>
+        <div class="card">
+            <form id="transactionForm" class="transaction-form">
+                <input type="number" id="amount" placeholder="Amount" step="0.01" required>
+                <select id="category">
+                    <option value="income">Income</option>
+                    <option value="groceries">Groceries</option>
+                    <option value="entertainment">Entertainment</option>
+                </select>
+                <select id="emotion">
+                    <option value="happy">😊 Rational</option>
+                    <option value="stressed">😰 Stressed</option>
+                    <option value="impulsive">💸 Impulsive</option>
+                </select>
+                <button type="submit">Add Transaction</button>
+            </form>
+        </div>
+
+        <div class="wallets">
+            <div class="wallet card" style="background: rgba(123,216,190,0.1)">
+                <h3>NOW Wallet</h3>
+                <p id="nowBalance">$0.00</p>
+            </div>
+            <div class="wallet card" style="background: rgba(91,106,157,0.1)">
+                <h3>SOON Wallet</h3>
+                <p id="soonBalance">$0.00</p>
+            </div>
+            <div class="wallet card" style="background: rgba(42,47,69,0.1)">
+                <h3>LATER Wallet</h3>
+                <p id="laterBalance">$0.00</p>
+            </div>
+        </div>
+
+        <div id="insights" class="card">
+            <h3>Financial Insights</h3>
+            <div id="insightsContent"></div>
+        </div>
+    </main>
+
+    <script>
+        const STORAGE_KEY = 'valt_transactions';
+        
+        class ValtEngine {
+            constructor() {
+                this.transactions = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                this.init();
+            }
+
+            init() {
+                this.renderBalances();
+                this.generateInsights();
+            }
+
+            addTransaction(transaction) {
+                transaction.timestamp = new Date().toISOString();
+                transaction.wallet = this.classifyWallet(transaction);
+                this.transactions.push(transaction);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(this.transactions));
+                this.renderBalances();
+                this.generateInsights();
+            }
+
+            classifyWallet({ amount, category }) {
+                if (category === 'income') return 'later';
+                if (amount > 100) return 'soon';
+                return 'now';
+            }
+
+            renderBalances() {
+                const balances = this.transactions.reduce((acc, t) => {
+                    const modifier = t.category === 'income' ? +t.amount : -t.amount;
+                    acc[t.wallet] = (acc[t.wallet] || 0) + modifier;
+                    return acc;
+                }, {});
+
+                document.getElementById('nowBalance').textContent = `$${(balances.now || 0).toFixed(2)}`;
+                document.getElementById('soonBalance').textContent = `$${(balances.soon || 0).toFixed(2)}`;
+                document.getElementById('laterBalance').textContent = `$${(balances.later || 0).toFixed(2)}`;
+            }
+
+            generateInsights() {
+                const insights = [];
+                const weekendSpending = this.transactions.filter(t => 
+                    new Date(t.timestamp).getDay() >= 5 && t.category !== 'income'
+                );
+                
+                if (weekendSpending.length > 3) {
+                    insights.push(`Weekend spending trend: ${weekendSpending.length} transactions`);
+                }
+
+                document.getElementById('insightsContent').innerHTML = insights.map(i => 
+                    `<div class="insight-item">🔍 ${i}</div>`
+                ).join('');
+            }
+        }
+
+        const valt = new ValtEngine();
+        
+        document.getElementById('transactionForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const transaction = {
+                amount: parseFloat(document.getElementById('amount').value),
+                category: document.getElementById('category').value,
+                emotion: document.getElementById('emotion').value
+            };
+            valt.addTransaction(transaction);
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>
