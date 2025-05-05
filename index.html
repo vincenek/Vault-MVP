@@ -3,51 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vault | Secure Financial Hub</title>
+    <title>Vault | Financial Management</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1A1F2B;
-            --secondary: #2D3748;
-            --accent: #48BB78;
-            --text: #E2E8F0;
-            --chart-1: #4FD1C5;
-            --chart-2: #F6AD55;
+            --bg: #0F172A;
+            --surface: #1E293B;
+            --accent: #3B82F6;
+            --text: #F8FAFC;
+            --error: #EF4444;
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--primary);
+            background: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            line-height: 1.6;
+            padding: 1rem;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem;
         }
 
-        .header {
+        header {
             text-align: center;
             padding: 2rem 0;
-            border-bottom: 1px solid var(--secondary);
-            margin-bottom: 2rem;
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             margin-bottom: 1rem;
-            filter: drop-shadow(0 0 8px rgba(72, 187, 120, 0.3));
+            border-radius: 8px;
         }
 
         .grid {
@@ -58,75 +54,61 @@
         }
 
         .card {
-            background: var(--secondary);
+            background: var(--surface);
             padding: 1.5rem;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         input {
             width: 100%;
             padding: 0.75rem;
             margin: 0.5rem 0;
-            background: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             color: var(--text);
-            transition: border-color 0.2s;
+            font-size: 1rem;
         }
 
         input:focus {
-            border-color: var(--accent);
-            outline: none;
+            outline: 2px solid var(--accent);
         }
 
         button {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 1rem;
             background: var(--accent);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
             border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 1rem;
             font-weight: 600;
-            transition: opacity 0.2s, transform 0.2s;
+            cursor: pointer;
+            transition: opacity 0.2s;
         }
 
-        button:active {
-            transform: scale(0.98);
+        button:hover {
+            opacity: 0.9;
         }
 
         .result {
-            padding: 1rem;
             margin-top: 1rem;
+            padding: 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
-            animation: fadeIn 0.3s ease;
+            border-left: 4px solid var(--accent);
         }
 
-        .dashboard {
-            background: var(--secondary);
-            padding: 2rem;
-            border-radius: 12px;
-            margin-top: 2rem;
+        .error {
+            color: var(--error);
+            margin-top: 0.5rem;
+            display: none;
         }
 
-        .chart-container {
-            position: relative;
+        #chartContainer {
             height: 400px;
-            margin: 2rem 0;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin-top: 2rem;
         }
 
         @media (max-width: 768px) {
@@ -134,117 +116,91 @@
                 padding: 0.5rem;
             }
             
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .chart-container {
+            #chartContainer {
                 height: 300px;
             }
-        }
-
-        .loading {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loading::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.05), 
-                transparent);
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <img src="https://i.postimg.cc/y39PyW30/IMG-0608.jpg" alt="Vault Logo" class="logo">
-            <h1>Secure Financial Hub</h1>
+        <header>
+            <img src="https://i.postimg.cc/y39PyW30/IMG-0608.jpg" alt="Vault" class="logo">
+            <h1>Vault Financial Suite</h1>
         </header>
 
         <div class="grid">
             <!-- Tax Calculator -->
             <div class="card">
-                <h2>📈 Tax Analysis</h2>
+                <h2>Tax Calculator</h2>
                 <input type="number" id="income" placeholder="Annual Income ($)">
-                <input type="number" id="expenses" placeholder="Business Expenses ($)">
+                <input type="number" id="expenses" placeholder="Expenses ($)">
                 <button onclick="calculateTax()">Calculate Tax</button>
                 <div id="taxResult" class="result"></div>
+                <div id="taxError" class="error"></div>
             </div>
 
             <!-- Payroll Calculator -->
             <div class="card">
-                <h2>👥 Payroll Suite</h2>
+                <h2>Payroll Calculator</h2>
                 <input type="number" id="hours" placeholder="Hours Worked">
                 <input type="number" id="rate" placeholder="Hourly Rate ($)">
                 <button onclick="calculatePayroll()">Calculate Pay</button>
                 <div id="payrollResult" class="result"></div>
+                <div id="payrollError" class="error"></div>
             </div>
 
             <!-- Depreciation Calculator -->
             <div class="card">
-                <h2>📉 Asset Manager</h2>
+                <h2>Asset Depreciation</h2>
                 <input type="number" id="assetValue" placeholder="Asset Value ($)">
                 <input type="number" id="assetLife" placeholder="Useful Life (years)">
                 <button onclick="calculateDepreciation()">Calculate</button>
                 <div id="depreciationResult" class="result"></div>
+                <div id="depreciationError" class="error"></div>
             </div>
         </div>
 
-        <!-- Advanced Dashboard -->
-        <div class="dashboard">
+        <!-- Financial Dashboard -->
+        <div class="card">
             <h2>Financial Overview</h2>
-            <div class="chart-container">
-                <canvas id="financialChart"></canvas>
+            <div id="chartContainer">
+                <canvas id="financeChart"></canvas>
             </div>
         </div>
     </div>
 
     <script>
-        // Initialize data storage
-        let financialData = JSON.parse(localStorage.getItem('vaultData')) || {
+        // Initialize Chart
+        let chart;
+        const ctx = document.getElementById('financeChart').getContext('2d');
+
+        // Data Storage
+        let financialData = {
             tax: 0,
             payroll: 0,
-            assets: [],
+            assets: 0,
             history: []
         };
-
-        // Save to localStorage
-        function saveData() {
-            localStorage.setItem('vaultData', JSON.stringify(financialData));
-        }
 
         // Tax Calculator
         function calculateTax() {
             const income = parseFloat(document.getElementById('income').value);
             const expenses = parseFloat(document.getElementById('expenses').value);
             
-            if (!income || income < 0) return showError('Invalid income');
-            if (expenses < 0) return showError('Invalid expenses');
+            clearErrors();
+            
+            if (!income || income < 0) return showError('taxError', 'Invalid income');
+            if (expenses < 0) return showError('taxError', 'Invalid expenses');
 
-            // Progressive tax calculation
-            const taxableIncome = income - expenses;
-            const tax = calculateProgressiveTax(taxableIncome);
-            
+            const tax = (income - expenses) * 0.25;
             financialData.tax = tax;
-            financialData.history.push({ type: 'tax', value: tax, date: new Date() });
+            financialData.history.push(tax);
             
-            displayResult('taxResult', `Tax Liability: $${tax.toLocaleString()}`, '#4FD1C5');
-            updateDashboard();
-            saveData();
+            document.getElementById('taxResult').innerHTML = `
+                Tax Liability: $${tax.toFixed(2)}
+            `;
+            updateChart();
         }
 
         // Payroll Calculator
@@ -252,22 +208,21 @@
             const hours = parseFloat(document.getElementById('hours').value);
             const rate = parseFloat(document.getElementById('rate').value);
             
-            if (!hours || hours < 0) return showError('Invalid hours');
-            if (!rate || rate < 0) return showError('Invalid rate');
+            clearErrors();
+            
+            if (!hours || hours < 0) return showError('payrollError', 'Invalid hours');
+            if (!rate || rate < 0) return showError('payrollError', 'Invalid rate');
 
             const gross = hours * rate;
-            const deductions = calculateDeductions(gross);
-            const net = gross - deductions;
-            
+            const net = gross * 0.85;
             financialData.payroll = net;
-            financialData.history.push({ type: 'payroll', value: net, date: new Date() });
+            financialData.history.push(net);
             
-            displayResult('payrollResult', `
-                Net Pay: $${net.toLocaleString()}<br>
-                <small style="color: #718096">Gross: $${gross.toLocaleString()}</small>
-            `, '#F6AD55');
-            updateDashboard();
-            saveData();
+            document.getElementById('payrollResult').innerHTML = `
+                Net Pay: $${net.toFixed(2)}<br>
+                <small>Gross: $${gross.toFixed(2)}</small>
+            `;
+            updateChart();
         }
 
         // Depreciation Calculator
@@ -275,100 +230,71 @@
             const value = parseFloat(document.getElementById('assetValue').value);
             const life = parseFloat(document.getElementById('assetLife').value);
             
-            if (!value || value < 0) return showError('Invalid asset value');
-            if (!life || life < 1) return showError('Invalid useful life');
+            clearErrors();
+            
+            if (!value || value < 0) return showError('depreciationError', 'Invalid value');
+            if (!life || life < 1) return showError('depreciationError', 'Invalid lifespan');
 
             const yearlyDep = value / life;
-            financialData.assets.push({ value, life, yearlyDep });
+            financialData.assets = yearlyDep;
+            financialData.history.push(yearlyDep);
             
-            displayResult('depreciationResult', `
-                Yearly Depreciation: $${yearlyDep.toLocaleString()}<br>
-                <small style="color: #718096">Total Value: $${value.toLocaleString()}</small>
-            `, '#48BB78');
-            updateDashboard();
-            saveData();
+            document.getElementById('depreciationResult').innerHTML = `
+                Yearly Depreciation: $${yearlyDep.toFixed(2)}
+            `;
+            updateChart();
         }
 
-        // Dashboard Initialization
-        let chart;
-        function updateDashboard() {
-            const ctx = document.getElementById('financialChart').getContext('2d');
+        // Chart Update
+        function updateChart() {
             if (chart) chart.destroy();
-
+            
             chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: financialData.history.slice(-6).map((_, i) => `Month ${i + 1}`),
+                    labels: financialData.history.map((_, i) => `Entry ${i + 1}`),
                     datasets: [{
-                        label: 'Cash Flow',
-                        data: financialData.history.slice(-6).map(item => item.value),
-                        borderColor: var(--accent),
+                        label: 'Financial History',
+                        data: financialData.history,
+                        borderColor: '#3B82F6',
                         tension: 0.4,
                         fill: true,
-                        backgroundColor: 'rgba(72, 187, 120, 0.1)'
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)'
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom' },
-                        tooltip: { mode: 'index' }
+                        legend: { position: 'bottom' }
                     },
                     scales: {
                         y: {
+                            beginAtZero: true,
                             grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                            ticks: { callback: value => `$${value.toLocaleString()}` }
+                            ticks: { color: '#94A3B8' }
                         },
-                        x: { grid: { display: false } }
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#94A3B8' }
+                        }
                     }
                 }
             });
         }
 
-        // Helper functions
-        function calculateProgressiveTax(income) {
-            // US 2023 tax brackets (single filer)
-            const brackets = [
-                { min: 0, max: 11000, rate: 0.10 },
-                { min: 11001, max: 44725, rate: 0.12 },
-                { min: 44726, max: 95375, rate: 0.22 },
-                { min: 95376, max: 182100, rate: 0.24 },
-                { min: 182101, max: 231250, rate: 0.32 },
-                { min: 231251, max: 578125, rate: 0.35 },
-                { min: 578126, rate: 0.37 }
-            ];
-
-            return brackets.reduce((tax, bracket) => {
-                const bracketSize = bracket.max ? Math.min(income, bracket.max) - bracket.min : income;
-                if (bracketSize > 0) tax += bracketSize * bracket.rate;
-                income -= bracketSize;
-                return tax;
-            }, 0);
+        // Error Handling
+        function showError(elementId, message) {
+            document.getElementById(elementId).textContent = message;
+            document.getElementById(elementId).style.display = 'block';
         }
 
-        function calculateDeductions(gross) {
-            return gross * 0.30; // Simplified deductions
+        function clearErrors() {
+            document.querySelectorAll('.error').forEach(el => {
+                el.textContent = '';
+                el.style.display = 'none';
+            });
         }
-
-        function displayResult(elementId, content, color) {
-            const element = document.getElementById(elementId);
-            element.innerHTML = content;
-            element.style.borderLeft = `4px solid ${color}`;
-            element.style.display = 'block';
-        }
-
-        function showError(message) {
-            const error = document.createElement('div');
-            error.className = 'result';
-            error.style.borderLeft = '4px solid #FC8181';
-            error.innerHTML = message;
-            document.body.appendChild(error);
-            setTimeout(() => error.remove(), 3000);
-        }
-
-        // Initial load
-        updateDashboard();
     </script>
 </body>
 </html>
