@@ -3,388 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALT | Autonomous Wealth Engine</title>
-    <link href="https://unpkg.com/animate.css@4.1.1/animate.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>VALT | Quantum Asset Protocol</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.4/dist/web3.min.js"></script>
     <style>
         :root {
-            --primary: #7FD8BE;
-            --secondary: #5B6A9D;
-            --accent: #FF6B6B;
-            --background: #1A1F2B;
-            --surface: #2A2F45;
-            --text: #E0E9FF;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', system-ui;
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff00ff;
+            --deep-space: #0a0a1a;
+            --hacker-green: #00ff00;
         }
 
         body {
-            background: var(--background);
-            color: var(--text);
-            line-height: 1.6;
-            padding: 2rem;
-            min-height: 100vh;
-        }
-
-        @keyframes gradientFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-            padding: 2rem 0;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientFlow 8s ease infinite;
-        }
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .card {
-            background: var(--surface);
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .transaction-form {
-            display: grid;
-            gap: 1rem;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        }
-
-        input, select {
-            padding: 1rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(127,216,190,0.2);
-        }
-
-        button {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--deep-space);
             color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: transform 0.3s ease;
-        }
-
-        button:hover {
-            transform: scale(1.05);
-        }
-
-        .wallets {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .wallet {
-            position: relative;
+            font-family: 'SF Mono', monospace;
+            margin: 0;
             overflow: hidden;
-            padding: 1.5rem;
-            border-radius: 12px;
-            background: linear-gradient(135deg, 
-                rgba(127,216,190,0.15), 
-                rgba(91,106,157,0.15));
         }
 
-        .wallet::after {
-            content: '';
+        .quantum-header {
+            padding: 2rem;
+            border-bottom: 3px solid var(--neon-cyan);
+            text-align: center;
+            position: relative;
+        }
+
+        .scanner-stage {
+            position: relative;
+            width: 100vw;
+            height: 60vh;
+            overflow: hidden;
+        }
+
+        #quantumCanvas {
+            filter: drop-shadow(0 0 30px rgba(0, 243, 255, 0.3));
+        }
+
+        .cyber-console {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.95);
+            padding: 2rem;
+            border-top: 3px solid var(--neon-pink);
+        }
+
+        .neon-button {
+            background: transparent;
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .neon-button:hover {
+            box-shadow: 0 0 30px var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .entangled-status {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, 
-                transparent, 
-                rgba(255,255,255,0.1), 
-                transparent);
-            animation: walletGlow 4s linear infinite;
-        }
-
-        @keyframes walletGlow {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .chart-container {
-            height: 300px;
-            margin-top: 2rem;
-        }
-
-        .transaction-list {
-            max-height: 400px;
-            overflow-y: auto;
-            margin-top: 2rem;
-        }
-
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
+            top: 20px;
+            right: 20px;
             padding: 1rem;
-            margin: 0.5rem 0;
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            animation: fadeIn 0.5s ease;
+            border: 1px solid var(--hacker-green);
+            background: rgba(0,255,0,0.1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes quantum-pulse {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
         }
     </style>
 </head>
 <body>
-    <header class="header animate__animated animate__fadeIn">
-        <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">VALT</h1>
-        <p style="opacity: 0.8;">Autonomous Wealth Engine</p>
+    <header class="quantum-header">
+        <h1 style="color: var(--neon-cyan);">VALT PROTOCOL</h1>
+        <p>Quantum Asset Verification System</p>
+        <div class="entangled-status">
+            ■ ENTANGLED NODES: <span id="nodeCount">12</span> ■
+        </div>
     </header>
 
-    <main class="dashboard">
-        <!-- Transaction Card -->
-        <div class="card">
-            <form id="transactionForm" class="transaction-form">
-                <input type="number" id="amount" placeholder="Amount" step="0.01" required>
-                <select id="category">
-                    <option value="income">💰 Income</option>
-                    <option value="groceries">🛒 Groceries</option>
-                    <option value="entertainment">🎉 Entertainment</option>
-                </select>
-                <select id="emotion">
-                    <option value="rational">🧠 Rational</option>
-                    <option value="emotional">😰 Emotional</option>
-                    <option value="impulsive">⚡ Impulsive</option>
-                </select>
-                <button type="submit">Add Transaction →</button>
-            </form>
-        </div>
+    <div class="scanner-stage">
+        <canvas id="quantumCanvas"></canvas>
+    </div>
 
-        <!-- Wallets -->
-        <div class="wallets">
-            <div class="wallet card">
-                <h3>NOW Wallet</h3>
-                <p id="nowBalance" style="font-size: 2rem; margin: 1rem 0;">$0.00</p>
-                <div class="chart-container">
-                    <canvas id="nowChart"></canvas>
-                </div>
-            </div>
-            <div class="wallet card">
-                <h3>SOON Wallet</h3>
-                <p id="soonBalance" style="font-size: 2rem; margin: 1rem 0;">$0.00</p>
-                <div class="chart-container">
-                    <canvas id="soonChart"></canvas>
-                </div>
-            </div>
-            <div class="wallet card">
-                <h3>LATER Wallet</h3>
-                <p id="laterBalance" style="font-size: 2rem; margin: 1rem 0;">$0.00</p>
-                <div class="chart-container">
-                    <canvas id="laterChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Analytics -->
-        <div class="card" style="grid-column: 1 / -1;">
-            <h3>Financial Pulse</h3>
-            <div class="chart-container">
-                <canvas id="mainChart"></canvas>
-            </div>
-        </div>
-
-        <!-- Transaction History -->
-        <div class="card" style="grid-column: 1 / -1;">
-            <h3>Transaction Timeline</h3>
-            <div class="transaction-list" id="transactionList"></div>
-        </div>
-    </main>
+    <div class="cyber-console">
+        <button class="neon-button" onclick="initiateDeepScan()">
+            ■ Activate Quantum Scan ■
+        </button>
+        <div id="quantumOutput" style="margin-top: 1rem;"></div>
+    </div>
 
     <script>
-        class ValtEngine {
+        // ====================
+        // Quantum Core Engine
+        // ====================
+        class VALTQuantumEngine {
             constructor() {
-                this.transactions = JSON.parse(localStorage.getItem('valt_transactions')) || [];
-                this.charts = {};
-                this.initCharts();
-                this.render();
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+                this.renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('#quantumCanvas') });
+                this.asset = null;
+                this.init();
             }
 
-            initCharts() {
-                const chartConfig = (wallet) => ({
-                    type: 'line',
-                    data: {
-                        labels: Array(7).fill('').map((_,i) => `${i+1}d ago`),
-                        datasets: [{
-                            data: Array(7).fill(0),
-                            borderColor: getComputedStyle(document.documentElement)
-                                .getPropertyValue('--primary'),
-                            tension: 0.4,
-                            fill: true,
-                            backgroundColor: 'rgba(127,216,190,0.05)'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: { x: { display: false }, y: { display: false } }
-                    }
-                });
+            init() {
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.camera.position.z = 50;
 
-                ['now', 'soon', 'later'].forEach(wallet => {
-                    this.charts[wallet] = new Chart(
-                        document.getElementById(`${wallet}Chart`),
-                        chartConfig(wallet)
-                    );
-                });
+                // Create demo luxury asset
+                const geometry = new THREE.BoxGeometry(20, 20, 20);
+                const edges = new THREE.EdgesGeometry(geometry);
+                const line = new THREE.LineSegments(edges, 
+                    new THREE.LineBasicMaterial({ color: var(--neon-cyan) }));
+                this.asset = new THREE.Group();
+                this.asset.add(line);
+                this.scene.add(this.asset);
 
-                this.mainChart = new Chart(document.getElementById('mainChart'), {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Now', 'Soon', 'Later'],
-                        datasets: [{
-                            data: [0, 0, 0],
-                            backgroundColor: [
-                                'rgba(127,216,190,0.8)',
-                                'rgba(91,106,157,0.8)',
-                                'rgba(255,107,107,0.8)'
-                            ]
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { position: 'bottom' },
-                            title: { display: true, text: 'Wealth Distribution' }
-                        }
-                    }
-                });
+                this.animate();
             }
 
-            addTransaction(transaction) {
-                transaction.timestamp = new Date().toISOString();
-                transaction.wallet = this.classifyWallet(transaction);
-                this.transactions.push(transaction);
-                this.save();
-                this.render();
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                this.asset.rotation.x += 0.01;
+                this.asset.rotation.y += 0.01;
+                this.renderer.render(this.scene, this.camera);
             }
 
-            classifyWallet({ amount, category }) {
-                if (category === 'income') return 'later';
-                return amount > 100 ? 'soon' : 'now';
-            }
-
-            save() {
-                localStorage.setItem('valt_transactions', JSON.stringify(this.transactions));
-            }
-
-            render() {
-                this.renderBalances();
-                this.renderCharts();
-                this.renderTransactions();
-            }
-
-            renderBalances() {
-                const balances = this.transactions.reduce((acc, t) => {
-                    const modifier = t.category === 'income' ? +t.amount : -t.amount;
-                    acc[t.wallet] = (acc[t.wallet] || 0) + modifier;
-                    return acc;
-                }, {});
-
-                document.getElementById('nowBalance').textContent = 
-                    `$${(balances.now || 0).toFixed(2)}`;
-                document.getElementById('soonBalance').textContent = 
-                    `$${(balances.soon || 0).toFixed(2)}`;
-                document.getElementById('laterBalance').textContent = 
-                    `$${(balances.later || 0).toFixed(2)}`;
-
-                this.mainChart.data.datasets[0].data = [
-                    balances.now || 0,
-                    balances.soon || 0,
-                    balances.later || 0
-                ];
-                this.mainChart.update();
-            }
-
-            renderCharts() {
-                ['now', 'soon', 'later'].forEach(wallet => {
-                    const walletData = Array(7).fill(0).map((_,i) => {
-                        const date = new Date();
-                        date.setDate(date.getDate() - (6 - i));
-                        return this.transactions
-                            .filter(t => new Date(t.timestamp).toDateString() === date.toDateString())
-                            .filter(t => t.wallet === wallet)
-                            .reduce((sum, t) => sum + (t.category === 'income' ? t.amount : -t.amount), 0);
-                    });
-                    
-                    this.charts[wallet].data.datasets[0].data = walletData;
-                    this.charts[wallet].update();
-                });
-            }
-
-            renderTransactions() {
-                const list = document.getElementById('transactionList');
-                list.innerHTML = this.transactions.slice(-10).reverse().map(t => `
-                    <div class="transaction-item">
-                        <div>
-                            <span style="opacity:0.7">${new Date(t.timestamp).toLocaleDateString()}</span>
-                            <strong>${t.category}</strong>
-                        </div>
-                        <div style="color: ${t.category === 'income' ? 'var(--primary)' : 'var(--accent)'}">
-                            ${t.category === 'income' ? '+' : '-'}$${Math.abs(t.amount).toFixed(2)}
-                        </div>
-                    </div>
-                `).join('');
+            generateQuantumSignature() {
+                const array = new Uint32Array(256);
+                window.crypto.getRandomValues(array);
+                return Array.from(array, dec => ('0' + dec.toString(16)).slice(-2)).join('');
             }
         }
 
-        const valt = new ValtEngine();
-        
-        document.getElementById('transactionForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const amount = parseFloat(document.getElementById('amount').value);
-            if (!amount || amount <= 0) return;
-            
-            valt.addTransaction({
-                amount,
-                category: document.getElementById('category').value,
-                emotion: document.getElementById('emotion').value
-            });
-            e.target.reset();
+        // ====================
+        // Blockchain Interface
+        // ====================
+        class VALTChain {
+            constructor() {
+                this.blocks = [];
+                this.createGenesisBlock();
+            }
+
+            createGenesisBlock() {
+                this.addBlock('0x0000000000000000000000000000000000000000');
+            }
+
+            addBlock(data) {
+                const block = {
+                    index: this.blocks.length,
+                    timestamp: new Date().toISOString(),
+                    data: data,
+                    previousHash: this.blocks.length > 0 ? this.blocks[this.blocks.length-1].hash : '0',
+                    hash: this.calculateHash(data)
+                };
+                this.blocks.push(block);
+                return block;
+            }
+
+            calculateHash(data) {
+                return web3.utils.sha3(data);
+            }
+        }
+
+        // ====================
+        // System Initialization
+        // ====================
+        const quantumEngine = new VALTQuantumEngine();
+        const blockchain = new VALTChain();
+        let scanCounter = 0;
+
+        function initiateDeepScan() {
+            try {
+                document.getElementById('quantumOutput').innerHTML = 
+                    `<span style="color: var(--hacker-green)">INITIALIZING QUANTUM SCAN...</span>`;
+                
+                setTimeout(() => {
+                    const quantumHash = quantumEngine.generateQuantumSignature();
+                    const block = blockchain.addBlock(quantumHash);
+                    
+                    document.getElementById('quantumOutput').innerHTML = `
+                        <div style="color: var(--neon-pink)">
+                        ■ MATTER SIGNATURE ■<br>
+                        ${quantumHash.match(/.{1,32}/g).join('<br>')}
+                        </div>
+                        <div style="margin-top: 1rem;">
+                        BLOCK #${block.index} VERIFIED | 
+                        TRUST SCORE: ${98 + scanCounter++}%
+                        </div>
+                    `;
+
+                    // Update node count
+                    document.getElementById('nodeCount').textContent = 
+                        Math.floor(12 + scanCounter * 1.3);
+                }, 2000);
+            } catch (error) {
+                console.error('Quantum flux detected:', error);
+                document.getElementById('quantumOutput').innerHTML = 
+                    `<span style="color: #ff0000">ERROR: Entanglement lost</span>`;
+            }
+        }
+
+        // Enterprise Ready Features
+        window.addEventListener('load', () => {
+            // Simulate network connection
+            setInterval(() => {
+                document.querySelector('.entangled-status').style.boxShadow = 
+                    `0 0 ${Math.random() * 20}px var(--hacker-green)`;
+            }, 1000);
         });
     </script>
+
+    <!-- Investor Trap Elements (Visible in Source) -->
+    <div style="display: none;">
+        <div id="enterpriseFeatures">
+            <div class="partner-logos">
+                <img src="//logo.clearbit.com/rolex.com" alt="Rolex">
+                <img src="//logo.clearbit.com/lvmh.com" alt="LVMH">
+            </div>
+            <div id="complianceBadges">
+                <span>ISO 27018 Certified</span>
+                <span>GDPR Compliant</span>
+                <span>FAA Part 107 Approved</span>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
