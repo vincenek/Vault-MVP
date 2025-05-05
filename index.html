@@ -3,372 +3,372 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vault - Financial Operating System</title>
+    <title>Vault | Secure Financial Hub</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
-    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet>
     <style>
         :root {
-            --primary: #101828;
-            --accent: #3B82F6;
-            --dark: #1D2939;
-            --light: #F8FAFC;
-            --success: #22C55E;
+            --primary: #1A1F2B;
+            --secondary: #2D3748;
+            --accent: #48BB78;
+            --text: #E2E8F0;
+            --chart-1: #4FD1C5;
+            --chart-2: #F6AD55;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Satoshi', sans-serif;
-            background: var(--light);
-            color: var(--primary);
+            font-family: 'Inter', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            min-height: 100vh;
             line-height: 1.6;
-            max-width: 1440px;
+        }
+
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1rem;
         }
 
         .header {
             text-align: center;
-            padding: 3rem 0;
-            border-bottom: 1px solid #EAECF0;
-            margin-bottom: 3rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--secondary);
+            margin-bottom: 2rem;
         }
 
-        .header img {
+        .logo {
+            width: 80px;
             height: 80px;
-            margin-bottom: 1.5rem;
-            transition: transform 0.3s ease;
-        }
-
-        .header img:hover {
-            transform: rotate(-5deg);
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 8px rgba(72, 187, 120, 0.3));
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 1px 3px rgba(16, 24, 40, 0.1);
-            border: 1px solid #F2F4F7;
-            transition: transform 0.2s ease;
+            background: var(--secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
 
         input {
             width: 100%;
-            padding: 0.875rem;
-            margin: 0.75rem 0;
-            border: 1px solid #D0D5DD;
-            border-radius: 0.5rem;
-            font-size: 1rem;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: var(--primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text);
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            outline: none;
         }
 
         button {
             background: var(--accent);
             color: white;
             border: none;
-            padding: 1rem 2rem;
-            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: 500;
             width: 100%;
             margin-top: 1rem;
-            transition: opacity 0.2s;
+            font-weight: 600;
+            transition: opacity 0.2s, transform 0.2s;
         }
 
-        button:disabled {
-            background: #94A3B8;
-            cursor: not-allowed;
+        button:active {
+            transform: scale(0.98);
         }
 
-        .loader {
-            display: none;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--accent);
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
+        .result {
+            padding: 1rem;
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            animation: fadeIn 0.3s ease;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        #dashboard {
-            background: white;
+        .dashboard {
+            background: var(--secondary);
             padding: 2rem;
-            border-radius: 1rem;
+            border-radius: 12px;
             margin-top: 2rem;
         }
 
-        .data-summary {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin-bottom: 3rem;
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 2rem 0;
         }
 
-        .summary-item {
-            text-align: center;
-            padding: 1.5rem;
-            background: var(--light);
-            border-radius: 0.75rem;
-            border: 1px solid #EAECF0;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .api-badge {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            background: var(--dark);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.875rem;
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.05), 
+                transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <img src="https://i.postimg.cc/y39PyW30/IMG-0608.jpg" alt="Vault Logo">
-        <h1>Your Enterprise Financial OS</h1>
-    </div>
+    <div class="container">
+        <header class="header">
+            <img src="https://i.postimg.cc/y39PyW30/IMG-0608.jpg" alt="Vault Logo" class="logo">
+            <h1>Secure Financial Hub</h1>
+        </header>
 
-    <div class="grid">
-        <!-- Tax Calculator -->
-        <div class="card">
-            <h2>📈 Advanced Tax Engine</h2>
-            <input type="number" id="income" placeholder="Annual Income ($)">
-            <input type="number" id="expenses" placeholder="Deductible Expenses ($)">
-            <div class="loader" id="taxLoader"></div>
-            <button onclick="calculateTax()" id="taxButton">
-                Optimize Tax Strategy
-            </button>
-            <div id="taxResult" class="summary-item" style="display:none;"></div>
-        </div>
-
-        <!-- Payroll System -->
-        <div class="card">
-            <h2>👥 Intelligent Payroll</h2>
-            <input type="number" id="hours" placeholder="Monthly Hours">
-            <input type="number" id="rate" placeholder="Hourly Rate ($)">
-            <div class="loader" id="payrollLoader"></div>
-            <button onclick="calculatePayroll()" id="payrollButton">
-                Process Payroll
-            </button>
-            <div id="payrollResult" class="summary-item" style="display:none;"></div>
-        </div>
-
-        <!-- Depreciation Manager -->
-        <div class="card">
-            <h2>📉 Asset Optimizer</h2>
-            <input type="number" id="assetValue" placeholder="Asset Value ($)">
-            <input type="number" id="assetLife" placeholder="Useful Life (years)">
-            <div class="loader" id="depreciationLoader"></div>
-            <button onclick="calculateDepreciation()" id="depreciationButton">
-                Calculate Depreciation
-            </button>
-            <div id="depreciationResult" class="summary-item" style="display:none;"></div>
-        </div>
-    </div>
-
-    <!-- Financial Command Center -->
-    <div id="dashboard">
-        <h2>📊 Executive Dashboard</h2>
-        <div class="data-summary">
-            <div class="summary-item">
-                <h3>Total Tax Liability</h3>
-                <p id="totalTax">$0</p>
+        <div class="grid">
+            <!-- Tax Calculator -->
+            <div class="card">
+                <h2>📈 Tax Analysis</h2>
+                <input type="number" id="income" placeholder="Annual Income ($)">
+                <input type="number" id="expenses" placeholder="Business Expenses ($)">
+                <button onclick="calculateTax()">Calculate Tax</button>
+                <div id="taxResult" class="result"></div>
             </div>
-            <div class="summary-item">
-                <h3>Total Payroll</h3>
-                <p id="totalPayroll">$0</p>
+
+            <!-- Payroll Calculator -->
+            <div class="card">
+                <h2>👥 Payroll Suite</h2>
+                <input type="number" id="hours" placeholder="Hours Worked">
+                <input type="number" id="rate" placeholder="Hourly Rate ($)">
+                <button onclick="calculatePayroll()">Calculate Pay</button>
+                <div id="payrollResult" class="result"></div>
             </div>
-            <div class="summary-item">
-                <h3>Managed Assets</h3>
-                <p id="totalAssets">$0</p>
+
+            <!-- Depreciation Calculator -->
+            <div class="card">
+                <h2>📉 Asset Manager</h2>
+                <input type="number" id="assetValue" placeholder="Asset Value ($)">
+                <input type="number" id="assetLife" placeholder="Useful Life (years)">
+                <button onclick="calculateDepreciation()">Calculate</button>
+                <div id="depreciationResult" class="result"></div>
             </div>
         </div>
-        <canvas id="financialChart"></canvas>
-    </div>
 
-    <div class="api-badge">
-        Powered by: TaxAPI.io | Plaid | Chart.js
+        <!-- Advanced Dashboard -->
+        <div class="dashboard">
+            <h2>Financial Overview</h2>
+            <div class="chart-container">
+                <canvas id="financialChart"></canvas>
+            </div>
+        </div>
     </div>
 
     <script>
-        // API Endpoints (Replace with your keys)
-        const TAX_API = 'https://api.taxapi.io/v1/calculate?api_key=YOUR_KEY';
-        const PLAID_API = 'https://cdn.plaid.com/link/v2/stable/link-initialize.js';
-
-        let financialState = {
+        // Initialize data storage
+        let financialData = JSON.parse(localStorage.getItem('vaultData')) || {
             tax: 0,
             payroll: 0,
             assets: [],
-            transactions: []
+            history: []
         };
 
-        // Professional Error Handler
-        class FinancialError extends Error {
-            constructor(message, type) {
-                super(message);
-                this.name = "FinancialError";
-                this.type = type;
-            }
+        // Save to localStorage
+        function saveData() {
+            localStorage.setItem('vaultData', JSON.stringify(financialData));
         }
 
-        async function calculateTax() {
-            try {
-                toggleLoader('tax', true);
-                
-                const income = parseFloat(document.getElementById('income').value);
-                const expenses = parseFloat(document.getElementById('expenses').value);
+        // Tax Calculator
+        function calculateTax() {
+            const income = parseFloat(document.getElementById('income').value);
+            const expenses = parseFloat(document.getElementById('expenses').value);
+            
+            if (!income || income < 0) return showError('Invalid income');
+            if (expenses < 0) return showError('Invalid expenses');
 
-                if (!income || income < 0) throw new FinancialError('Invalid income value', 'validation');
-                if (expenses < 0) throw new FinancialError('Expenses cannot be negative', 'validation');
-
-                // Simulate API call
-                const response = await mockTaxAPI(income, expenses);
-                
-                financialState.tax = response.taxOwed;
-                displayResult('taxResult', 
-                    `Optimized Tax: $${response.taxOwed.toFixed(2)}`,
-                    `Potential Savings: $${response.savings.toFixed(2)}`
-                );
-                
-                updateDashboard();
-            } catch (error) {
-                handleError(error, 'tax');
-            } finally {
-                toggleLoader('tax', false);
-            }
+            // Progressive tax calculation
+            const taxableIncome = income - expenses;
+            const tax = calculateProgressiveTax(taxableIncome);
+            
+            financialData.tax = tax;
+            financialData.history.push({ type: 'tax', value: tax, date: new Date() });
+            
+            displayResult('taxResult', `Tax Liability: $${tax.toLocaleString()}`, '#4FD1C5');
+            updateDashboard();
+            saveData();
         }
 
-        async function calculatePayroll() {
-            try {
-                toggleLoader('payroll', true);
-                
-                const hours = parseFloat(document.getElementById('hours').value);
-                const rate = parseFloat(document.getElementById('rate').value);
+        // Payroll Calculator
+        function calculatePayroll() {
+            const hours = parseFloat(document.getElementById('hours').value);
+            const rate = parseFloat(document.getElementById('rate').value);
+            
+            if (!hours || hours < 0) return showError('Invalid hours');
+            if (!rate || rate < 0) return showError('Invalid rate');
 
-                if (!hours || hours < 0) throw new FinancialError('Invalid hours', 'validation');
-                if (!rate || rate < 0) throw new FinancialError('Invalid rate', 'validation');
-
-                // Simulate payroll processing
-                const payroll = await processPayroll(hours, rate);
-                
-                financialState.payroll = payroll.netPay;
-                displayResult('payrollResult',
-                    `Net Pay: $${payroll.netPay.toFixed(2)}`,
-                    `Gross: $${payroll.grossPay.toFixed(2)}`
-                );
-                
-                updateDashboard();
-            } catch (error) {
-                handleError(error, 'payroll');
-            } finally {
-                toggleLoader('payroll', false);
-            }
+            const gross = hours * rate;
+            const deductions = calculateDeductions(gross);
+            const net = gross - deductions;
+            
+            financialData.payroll = net;
+            financialData.history.push({ type: 'payroll', value: net, date: new Date() });
+            
+            displayResult('payrollResult', `
+                Net Pay: $${net.toLocaleString()}<br>
+                <small style="color: #718096">Gross: $${gross.toLocaleString()}</small>
+            `, '#F6AD55');
+            updateDashboard();
+            saveData();
         }
 
-        // Advanced Business Logic
-        async function mockTaxAPI(income, expenses) {
-            return new Promise(resolve => setTimeout(() => {
-                const taxBrackets = [
-                    { min: 0, max: 9950, rate: 0.10 },
-                    { min: 9951, max: 40525, rate: 0.12 },
-                    { min: 40526, max: 86375, rate: 0.22 },
-                    { min: 86376, max: 164925, rate: 0.24 },
-                    { min: 164926, max: 209425, rate: 0.32 },
-                    { min: 209426, max: 523600, rate: 0.35 },
-                    { min: 523601, rate: 0.37 }
-                ];
+        // Depreciation Calculator
+        function calculateDepreciation() {
+            const value = parseFloat(document.getElementById('assetValue').value);
+            const life = parseFloat(document.getElementById('assetLife').value);
+            
+            if (!value || value < 0) return showError('Invalid asset value');
+            if (!life || life < 1) return showError('Invalid useful life');
 
-                let taxableIncome = income - expenses;
-                let taxOwed = 0;
-
-                for (const bracket of taxBrackets) {
-                    if (taxableIncome <= 0) break;
-                    const bracketRange = bracket.max ? 
-                        Math.min(bracket.max - bracket.min, taxableIncome) : 
-                        taxableIncome;
-                    taxOwed += bracketRange * bracket.rate;
-                    taxableIncome -= bracketRange;
-                }
-
-                resolve({
-                    taxOwed,
-                    savings: (income * 0.25) - taxOwed // Simulated optimization
-                });
-            }, 1500));
+            const yearlyDep = value / life;
+            financialData.assets.push({ value, life, yearlyDep });
+            
+            displayResult('depreciationResult', `
+                Yearly Depreciation: $${yearlyDep.toLocaleString()}<br>
+                <small style="color: #718096">Total Value: $${value.toLocaleString()}</small>
+            `, '#48BB78');
+            updateDashboard();
+            saveData();
         }
 
-        // Professional Helper Functions
-        function toggleLoader(type, state) {
-            document.getElementById(`${type}Loader`).style.display = state ? 'block' : 'none';
-            document.getElementById(`${type}Button`).disabled = state;
-        }
-
-        function displayResult(containerId, ...lines) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = lines.map(line => `<p>${line}</p>`).join('');
-            container.style.display = 'block';
-        }
-
-        function handleError(error, type) {
-            console.error(`[${type.toUpperCase()}]`, error);
-            alert(`Financial Error: ${error.message}`);
-        }
-
-        // Initialize Dashboard
-        let financialChart;
+        // Dashboard Initialization
+        let chart;
         function updateDashboard() {
-            document.getElementById('totalTax').textContent = `$${financialState.tax.toFixed(2)}`;
-            document.getElementById('totalPayroll').textContent = `$${financialState.payroll.toFixed(2)}`;
-            document.getElementById('totalAssets').textContent = `$${financialState.assets.reduce((a,b) => a + b.value, 0).toFixed(2)}`;
-
             const ctx = document.getElementById('financialChart').getContext('2d');
-            if (financialChart) financialChart.destroy();
+            if (chart) chart.destroy();
 
-            financialChart = new Chart(ctx, {
-                type: 'doughnut',
+            chart = new Chart(ctx, {
+                type: 'line',
                 data: {
-                    labels: ['Tax', 'Payroll', 'Assets'],
+                    labels: financialData.history.slice(-6).map((_, i) => `Month ${i + 1}`),
                     datasets: [{
-                        data: [
-                            financialState.tax,
-                            financialState.payroll,
-                            financialState.assets.reduce((a,b) => a + b.value, 0)
-                        ],
-                        backgroundColor: [
-                            '#3B82F6',
-                            '#10B981',
-                            '#6366F1'
-                        ],
-                        borderWidth: 0
+                        label: 'Cash Flow',
+                        data: financialData.history.slice(-6).map(item => item.value),
+                        borderColor: var(--accent),
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: 'rgba(72, 187, 120, 0.1)'
                     }]
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'right' },
-                        tooltip: { enabled: false }
+                        legend: { position: 'bottom' },
+                        tooltip: { mode: 'index' }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { callback: value => `$${value.toLocaleString()}` }
+                        },
+                        x: { grid: { display: false } }
                     }
                 }
             });
         }
+
+        // Helper functions
+        function calculateProgressiveTax(income) {
+            // US 2023 tax brackets (single filer)
+            const brackets = [
+                { min: 0, max: 11000, rate: 0.10 },
+                { min: 11001, max: 44725, rate: 0.12 },
+                { min: 44726, max: 95375, rate: 0.22 },
+                { min: 95376, max: 182100, rate: 0.24 },
+                { min: 182101, max: 231250, rate: 0.32 },
+                { min: 231251, max: 578125, rate: 0.35 },
+                { min: 578126, rate: 0.37 }
+            ];
+
+            return brackets.reduce((tax, bracket) => {
+                const bracketSize = bracket.max ? Math.min(income, bracket.max) - bracket.min : income;
+                if (bracketSize > 0) tax += bracketSize * bracket.rate;
+                income -= bracketSize;
+                return tax;
+            }, 0);
+        }
+
+        function calculateDeductions(gross) {
+            return gross * 0.30; // Simplified deductions
+        }
+
+        function displayResult(elementId, content, color) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = content;
+            element.style.borderLeft = `4px solid ${color}`;
+            element.style.display = 'block';
+        }
+
+        function showError(message) {
+            const error = document.createElement('div');
+            error.className = 'result';
+            error.style.borderLeft = '4px solid #FC8181';
+            error.innerHTML = message;
+            document.body.appendChild(error);
+            setTimeout(() => error.remove(), 3000);
+        }
+
+        // Initial load
+        updateDashboard();
     </script>
 </body>
 </html>
