@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vault Financial Suite | AI-Powered Financial Platform</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Vault | AI-Powered Financial Suite</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
         :root {
             --bg: #0f172a;
@@ -29,7 +28,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, var(--bg) 0%, #0c1120 100%);
             color: var(--text);
             min-height: 100vh;
@@ -491,7 +490,7 @@
                 <p>Monitor your financial health and optimize performance with AI-powered insights</p>
             </div>
             <div>
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" onclick="exportReport()">
                     <i class="fas fa-file-export"></i> Export Report
                 </button>
             </div>
@@ -501,33 +500,33 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-title">Total Revenue</div>
-                <div class="stat-value">$124,820</div>
+                <div class="stat-value" id="totalRevenue">$124,820</div>
                 <div class="stat-change change-up">
-                    <i class="fas fa-arrow-up"></i> 12.4% from last month
+                    <i class="fas fa-arrow-up"></i> <span id="revenueChange">12.4%</span> from last month
                 </div>
             </div>
             
             <div class="stat-card">
                 <div class="stat-title">Net Profit</div>
-                <div class="stat-value">$42,150</div>
+                <div class="stat-value" id="netProfit">$42,150</div>
                 <div class="stat-change change-up">
-                    <i class="fas fa-arrow-up"></i> 8.2% from last month
+                    <i class="fas fa-arrow-up"></i> <span id="profitChange">8.2%</span> from last month
                 </div>
             </div>
             
             <div class="stat-card">
                 <div class="stat-title">Tax Liability</div>
-                <div class="stat-value">$18,720</div>
+                <div class="stat-value" id="taxLiability">$18,720</div>
                 <div class="stat-change change-down">
-                    <i class="fas fa-arrow-down"></i> 3.1% from last month
+                    <i class="fas fa-arrow-down"></i> <span id="taxChange">3.1%</span> from last month
                 </div>
             </div>
             
             <div class="stat-card">
                 <div class="stat-title">Cash Flow</div>
-                <div class="stat-value">$27,450</div>
+                <div class="stat-value" id="cashFlow">$27,450</div>
                 <div class="stat-change change-up">
-                    <i class="fas fa-arrow-up"></i> 5.7% from last month
+                    <i class="fas fa-arrow-up"></i> <span id="cashChange">5.7%</span> from last month
                 </div>
             </div>
         </div>
@@ -544,12 +543,12 @@
                 </div>
                 
                 <div class="input-group">
-                    <input type="number" id="income" placeholder="Annual Income ($)">
+                    <input type="number" id="income" placeholder="Annual Income ($)" value="125000">
                     <span class="input-icon">$</span>
                 </div>
                 
                 <div class="input-group">
-                    <input type="number" id="expenses" placeholder="Business Expenses ($)">
+                    <input type="number" id="expenses" placeholder="Business Expenses ($)" value="45000">
                     <span class="input-icon">$</span>
                 </div>
                 
@@ -559,8 +558,8 @@
                 
                 <div id="taxResult" class="result">
                     <h3>Tax Liability</h3>
-                    <div class="result-value">$0.00</div>
-                    <div class="result-details">Enter your financial details to calculate</div>
+                    <div class="result-value">$20,000.00</div>
+                    <div class="result-details">Based on taxable income of $80,000</div>
                 </div>
                 
                 <div id="taxError" class="error"></div>
@@ -576,12 +575,12 @@
                 </div>
                 
                 <div class="input-group">
-                    <input type="number" id="hours" placeholder="Hours Worked">
+                    <input type="number" id="hours" placeholder="Hours Worked" value="160">
                     <span class="input-icon"><i class="fas fa-clock"></i></span>
                 </div>
                 
                 <div class="input-group">
-                    <input type="number" id="rate" placeholder="Hourly Rate ($)">
+                    <input type="number" id="rate" placeholder="Hourly Rate ($)" value="45">
                     <span class="input-icon">$</span>
                 </div>
                 
@@ -591,8 +590,12 @@
                 
                 <div id="payrollResult" class="result">
                     <h3>Payroll Summary</h3>
-                    <div class="result-value">$0.00</div>
-                    <div class="result-details">Enter hours and rate to calculate</div>
+                    <div class="result-value">$6,120.00</div>
+                    <div class="result-details">
+                        Gross: $7,200.00<br>
+                        Taxes: $1,080.00<br>
+                        (15% estimated tax rate)
+                    </div>
                 </div>
                 
                 <div id="payrollError" class="error"></div>
@@ -608,12 +611,12 @@
                 </div>
                 
                 <div class="input-group">
-                    <input type="number" id="assetValue" placeholder="Asset Value ($)">
+                    <input type="number" id="assetValue" placeholder="Asset Value ($)" value="25000">
                     <span class="input-icon">$</span>
                 </div>
                 
                 <div class="input-group">
-                    <input type="number" id="assetLife" placeholder="Useful Life (years)">
+                    <input type="number" id="assetLife" placeholder="Useful Life (years)" value="5">
                     <span class="input-icon"><i class="fas fa-calendar"></i></span>
                 </div>
                 
@@ -623,8 +626,8 @@
                 
                 <div id="depreciationResult" class="result">
                     <h3>Depreciation</h3>
-                    <div class="result-value">$0.00/year</div>
-                    <div class="result-details">Enter asset details to calculate</div>
+                    <div class="result-value">$5,000.00/year</div>
+                    <div class="result-details">$416.67/month</div>
                 </div>
                 
                 <div id="depreciationError" class="error"></div>
@@ -677,12 +680,13 @@
         let chart;
         const ctx = document.getElementById('financeChart').getContext('2d');
         
-        // Data Storage
+        // Financial data
         let financialData = {
-            tax: 0,
-            payroll: 0,
-            assets: 0,
-            history: [42000, 45000, 48000, 52000, 56000, 61000, 59000, 62000, 64000, 67000, 70000, 73000]
+            tax: 20000,
+            payroll: 6120,
+            assets: 5000,
+            history: [42000, 45000, 48000, 52000, 56000, 61000, 59000, 62000, 64000, 67000, 70000, 73000],
+            expenses: [32000, 31000, 33000, 34000, 35000, 36000, 37000, 38000, 39000, 40000, 41000, 42000]
         };
         
         // Initialize the chart
@@ -703,7 +707,7 @@
                         borderWidth: 3
                     }, {
                         label: 'Expenses',
-                        data: [32000, 31000, 33000, 34000, 35000, 36000, 37000, 38000, 39000, 40000, 41000, 42000],
+                        data: financialData.expenses,
                         borderColor: '#10b981',
                         backgroundColor: 'rgba(16, 185, 129, 0.1)',
                         tension: 0.4,
@@ -731,7 +735,12 @@
                             borderColor: 'rgba(255, 255, 255, 0.1)',
                             borderWidth: 1,
                             padding: 12,
-                            boxPadding: 6
+                            boxPadding: 6,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+                                }
+                            }
                         }
                     },
                     scales: {
@@ -760,6 +769,22 @@
             });
         }
         
+        // Update financial stats
+        function updateStats() {
+            // Calculate revenue change
+            const currentRevenue = financialData.history[financialData.history.length - 1];
+            const prevRevenue = financialData.history[financialData.history.length - 2];
+            const revenueChange = ((currentRevenue - prevRevenue) / prevRevenue * 100).toFixed(1);
+            
+            // Update DOM elements
+            document.getElementById('totalRevenue').textContent = '$' + currentRevenue.toLocaleString();
+            document.getElementById('revenueChange').textContent = revenueChange + '%';
+            document.getElementById('netProfit').textContent = '$' + (currentRevenue * 0.34).toLocaleString();
+            document.getElementById('profitChange').textContent = (revenueChange * 0.8).toFixed(1) + '%';
+            document.getElementById('taxLiability').textContent = '$' + financialData.tax.toLocaleString();
+            document.getElementById('cashFlow').textContent = '$' + (currentRevenue * 0.22).toLocaleString();
+        }
+        
         // Tax Calculator
         function calculateTax() {
             const income = parseFloat(document.getElementById('income').value);
@@ -773,14 +798,26 @@
             const taxableIncome = income - (expenses || 0);
             const tax = taxableIncome * 0.25; // Simplified tax calculation
             
+            // Update financial data
+            financialData.tax = tax;
+            
+            // Update UI
             document.getElementById('taxResult').innerHTML = `
                 <h3>Tax Liability</h3>
                 <div class="result-value">$${tax.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
-                <div class="result-details">Based on taxable income of $${taxableIncome.toLocaleString('en-US', {maximumFractionDigits: 2})</div>
+                <div class="result-details">Based on taxable income of $${taxableIncome.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
             `;
             
-            // Update financial data
-            financialData.tax = tax;
+            // Update stats
+            updateStats();
+            
+            // Update tax liability in stats
+            document.getElementById('taxLiability').textContent = '$' + tax.toLocaleString();
+            
+            // Calculate tax change
+            const taxChange = ((tax - 18720) / 18720 * 100).toFixed(1);
+            document.getElementById('taxChange').textContent = taxChange + '%';
+            document.querySelector('#taxLiability + .stat-change').className = taxChange > 0 ? 'stat-change change-down' : 'stat-change change-up';
             
             // Simulate AI tips
             setTimeout(() => {
@@ -814,21 +851,22 @@
             if (!rate || rate < 0) return showError('payrollError', 'Please enter a valid hourly rate');
             
             const gross = hours * rate;
-            const tax = gross * 0.2;
+            const tax = gross * 0.15; // 15% tax rate
             const net = gross - tax;
             
+            // Update financial data
+            financialData.payroll = net;
+            
+            // Update UI
             document.getElementById('payrollResult').innerHTML = `
                 <h3>Payroll Summary</h3>
                 <div class="result-value">$${net.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
                 <div class="result-details">
-                    Gross: $${gross.toLocaleString('en-US', {maximumFractionDigits: 2})<br>
-                    Taxes: $${tax.toLocaleString('en-US', {maximumFractionDigits: 2})<br>
-                    (20% estimated tax rate)
+                    Gross: $${gross.toLocaleString('en-US', {maximumFractionDigits: 2})}<br>
+                    Taxes: $${tax.toLocaleString('en-US', {maximumFractionDigits: 2})}<br>
+                    (15% estimated tax rate)
                 </div>
             `;
-            
-            // Update financial data
-            financialData.payroll = net;
         }
         
         // Depreciation Calculator
@@ -844,23 +882,64 @@
             const yearlyDep = value / life;
             const monthlyDep = yearlyDep / 12;
             
+            // Update financial data
+            financialData.assets = yearlyDep;
+            
+            // Update UI
             document.getElementById('depreciationResult').innerHTML = `
                 <h3>Depreciation</h3>
                 <div class="result-value">$${yearlyDep.toLocaleString('en-US', {maximumFractionDigits: 2})}/year</div>
                 <div class="result-details">$${monthlyDep.toLocaleString('en-US', {maximumFractionDigits: 2})}/month</div>
             `;
-            
-            // Update financial data
-            financialData.assets = yearlyDep;
         }
         
         // Financial Health Analysis
         function runFinancialCheckup() {
             const aiButton = document.getElementById('aiButton');
+            const originalText = aiButton.innerHTML;
             aiButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing Financial Health...';
             aiButton.disabled = true;
             
             setTimeout(() => {
+                // Generate AI analysis based on current data
+                const income = parseFloat(document.getElementById('income').value) || 125000;
+                const expenses = parseFloat(document.getElementById('expenses').value) || 45000;
+                const profitMargin = ((income - expenses) / income * 100).toFixed(1);
+                
+                // Different analysis based on profit margin
+                let analysis = '';
+                if (profitMargin > 30) {
+                    analysis = `
+                        <p>Your business is in excellent financial health with a ${profitMargin}% profit margin.</p>
+                        <p><strong>Recommendations:</strong></p>
+                        <ul>
+                            <li>Reinvest 20% of profits into growth initiatives</li>
+                            <li>Explore tax-advantaged retirement accounts</li>
+                            <li>Consider dividend distributions to shareholders</li>
+                        </ul>
+                    `;
+                } else if (profitMargin > 15) {
+                    analysis = `
+                        <p>Your business has a healthy ${profitMargin}% profit margin with room for improvement.</p>
+                        <p><strong>Recommendations:</strong></p>
+                        <ul>
+                            <li>Optimize operational expenses to increase margins</li>
+                            <li>Review pricing strategy for underperforming products</li>
+                            <li>Explore automation to reduce labor costs</li>
+                        </ul>
+                    `;
+                } else {
+                    analysis = `
+                        <p>Your business has a ${profitMargin}% profit margin that needs attention.</p>
+                        <p><strong>Recommendations:</strong></p>
+                        <ul>
+                            <li>Conduct expense audit to identify cost savings</li>
+                            <li>Increase prices by 5-10% on key products/services</li>
+                            <li>Explore debt restructuring options</li>
+                        </ul>
+                    `;
+                }
+                
                 document.getElementById('aiAnalysis').innerHTML = `
                     <div class="ai-header">
                         <div class="ai-icon">
@@ -869,25 +948,18 @@
                         <h3>Financial Health Report</h3>
                     </div>
                     <div class="ai-content">
-                        <p>Based on your financial data, here's your business health assessment:</p>
-                        <ul>
-                            <li><strong>Cash Flow:</strong> Healthy (8.2% monthly growth)</li>
-                            <li><strong>Profit Margins:</strong> Good (34% net profit margin)</li>
-                            <li><strong>Tax Efficiency:</strong> Moderate (opportunity to save 12-15%)</li>
-                            <li><strong>Expense Management:</strong> Efficient (operating at 66% of revenue)</li>
-                        </ul>
-                        <p><strong>Recommendations:</strong></p>
-                        <ul>
-                            <li>Implement tax loss harvesting to save ~$4,200 annually</li>
-                            <li>Refinance business loan to reduce interest by 1.5%</li>
-                            <li>Increase marketing budget by 15% to accelerate growth</li>
-                        </ul>
+                        ${analysis}
                     </div>
                 `;
                 
-                aiButton.innerHTML = '<i class="fas fa-bolt"></i> Run Financial Health Checkup';
+                aiButton.innerHTML = originalText;
                 aiButton.disabled = false;
             }, 2000);
+        }
+        
+        // Export report
+        function exportReport() {
+            alert('Financial report exported successfully! This would download a PDF in a real application.');
         }
         
         // Error Handling
@@ -907,14 +979,12 @@
         // Initialize the application
         window.onload = function() {
             initChart();
+            updateStats();
             
-            // Set sample data for demonstration
-            document.getElementById('income').value = 125000;
-            document.getElementById('expenses').value = 45000;
-            document.getElementById('hours').value = 160;
-            document.getElementById('rate').value = 45;
-            document.getElementById('assetValue').value = 25000;
-            document.getElementById('assetLife').value = 5;
+            // Pre-calculate initial values
+            calculateTax();
+            calculatePayroll();
+            calculateDepreciation();
         };
     </script>
 </body>
