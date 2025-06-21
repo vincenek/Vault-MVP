@@ -6,9 +6,6 @@
     <title>TaxVault | Global Tax & Payroll Solution</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js"></script>
     <style>
         :root {
             --primary: #0f172a;
@@ -643,24 +640,6 @@
         .auth-form.active {
             display: block;
         }
-        
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: white;
-        }
     </style>
 </head>
 <body>
@@ -682,7 +661,7 @@
                 <a href="#">Support</a>
             </nav>
             
-            <div class="user-actions" id="userActions">
+            <div class="user-actions">
                 <button class="btn btn-secondary" id="signInBtn">
                     <i class="fas fa-sign-in-alt"></i> Sign In
                 </button>
@@ -965,7 +944,7 @@
                     <input type="password" id="password" placeholder="Enter your password">
                 </div>
                 
-                <button class="btn btn-primary" id="loginBtn" style="width: 100%;">Sign In</button>
+                <button class="btn btn-primary" style="width: 100%;">Sign In</button>
                 
                 <div style="text-align: center; margin-top: 1rem;">
                     <a href="#" style="color: var(--accent);">Forgot password?</a>
@@ -988,28 +967,12 @@
                     <input type="password" id="confirmPassword" placeholder="Confirm your password">
                 </div>
                 
-                <button class="btn btn-primary" id="registerBtn" style="width: 100%;">Create Account</button>
+                <button class="btn btn-primary" style="width: 100%;">Create Account</button>
             </div>
         </div>
     </div>
     
     <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyA4yX9v8u-wjIPeBY64cc7YASVWIcak-eM",
-            authDomain: "vault-602d2.firebaseapp.com",
-            projectId: "vault-602d2",
-            storageBucket: "vault-602d2.firebasestorage.app",
-            messagingSenderId: "397379271243",
-            appId: "1:397379271243:web:fab5914ccdca9d796d2bce",
-            measurementId: "G-4R62KV83W2"
-        };
-
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const analytics = firebase.analytics();
-        const auth = firebase.auth();
-
         // Enhanced country tax data
         const countryData = {
             nigeria: {
@@ -1391,88 +1354,6 @@
             document.getElementById('payrollError').style.display = 'none';
         }
         
-        // Update UI based on authentication state
-        function updateAuthState(user) {
-            const userActions = document.getElementById('userActions');
-            
-            if (user) {
-                // User is signed in
-                const firstLetter = user.email.charAt(0).toUpperCase();
-                userActions.innerHTML = `
-                    <div class="user-profile">
-                        <div class="user-avatar">${firstLetter}</div>
-                        <button class="btn btn-secondary" id="signOutBtn">
-                            <i class="fas fa-sign-out-alt"></i> Sign Out
-                        </button>
-                    </div>
-                `;
-                
-                document.getElementById('signOutBtn').addEventListener('click', signOut);
-            } else {
-                // User is signed out
-                userActions.innerHTML = `
-                    <button class="btn btn-secondary" id="signInBtn">
-                        <i class="fas fa-sign-in-alt"></i> Sign In
-                    </button>
-                    <button class="btn btn-primary" id="getStartedBtn">
-                        <i class="fas fa-rocket"></i> Get Started
-                    </button>
-                `;
-                
-                document.getElementById('signInBtn').addEventListener('click', showAuthModal);
-                document.getElementById('getStartedBtn').addEventListener('click', showAuthModal);
-            }
-        }
-        
-        // Show auth modal
-        function showAuthModal() {
-            document.getElementById('authModal').style.display = 'flex';
-        }
-        
-        // Close auth modal
-        function closeAuthModal() {
-            document.getElementById('authModal').style.display = 'none';
-        }
-        
-        // Sign up function
-        function register(email, password) {
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Signed up 
-                    const user = userCredential.user;
-                    showNotification('Account created successfully! Welcome to TaxVault');
-                    closeAuthModal();
-                })
-                .catch((error) => {
-                    const errorMessage = error.message;
-                    showNotification(errorMessage, 'error');
-                });
-        }
-        
-        // Sign in function
-        function login(email, password) {
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Signed in
-                    const user = userCredential.user;
-                    showNotification('Signed in successfully');
-                    closeAuthModal();
-                })
-                .catch((error) => {
-                    const errorMessage = error.message;
-                    showNotification(errorMessage, 'error');
-                });
-        }
-        
-        // Sign out function
-        function signOut() {
-            auth.signOut().then(() => {
-                showNotification('Signed out successfully');
-            }).catch((error) => {
-                showNotification('Error signing out', 'error');
-            });
-        }
-        
         // Initialize the application
         window.onload = function() {
             // Set up event listeners
@@ -1485,18 +1366,26 @@
             
             // Auth modal functionality
             const authModal = document.getElementById('authModal');
+            const signInBtn = document.getElementById('signInBtn');
+            const getStartedBtn = document.getElementById('getStartedBtn');
             const closeModal = document.getElementById('closeModal');
             const authTabs = document.querySelectorAll('.auth-tab');
             
-            // Initialize auth buttons
-            document.getElementById('signInBtn').addEventListener('click', showAuthModal);
-            document.getElementById('getStartedBtn').addEventListener('click', showAuthModal);
+            signInBtn.addEventListener('click', () => {
+                authModal.style.display = 'flex';
+            });
             
-            closeModal.addEventListener('click', closeAuthModal);
+            getStartedBtn.addEventListener('click', () => {
+                authModal.style.display = 'flex';
+            });
+            
+            closeModal.addEventListener('click', () => {
+                authModal.style.display = 'none';
+            });
             
             window.addEventListener('click', (e) => {
                 if (e.target === authModal) {
-                    closeAuthModal();
+                    authModal.style.display = 'none';
                 }
             });
             
@@ -1517,34 +1406,9 @@
                 });
             });
             
-            // Register and login buttons
-            document.getElementById('registerBtn').addEventListener('click', () => {
-                const email = document.getElementById('regEmail').value;
-                const password = document.getElementById('regPassword').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
-                
-                if (password !== confirmPassword) {
-                    showNotification('Passwords do not match', 'error');
-                    return;
-                }
-                
-                register(email, password);
-            });
-            
-            document.getElementById('loginBtn').addEventListener('click', () => {
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                login(email, password);
-            });
-            
             // Pre-calculate initial values
             calculateTax();
             calculatePayroll();
-            
-            // Set up Firebase auth state listener
-            auth.onAuthStateChanged((user) => {
-                updateAuthState(user);
-            });
         };
     </script>
 </body>
