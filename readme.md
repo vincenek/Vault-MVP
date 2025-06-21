@@ -1,50 +1,53 @@
-# TaxVault - Global Tax & Payroll Solution
+# TaxVault: Global Tax & Payroll Solution
 
-TaxVault is a comprehensive solution for startups and businesses to calculate global taxes and payroll with a focus on Nigeria. This production-ready application provides accurate calculations, financial insights, and professional reporting.
+![TaxVault Dashboard](https://via.placeholder.com/800x400.png?text=TaxVault+Dashboard)
 
-## Features
+TaxVault is a comprehensive global tax and payroll solution designed specifically for startups and small businesses. It simplifies complex international tax calculations and payroll processing with a focus on Nigeria's unique financial landscape.
 
-- **Global Tax Calculator**: Calculate tax liabilities for 7 countries including Nigeria, USA, UK, and more
-- **Payroll Calculator**: Compute payroll with country-specific deductions and contributions
-- **AI Financial Advisor**: Get personalized optimization strategies based on your financial data
-- **Professional Reporting**: Export detailed PDF reports for tax and payroll calculations
-- **User Authentication**: Sign up and sign in with Firebase authentication
-- **Responsive Design**: Works seamlessly on mobile, tablet, and desktop devices
+## Why TaxVault?
 
-## Why TaxVault is Needed
+- 🌍 **Global Compliance**: Calculate taxes and payroll for 12+ countries
+- 🇳🇬 **Nigeria-First**: Specialized support for Nigerian tax laws
+- 💡 **AI-Powered Insights**: Get actionable financial optimization advice
+- 📊 **Professional Reporting**: Export detailed financial reports
+- 🔒 **Secure**: Firebase authentication and data protection
 
-- **Pain Point**: Businesses waste 120+ hours monthly on payroll errors and tax compliance
-- **Cost**: Cross-border payroll errors cost $15B annually in penalties
-- **Nigeria Focus**: No existing solutions combine Nigerian tax expertise with global capabilities
-- **Affordability**: Enterprise solutions cost $50K+/year - TaxVault is startup-friendly
+## Key Features
 
-## How to Use
+### Global Tax Calculator
+- Country-specific tax bracket calculations
+- Expense deduction handling
+- Effective tax rate visualization
+- Detailed tax breakdown charts
 
-1. **Tax Calculation**:
-   - Select a country
-   - Enter annual income and business expenses
-   - Click "Calculate Tax Liability"
-   - View detailed breakdown and visualization
+### Global Payroll Calculator
+- Employee classification (Full-time, Contractor, Executive)
+- Country-specific deductions
+- Gross-to-net pay calculations
+- Detailed payroll summaries
 
-2. **Payroll Calculation**:
-   - Select a country and employee type
-   - Enter hours worked and hourly rate
-   - Click "Calculate Payroll"
-   - View gross pay, deductions, and net pay
+### AI Financial Advisor
+- Tax optimization strategies
+- Compliance guidance
+- Expense management advice
+- Country-specific recommendations
 
-3. **Financial Advice**:
-   - Click "Generate Financial Advice"
-   - Get personalized optimization strategies
-
-4. **Export Reports**:
-   - Click "Export Report"
-   - Download a professional PDF with all calculations
+### Professional Reporting
+- Detailed PDF export
+- Calculation summaries
+- Visual tax breakdowns
+- Professional formatting
 
 ## Technology Stack
 
 - **Frontend**: HTML5, CSS3, JavaScript
 - **Charts**: Chart.js
-- **PDF Generation**: jsPDF
+- **PDF Export**: jsPDF, html2canvas
 - **Authentication**: Firebase Auth
-- **Hosting**: Github Hosting
+- **Analytics**: Firebase Analytics
 
+## Getting Started
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/yourusername/taxvault.git
