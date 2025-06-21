@@ -46,5 +46,5 @@ TaxVault is a comprehensive solution for startups and businesses to calculate gl
 - **Charts**: Chart.js
 - **PDF Generation**: jsPDF
 - **Authentication**: Firebase Auth
-- **Hosting**: Firebase Hosting (recommended)
+- **Hosting**: Github Hosting
 
