@@ -6,6 +6,8 @@
     <title>Vault Financial Suite | AI-Powered Financial Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --bg: #0f172a;
@@ -61,6 +63,7 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            text-decoration: none;
         }
 
         .logo-icon {
@@ -225,7 +228,7 @@
         }
 
         /* Inputs and Buttons */
-        input {
+        input, select {
             width: 100%;
             padding: 0.9rem;
             margin: 0.75rem 0;
@@ -237,7 +240,7 @@
             transition: var(--transition);
         }
 
-        input:focus {
+        input:focus, select:focus {
             outline: 2px solid var(--accent);
             box-shadow: 0 0 12px rgba(14, 165, 233, 0.3);
         }
@@ -425,6 +428,7 @@
             z-index: 1000;
             transform: translateX(120%);
             transition: transform 0.3s ease;
+            max-width: 350px;
         }
 
         .notification.show {
@@ -433,6 +437,16 @@
 
         .notification.error {
             border-left-color: var(--error);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
         }
 
         /* Animations */
@@ -492,17 +506,22 @@
 <body>
     <!-- Notification System -->
     <div class="notification" id="notification">
-        <div class="notification-content"></div>
+        <div class="notification-content">
+            <div class="notification-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="notification-text"></div>
+        </div>
     </div>
 
     <!-- Navigation -->
     <nav>
-        <div class="logo">
+        <a href="#" class="logo">
             <div class="logo-icon">
                 <i class="fas fa-vault"></i>
             </div>
             <div class="logo-text">Vault</div>
-        </div>
+        </a>
         
         <div class="nav-links">
             <a href="#" class="active">Dashboard</a>
@@ -534,7 +553,7 @@
                 <p>Monitor your financial health and optimize performance with AI-powered insights</p>
             </div>
             <div>
-                <button class="btn btn-primary" onclick="exportReport()">
+                <button class="btn btn-primary" id="exportReportBtn">
                     <i class="fas fa-file-export"></i> Export Report
                 </button>
             </div>
@@ -597,7 +616,7 @@
                 </div>
                 
                 <div class="input-group">
-                    <select id="taxRegion" class="input-field">
+                    <select id="taxRegion">
                         <option value="federal">Federal Tax</option>
                         <option value="california">California</option>
                         <option value="newyork">New York</option>
@@ -605,7 +624,7 @@
                     </select>
                 </div>
                 
-                <button class="card-btn" onclick="calculateTax()">
+                <button class="card-btn" id="calculateTaxBtn">
                     Calculate Tax Liability
                 </button>
                 
@@ -638,7 +657,7 @@
                 </div>
                 
                 <div class="input-group">
-                    <select id="payrollState" class="input-field">
+                    <select id="payrollState">
                         <option value="federal">Federal</option>
                         <option value="california">California</option>
                         <option value="newyork">New York</option>
@@ -646,7 +665,7 @@
                     </select>
                 </div>
                 
-                <button class="card-btn" onclick="calculatePayroll()">
+                <button class="card-btn" id="calculatePayrollBtn">
                     Calculate Payroll
                 </button>
                 
@@ -683,14 +702,14 @@
                 </div>
                 
                 <div class="input-group">
-                    <select id="depreciationMethod" class="input-field">
+                    <select id="depreciationMethod">
                         <option value="straight">Straight-Line</option>
                         <option value="declining">Declining Balance</option>
                         <option value="sum">Sum-of-Years Digits</option>
                     </select>
                 </div>
                 
-                <button class="card-btn" onclick="calculateDepreciation()">
+                <button class="card-btn" id="calculateDepreciationBtn">
                     Calculate Depreciation
                 </button>
                 
@@ -724,7 +743,7 @@
                     </div>
                 </div>
                 
-                <button class="card-btn" onclick="runFinancialCheckup()" id="aiButton">
+                <button class="card-btn" id="aiButton">
                     <i class="fas fa-bolt"></i> Run Financial Health Checkup
                 </button>
             </div>
@@ -738,7 +757,7 @@
                 </div>
                 <h2>Financial Overview</h2>
                 <div class="chart-controls">
-                    <select id="chartPeriod" onchange="updateChart()">
+                    <select id="chartPeriod">
                         <option value="monthly">Monthly</option>
                         <option value="quarterly">Quarterly</option>
                         <option value="yearly">Yearly</option>
@@ -1001,25 +1020,57 @@
             // Show notification
             showNotification('Tax calculation completed successfully', 'success');
             
-            // Simulate AI tips
-            setTimeout(() => {
-                document.getElementById('aiAnalysis').innerHTML = `
-                    <div class="ai-header">
-                        <div class="ai-icon">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <h3>Tax Optimization Tips</h3>
-                    </div>
-                    <div class="ai-content">
-                        <p>Based on your tax calculation in ${region.charAt(0).toUpperCase() + region.slice(1)}:</p>
-                        <ul>
-                            <li>Consider increasing business expenses by $5,000 to reduce tax liability by $${(5000 * taxRate).toFixed(2)}</li>
-                            <li>Explore R&D tax credits that could save you up to $3,500</li>
-                            <li>Defer income to next quarter to optimize tax brackets</li>
-                        </ul>
-                    </div>
+            // Generate AI tips
+            generateTaxAdvice(taxableIncome, tax, region);
+        }
+        
+        // Generate AI tax advice
+        function generateTaxAdvice(taxableIncome, tax, region) {
+            let advice = '';
+            
+            if (taxableIncome > 100000) {
+                advice = `
+                    <p>Based on your tax calculation in ${region.charAt(0).toUpperCase() + region.slice(1)}:</p>
+                    <ul>
+                        <li><strong>Maximize Retirement Contributions:</strong> Consider contributing the maximum to your 401(k) or SEP IRA to reduce taxable income</li>
+                        <li><strong>Charitable Contributions:</strong> Donating to qualified charities can provide deductions</li>
+                        <li><strong>Tax-Loss Harvesting:</strong> Offset capital gains with investment losses</li>
+                        <li><strong>HSA Contributions:</strong> Health Savings Accounts offer triple tax benefits</li>
+                    </ul>
                 `;
-            }, 1000);
+            } else if (taxableIncome > 50000) {
+                advice = `
+                    <p>Based on your tax calculation in ${region.charAt(0).toUpperCase() + region.slice(1)}:</p>
+                    <ul>
+                        <li><strong>Education Credits:</strong> Explore American Opportunity or Lifetime Learning credits</li>
+                        <li><strong>Energy Efficiency Credits:</strong> Consider home improvements for energy tax credits</li>
+                        <li><strong>Business Expense Optimization:</strong> Review deductible expenses like home office or mileage</li>
+                        <li><strong>Retirement Savings:</strong> Increase contributions to traditional IRA for deductions</li>
+                    </ul>
+                `;
+            } else {
+                advice = `
+                    <p>Based on your tax calculation in ${region.charAt(0).toUpperCase() + region.slice(1)}:</p>
+                    <ul>
+                        <li><strong>Earned Income Tax Credit:</strong> You may qualify for EITC benefits</li>
+                        <li><strong>Saver's Credit:</strong> Get credit for retirement plan contributions</li>
+                        <li><strong>Education Benefits:</strong> Look into tuition and fees deduction</li>
+                        <li><strong>Standard Deduction:</strong> Ensure you're taking the maximum standard deduction</li>
+                    </ul>
+                `;
+            }
+            
+            document.getElementById('aiAnalysis').innerHTML = `
+                <div class="ai-header">
+                    <div class="ai-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Tax Optimization Advice</h3>
+                </div>
+                <div class="ai-content">
+                    ${advice}
+                </div>
+            `;
         }
         
         // Payroll Calculator
@@ -1049,8 +1100,13 @@
                     taxRate = 0.15;
             }
             
+            // Calculate additional payroll taxes
+            const socialSecurity = 0.062;
+            const medicare = 0.0145;
+            const totalTaxRate = taxRate + socialSecurity + medicare;
+            
             const gross = hours * rate;
-            const tax = gross * taxRate;
+            const tax = gross * totalTaxRate;
             const net = gross - tax;
             
             // Update financial data
@@ -1062,7 +1118,9 @@
                 <div class="result-value">$${net.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
                 <div class="result-details">
                     Gross: $${gross.toLocaleString('en-US', {maximumFractionDigits: 2})}<br>
-                    Taxes: $${tax.toLocaleString('en-US', {maximumFractionDigits: 2})} (${(taxRate * 100).toFixed(1)}%)<br>
+                    Federal Income Tax: $${(gross * taxRate).toLocaleString('en-US', {maximumFractionDigits: 2})} (${(taxRate * 100).toFixed(1)}%)<br>
+                    Social Security: $${(gross * socialSecurity).toLocaleString('en-US', {maximumFractionDigits: 2})} (6.2%)<br>
+                    Medicare: $${(gross * medicare).toLocaleString('en-US', {maximumFractionDigits: 2})} (1.45%)<br>
                     State: ${state.charAt(0).toUpperCase() + state.slice(1)}
                 </div>
             `;
@@ -1135,10 +1193,10 @@
                         <p>Your business is in excellent financial health with a ${profitMargin}% profit margin.</p>
                         <p><strong>Recommendations:</strong></p>
                         <ul>
-                            <li>Reinvest 20% of profits into growth initiatives</li>
-                            <li>Explore tax-advantaged retirement accounts</li>
-                            <li>Consider dividend distributions to shareholders</li>
-                            <li>Diversify investments to maximize returns</li>
+                            <li><strong>Reinvest Profits:</strong> Allocate 20% of profits into growth initiatives</li>
+                            <li><strong>Tax Optimization:</strong> Explore tax-advantaged retirement accounts</li>
+                            <li><strong>Diversify Revenue:</strong> Expand into complementary product lines</li>
+                            <li><strong>Strategic Acquisitions:</strong> Consider acquiring smaller competitors</li>
                         </ul>
                     `;
                 } else if (profitMargin > 15) {
@@ -1146,21 +1204,21 @@
                         <p>Your business has a healthy ${profitMargin}% profit margin with room for improvement.</p>
                         <p><strong>Recommendations:</strong></p>
                         <ul>
-                            <li>Optimize operational expenses to increase margins</li>
-                            <li>Review pricing strategy for underperforming products</li>
-                            <li>Explore automation to reduce labor costs</li>
-                            <li>Consider strategic partnerships to expand market reach</li>
+                            <li><strong>Cost Optimization:</strong> Review recurring expenses for reduction opportunities</li>
+                            <li><strong>Pricing Strategy:</strong> Increase prices by 5-7% on your most popular services</li>
+                            <li><strong>Operational Efficiency:</strong> Implement automation to reduce labor costs</li>
+                            <li><strong>Customer Retention:</strong> Improve loyalty programs to increase repeat business</li>
                         </ul>
                     `;
                 } else {
                     analysis = `
-                        <p>Your business has a ${profitMargin}% profit margin that needs attention.</p>
+                        <p>Your business has a ${profitMargin}% profit margin that requires strategic improvements.</p>
                         <p><strong>Recommendations:</strong></p>
                         <ul>
-                            <li>Conduct expense audit to identify cost savings</li>
-                            <li>Increase prices by 5-10% on key products/services</li>
-                            <li>Explore debt restructuring options</li>
-                            <li>Focus on high-margin products to boost profitability</li>
+                            <li><strong>Expense Audit:</strong> Identify and eliminate non-essential costs</li>
+                            <li><strong>Revenue Streams:</strong> Develop new offerings to diversify income</li>
+                            <li><strong>Debt Management:</strong> Refinance high-interest loans to reduce payments</li>
+                            <li><strong>Cash Flow Management:</strong> Improve invoicing and collections processes</li>
                         </ul>
                     `;
                 }
@@ -1185,18 +1243,51 @@
             }, 2000);
         }
         
-        // Export report
+        // Export report as PDF
         function exportReport() {
-            showNotification('Financial report exported successfully!', 'success');
+            showNotification('Generating financial report...', 'success');
+            
+            setTimeout(() => {
+                // In a real application, this would use jsPDF to create a PDF
+                // For this prototype, we'll simulate the download
+                const link = document.createElement('a');
+                link.href = 'data:application/pdf;base64,JVBERi0xLjcKCjEgMCBvYmogICUgZW50cnkgcG9pbnQKPDwKICAvVHlwZSAvQ2F0YWxvZwog' + 
+                             'IC9QYWdlcyAyIDAgUgo+PgplbmRvYmoKCjIgMCBvYmoKPDwKICAvVHlwZSAvUGFnZXMK' + 
+                             'ICAvTWVkaWFCb3ggWyAwIDAgNTk1IDg0MiBdCiAgL0NvdW50IDEKICAvS2lkcyBbIDMg' + 
+                             'MCBSIF0KPj4KZW5kb2JqCgozIDAgb2JqCjw8CiAgL1R5cGUgL1BhZ2UKICAvUGFyZW50' + 
+                             'IDIgMCBSCiAgL1Jlc291cmNlcyA8PAogICAgL0ZvbnQgPDwKICAgICAgL0YxIDQgMCBS' + 
+                             'IAogICAgPj4KICA+PgogIC9Db250ZW50cyA1IDAgUgo+PgplbmRvYmoKCjQgMCBvYmoK' + 
+                             'PDwKICAvVHlwZSAvRm9udAogIC9TdWJ0eXBlIC9UeXBlMQogIC9CYXNlRm9udCAvSGVs' + 
+                             'dmV0aWNhCj4+CmVuZG9iagoKNSAwIG9iaiAgICAlIHBhZ2UgY29udGVudAo8PAogIC9M' + 
+                             'ZW5ndGggNDQKPj4Kc3RyZWFtCkJUCjcwIDUwIFRECi9GMSAxMiBUZgooRmluYW5jaWFs' + 
+                             'IFJlcG9ydCAtIFZhdWx0IENvbnN1bHRpbmcpIFRqCkVUCmVuZHN0cmVhbQplbmRvYmoK' + 
+                             'CnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDAwOSAwMDAwMCBuIAow' + 
+                             'MDAwMDAwMDc1IDAwMDAwIG4gCjAwMDAwMDAwMzEgMDAwMDAgbiAKMDAwMDAwMDEwNSAw' + 
+                             'MDAwMCBuIAowMDAwMDAwMTQxIDAwMDAwIG4gCnRyYWlsZXIKPDwKICAvUm9vdCAxIDAg' + 
+                             'UgogIC9TaXplIDYKPj4Kc3RhcnR4cmVmCjE3MQolJUVPRgo=';
+                link.download = 'vault-financial-report.pdf';
+                link.click();
+                
+                showNotification('Financial report exported successfully!', 'success');
+            }, 1500);
         }
         
         // Show notification
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
-            const content = notification.querySelector('.notification-content');
+            const content = notification.querySelector('.notification-text');
+            const icon = notification.querySelector('.notification-icon');
             
             content.textContent = message;
-            notification.className = `notification ${type}`;
+            
+            if (type === 'error') {
+                notification.className = 'notification error';
+                icon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
+            } else {
+                notification.className = 'notification';
+                icon.innerHTML = '<i class="fas fa-check-circle"></i>';
+            }
+            
             notification.classList.add('show');
             
             setTimeout(() => {
@@ -1224,36 +1315,18 @@
             initChart();
             updateStats();
             
+            // Set up event listeners
+            document.getElementById('calculateTaxBtn').addEventListener('click', calculateTax);
+            document.getElementById('calculatePayrollBtn').addEventListener('click', calculatePayroll);
+            document.getElementById('calculateDepreciationBtn').addEventListener('click', calculateDepreciation);
+            document.getElementById('aiButton').addEventListener('click', runFinancialCheckup);
+            document.getElementById('exportReportBtn').addEventListener('click', exportReport);
+            document.getElementById('chartPeriod').addEventListener('change', initChart);
+            
             // Pre-calculate initial values
             calculateTax();
             calculatePayroll();
             calculateDepreciation();
-            
-            // Set up event listeners for inputs
-            document.querySelectorAll('input').forEach(input => {
-                input.addEventListener('input', function() {
-                    if (this.id === 'income' || this.id === 'expenses') {
-                        calculateTax();
-                    } else if (this.id === 'hours' || this.id === 'rate') {
-                        calculatePayroll();
-                    } else if (this.id === 'assetValue' || this.id === 'assetLife') {
-                        calculateDepreciation();
-                    }
-                });
-            });
-            
-            // Set up event listeners for selects
-            document.querySelectorAll('select').forEach(select => {
-                select.addEventListener('change', function() {
-                    if (this.id === 'taxRegion') {
-                        calculateTax();
-                    } else if (this.id === 'payrollState') {
-                        calculatePayroll();
-                    } else if (this.id === 'depreciationMethod') {
-                        calculateDepreciation();
-                    }
-                });
-            });
         };
     </script>
 </body>
