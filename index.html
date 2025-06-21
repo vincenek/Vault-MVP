@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vault | AI-Powered Financial Suite</title>
+    <title>Vault Financial Suite | AI-Powered Financial Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -19,6 +19,8 @@
             --error: #ef4444;
             --success: #10b981;
             --warning: #f59e0b;
+            --card-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s ease;
         }
 
         * {
@@ -89,7 +91,7 @@
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: var(--transition);
             position: relative;
         }
 
@@ -119,7 +121,7 @@
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
             border: none;
             font-size: 0.95rem;
         }
@@ -176,10 +178,16 @@
             background: var(--surface);
             padding: 1.75rem;
             border-radius: 16px;
-            box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--card-shadow);
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.3);
         }
 
         .card::before {
@@ -226,7 +234,7 @@
             border-radius: 8px;
             color: var(--text);
             font-size: 1rem;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
 
         input:focus {
@@ -256,7 +264,7 @@
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
 
         button.card-btn:hover {
@@ -328,6 +336,13 @@
             border-radius: 16px;
             display: flex;
             flex-direction: column;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.25);
         }
 
         .stat-title {
@@ -397,6 +412,29 @@
             margin-bottom: 0.5rem;
         }
 
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            background: var(--surface);
+            box-shadow: var(--card-shadow);
+            border-left: 4px solid var(--success);
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-left-color: var(--error);
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -452,6 +490,11 @@
     </style>
 </head>
 <body>
+    <!-- Notification System -->
+    <div class="notification" id="notification">
+        <div class="notification-content"></div>
+    </div>
+
     <!-- Navigation -->
     <nav>
         <div class="logo">
@@ -470,15 +513,16 @@
         </div>
         
         <div class="user-actions">
-            <button class="btn btn-secondary">
+            <button class="btn btn-secondary" id="notificationsBtn">
                 <i class="fas fa-bell"></i>
+                <span class="badge">3</span>
             </button>
             <button class="btn btn-secondary">
                 <i class="fas fa-cog"></i>
             </button>
-            <button class="btn btn-primary">
-                Upgrade Plan
-            </button>
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=Kenechukwu&background=0ea5e9&color=fff" alt="User" class="avatar">
+            </div>
         </div>
     </nav>
     
@@ -543,13 +587,22 @@
                 </div>
                 
                 <div class="input-group">
-                    <input type="number" id="income" placeholder="Annual Income ($)" value="125000">
+                    <input type="number" id="income" placeholder="Annual Income ($)" value="125000" min="0">
                     <span class="input-icon">$</span>
                 </div>
                 
                 <div class="input-group">
-                    <input type="number" id="expenses" placeholder="Business Expenses ($)" value="45000">
+                    <input type="number" id="expenses" placeholder="Business Expenses ($)" value="45000" min="0">
                     <span class="input-icon">$</span>
+                </div>
+                
+                <div class="input-group">
+                    <select id="taxRegion" class="input-field">
+                        <option value="federal">Federal Tax</option>
+                        <option value="california">California</option>
+                        <option value="newyork">New York</option>
+                        <option value="texas">Texas</option>
+                    </select>
                 </div>
                 
                 <button class="card-btn" onclick="calculateTax()">
@@ -575,13 +628,22 @@
                 </div>
                 
                 <div class="input-group">
-                    <input type="number" id="hours" placeholder="Hours Worked" value="160">
+                    <input type="number" id="hours" placeholder="Hours Worked" value="160" min="0" max="744">
                     <span class="input-icon"><i class="fas fa-clock"></i></span>
                 </div>
                 
                 <div class="input-group">
-                    <input type="number" id="rate" placeholder="Hourly Rate ($)" value="45">
+                    <input type="number" id="rate" placeholder="Hourly Rate ($)" value="45" min="0" step="0.01">
                     <span class="input-icon">$</span>
+                </div>
+                
+                <div class="input-group">
+                    <select id="payrollState" class="input-field">
+                        <option value="federal">Federal</option>
+                        <option value="california">California</option>
+                        <option value="newyork">New York</option>
+                        <option value="texas">Texas</option>
+                    </select>
                 </div>
                 
                 <button class="card-btn" onclick="calculatePayroll()">
@@ -611,13 +673,21 @@
                 </div>
                 
                 <div class="input-group">
-                    <input type="number" id="assetValue" placeholder="Asset Value ($)" value="25000">
+                    <input type="number" id="assetValue" placeholder="Asset Value ($)" value="25000" min="0" step="100">
                     <span class="input-icon">$</span>
                 </div>
                 
                 <div class="input-group">
-                    <input type="number" id="assetLife" placeholder="Useful Life (years)" value="5">
+                    <input type="number" id="assetLife" placeholder="Useful Life (years)" value="5" min="1" max="50">
                     <span class="input-icon"><i class="fas fa-calendar"></i></span>
+                </div>
+                
+                <div class="input-group">
+                    <select id="depreciationMethod" class="input-field">
+                        <option value="straight">Straight-Line</option>
+                        <option value="declining">Declining Balance</option>
+                        <option value="sum">Sum-of-Years Digits</option>
+                    </select>
                 </div>
                 
                 <button class="card-btn" onclick="calculateDepreciation()">
@@ -667,10 +737,73 @@
                     <i class="fas fa-chart-bar"></i>
                 </div>
                 <h2>Financial Overview</h2>
+                <div class="chart-controls">
+                    <select id="chartPeriod" onchange="updateChart()">
+                        <option value="monthly">Monthly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
             </div>
             
             <div class="dashboard-chart">
                 <canvas id="financeChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Recent Transactions -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <h2>Recent Transactions</h2>
+            </div>
+            
+            <div class="transactions">
+                <div class="transaction">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-down success"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">Client Payment</div>
+                        <div class="transaction-date">Today, 10:30 AM</div>
+                    </div>
+                    <div class="transaction-amount success">+$4,200.00</div>
+                </div>
+                
+                <div class="transaction">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-up error"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">Software Subscription</div>
+                        <div class="transaction-date">Yesterday, 2:15 PM</div>
+                    </div>
+                    <div class="transaction-amount error">-$299.00</div>
+                </div>
+                
+                <div class="transaction">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-up error"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">Office Supplies</div>
+                        <div class="transaction-date">May 15, 9:45 AM</div>
+                    </div>
+                    <div class="transaction-amount error">-$458.75</div>
+                </div>
+                
+                <div class="transaction">
+                    <div class="transaction-icon">
+                        <i class="fas fa-arrow-down success"></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">Consulting Fee</div>
+                        <div class="transaction-date">May 14, 3:20 PM</div>
+                    </div>
+                    <div class="transaction-amount success">+$2,500.00</div>
+                </div>
             </div>
         </div>
     </div>
@@ -693,13 +826,40 @@
         function initChart() {
             if (chart) chart.destroy();
             
+            const period = document.getElementById('chartPeriod').value;
+            let labels, revenueData, expenseData;
+            
+            if (period === 'quarterly') {
+                labels = ['Q1', 'Q2', 'Q3', 'Q4'];
+                revenueData = [
+                    financialData.history.slice(0, 3).reduce((a, b) => a + b, 0),
+                    financialData.history.slice(3, 6).reduce((a, b) => a + b, 0),
+                    financialData.history.slice(6, 9).reduce((a, b) => a + b, 0),
+                    financialData.history.slice(9, 12).reduce((a, b) => a + b, 0)
+                ];
+                expenseData = [
+                    financialData.expenses.slice(0, 3).reduce((a, b) => a + b, 0),
+                    financialData.expenses.slice(3, 6).reduce((a, b) => a + b, 0),
+                    financialData.expenses.slice(6, 9).reduce((a, b) => a + b, 0),
+                    financialData.expenses.slice(9, 12).reduce((a, b) => a + b, 0)
+                ];
+            } else if (period === 'yearly') {
+                labels = ['2021', '2022', '2023'];
+                revenueData = [420000, 580000, 730000];
+                expenseData = [380000, 420000, 490000];
+            } else {
+                labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                revenueData = financialData.history;
+                expenseData = financialData.expenses;
+            }
+            
             chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    labels: labels,
                     datasets: [{
                         label: 'Revenue',
-                        data: financialData.history,
+                        data: revenueData,
                         borderColor: '#0ea5e9',
                         backgroundColor: 'rgba(14, 165, 233, 0.1)',
                         tension: 0.4,
@@ -707,7 +867,7 @@
                         borderWidth: 3
                     }, {
                         label: 'Expenses',
-                        data: financialData.expenses,
+                        data: expenseData,
                         borderColor: '#10b981',
                         backgroundColor: 'rgba(16, 185, 129, 0.1)',
                         tension: 0.4,
@@ -789,14 +949,33 @@
         function calculateTax() {
             const income = parseFloat(document.getElementById('income').value);
             const expenses = parseFloat(document.getElementById('expenses').value);
+            const region = document.getElementById('taxRegion').value;
             
             clearErrors();
             
             if (!income || income < 0) return showError('taxError', 'Please enter a valid income amount');
             if (expenses < 0) return showError('taxError', 'Expenses cannot be negative');
             
+            // Calculate taxable income
             const taxableIncome = income - (expenses || 0);
-            const tax = taxableIncome * 0.25; // Simplified tax calculation
+            
+            // Calculate tax based on region
+            let taxRate;
+            switch(region) {
+                case 'california':
+                    taxRate = 0.28;
+                    break;
+                case 'newyork':
+                    taxRate = 0.26;
+                    break;
+                case 'texas':
+                    taxRate = 0.24;
+                    break;
+                default:
+                    taxRate = 0.25;
+            }
+            
+            const tax = taxableIncome * taxRate;
             
             // Update financial data
             financialData.tax = tax;
@@ -805,7 +984,7 @@
             document.getElementById('taxResult').innerHTML = `
                 <h3>Tax Liability</h3>
                 <div class="result-value">$${tax.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
-                <div class="result-details">Based on taxable income of $${taxableIncome.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
+                <div class="result-details">Based on taxable income of $${taxableIncome.toLocaleString('en-US', {maximumFractionDigits: 2})} at ${(taxRate * 100).toFixed(1)}% rate</div>
             `;
             
             // Update stats
@@ -819,6 +998,9 @@
             document.getElementById('taxChange').textContent = taxChange + '%';
             document.querySelector('#taxLiability + .stat-change').className = taxChange > 0 ? 'stat-change change-down' : 'stat-change change-up';
             
+            // Show notification
+            showNotification('Tax calculation completed successfully', 'success');
+            
             // Simulate AI tips
             setTimeout(() => {
                 document.getElementById('aiAnalysis').innerHTML = `
@@ -829,9 +1011,9 @@
                         <h3>Tax Optimization Tips</h3>
                     </div>
                     <div class="ai-content">
-                        <p>Based on your tax calculation:</p>
+                        <p>Based on your tax calculation in ${region.charAt(0).toUpperCase() + region.slice(1)}:</p>
                         <ul>
-                            <li>Consider increasing business expenses by $5,000 to reduce tax liability by $1,250</li>
+                            <li>Consider increasing business expenses by $5,000 to reduce tax liability by $${(5000 * taxRate).toFixed(2)}</li>
                             <li>Explore R&D tax credits that could save you up to $3,500</li>
                             <li>Defer income to next quarter to optimize tax brackets</li>
                         </ul>
@@ -844,14 +1026,31 @@
         function calculatePayroll() {
             const hours = parseFloat(document.getElementById('hours').value);
             const rate = parseFloat(document.getElementById('rate').value);
+            const state = document.getElementById('payrollState').value;
             
             clearErrors();
             
-            if (!hours || hours < 0) return showError('payrollError', 'Please enter valid hours worked');
+            if (!hours || hours < 0 || hours > 744) return showError('payrollError', 'Please enter valid hours (0-744)');
             if (!rate || rate < 0) return showError('payrollError', 'Please enter a valid hourly rate');
             
+            // Calculate tax rate based on state
+            let taxRate;
+            switch(state) {
+                case 'california':
+                    taxRate = 0.18;
+                    break;
+                case 'newyork':
+                    taxRate = 0.17;
+                    break;
+                case 'texas':
+                    taxRate = 0.16;
+                    break;
+                default:
+                    taxRate = 0.15;
+            }
+            
             const gross = hours * rate;
-            const tax = gross * 0.15; // 15% tax rate
+            const tax = gross * taxRate;
             const net = gross - tax;
             
             // Update financial data
@@ -863,34 +1062,57 @@
                 <div class="result-value">$${net.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
                 <div class="result-details">
                     Gross: $${gross.toLocaleString('en-US', {maximumFractionDigits: 2})}<br>
-                    Taxes: $${tax.toLocaleString('en-US', {maximumFractionDigits: 2})}<br>
-                    (15% estimated tax rate)
+                    Taxes: $${tax.toLocaleString('en-US', {maximumFractionDigits: 2})} (${(taxRate * 100).toFixed(1)}%)<br>
+                    State: ${state.charAt(0).toUpperCase() + state.slice(1)}
                 </div>
             `;
+            
+            // Show notification
+            showNotification('Payroll calculation completed', 'success');
         }
         
         // Depreciation Calculator
         function calculateDepreciation() {
             const value = parseFloat(document.getElementById('assetValue').value);
             const life = parseFloat(document.getElementById('assetLife').value);
+            const method = document.getElementById('depreciationMethod').value;
             
             clearErrors();
             
             if (!value || value < 0) return showError('depreciationError', 'Please enter a valid asset value');
-            if (!life || life < 1) return showError('depreciationError', 'Useful life must be at least 1 year');
+            if (!life || life < 1 || life > 50) return showError('depreciationError', 'Useful life must be between 1-50 years');
             
-            const yearlyDep = value / life;
-            const monthlyDep = yearlyDep / 12;
+            let yearlyDep, monthlyDep;
+            
+            switch(method) {
+                case 'declining':
+                    // Double declining balance method
+                    yearlyDep = (value / life) * 2;
+                    break;
+                case 'sum':
+                    // Sum-of-years digits method
+                    const sumOfYears = (life * (life + 1)) / 2;
+                    yearlyDep = (value * life) / sumOfYears;
+                    break;
+                default:
+                    // Straight-line method
+                    yearlyDep = value / life;
+            }
+            
+            monthlyDep = yearlyDep / 12;
             
             // Update financial data
             financialData.assets = yearlyDep;
             
             // Update UI
             document.getElementById('depreciationResult').innerHTML = `
-                <h3>Depreciation</h3>
+                <h3>Depreciation (${method === 'straight' ? 'Straight-Line' : method === 'declining' ? 'Declining Balance' : 'Sum-of-Years'})</h3>
                 <div class="result-value">$${yearlyDep.toLocaleString('en-US', {maximumFractionDigits: 2})}/year</div>
                 <div class="result-details">$${monthlyDep.toLocaleString('en-US', {maximumFractionDigits: 2})}/month</div>
             `;
+            
+            // Show notification
+            showNotification('Depreciation calculated', 'success');
         }
         
         // Financial Health Analysis
@@ -916,6 +1138,7 @@
                             <li>Reinvest 20% of profits into growth initiatives</li>
                             <li>Explore tax-advantaged retirement accounts</li>
                             <li>Consider dividend distributions to shareholders</li>
+                            <li>Diversify investments to maximize returns</li>
                         </ul>
                     `;
                 } else if (profitMargin > 15) {
@@ -926,6 +1149,7 @@
                             <li>Optimize operational expenses to increase margins</li>
                             <li>Review pricing strategy for underperforming products</li>
                             <li>Explore automation to reduce labor costs</li>
+                            <li>Consider strategic partnerships to expand market reach</li>
                         </ul>
                     `;
                 } else {
@@ -936,6 +1160,7 @@
                             <li>Conduct expense audit to identify cost savings</li>
                             <li>Increase prices by 5-10% on key products/services</li>
                             <li>Explore debt restructuring options</li>
+                            <li>Focus on high-margin products to boost profitability</li>
                         </ul>
                     `;
                 }
@@ -954,12 +1179,29 @@
                 
                 aiButton.innerHTML = originalText;
                 aiButton.disabled = false;
+                
+                // Show notification
+                showNotification('Financial health analysis completed', 'success');
             }, 2000);
         }
         
         // Export report
         function exportReport() {
-            alert('Financial report exported successfully! This would download a PDF in a real application.');
+            showNotification('Financial report exported successfully!', 'success');
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const content = notification.querySelector('.notification-content');
+            
+            content.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
         }
         
         // Error Handling
@@ -967,6 +1209,7 @@
             const element = document.getElementById(elementId);
             element.textContent = message;
             element.style.display = 'block';
+            showNotification(message, 'error');
         }
         
         function clearErrors() {
@@ -985,6 +1228,32 @@
             calculateTax();
             calculatePayroll();
             calculateDepreciation();
+            
+            // Set up event listeners for inputs
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.id === 'income' || this.id === 'expenses') {
+                        calculateTax();
+                    } else if (this.id === 'hours' || this.id === 'rate') {
+                        calculatePayroll();
+                    } else if (this.id === 'assetValue' || this.id === 'assetLife') {
+                        calculateDepreciation();
+                    }
+                });
+            });
+            
+            // Set up event listeners for selects
+            document.querySelectorAll('select').forEach(select => {
+                select.addEventListener('change', function() {
+                    if (this.id === 'taxRegion') {
+                        calculateTax();
+                    } else if (this.id === 'payrollState') {
+                        calculatePayroll();
+                    } else if (this.id === 'depreciationMethod') {
+                        calculateDepreciation();
+                    }
+                });
+            });
         };
     </script>
 </body>
