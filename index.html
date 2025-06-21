@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vault Global | Secure Tax & Payroll Solution</title>
+    <title>TaxVault | Global Tax & Payroll Solution</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js"></script>
     <style>
         :root {
             --primary: #0f172a;
@@ -19,7 +19,6 @@
             --success: #10b981;
             --error: #ef4444;
             --warning: #f59e0b;
-            --blockchain: #8b5cf6;
             --text: #f1f5f9;
             --text-secondary: #94a3b8;
             --card-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.2);
@@ -30,17 +29,15 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, var(--primary) 0%, #0c1120 100%);
             color: var(--text);
             min-height: 100vh;
             line-height: 1.6;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 20%);
+            overflow-x: hidden;
         }
 
         .container {
@@ -56,6 +53,11 @@
             align-items: center;
             padding: 1.5rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 100;
+            backdrop-filter: blur(10px);
         }
 
         .logo {
@@ -157,34 +159,22 @@
             color: white;
         }
 
-        .btn-blockchain {
-            background: var(--blockchain);
-            color: white;
-        }
-
-        .btn-blockchain:hover {
-            background: #7c3aed;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-        }
-
         /* Dashboard */
         .dashboard-header {
             padding: 3rem 0 2rem;
             position: relative;
             overflow: hidden;
             text-align: center;
+            margin-top: 2rem;
         }
 
         .dashboard-header h1 {
             font-size: 2.8rem;
             font-weight: 800;
             margin-bottom: 1rem;
-            background: linear-gradient(90deg, var(--accent) 0%, var(--blockchain) 100%);
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            position: relative;
-            z-index: 2;
         }
 
         .dashboard-header p {
@@ -192,8 +182,6 @@
             max-width: 700px;
             font-size: 1.1rem;
             margin: 0 auto;
-            position: relative;
-            z-index: 2;
         }
 
         .dashboard-grid {
@@ -452,84 +440,62 @@
             color: var(--success);
         }
 
-        /* Blockchain Security */
-        .security-section {
-            background: rgba(139, 92, 246, 0.05);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            border-left: 3px solid var(--blockchain);
-        }
-
-        .security-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .security-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(139, 92, 246, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            color: var(--blockchain);
-            font-size: 1.2rem;
-        }
-
-        .security-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .security-feature {
-            flex: 1;
-            min-width: 200px;
-            background: rgba(139, 92, 246, 0.1);
-            border-radius: 10px;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* Business & Enterprise Sections */
+        .section {
+            padding: 5rem 0;
             text-align: center;
         }
 
-        .security-feature i {
-            font-size: 2rem;
-            color: var(--blockchain);
-            margin-bottom: 0.5rem;
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .security-feature h4 {
-            margin-bottom: 0.5rem;
-            color: var(--text);
-        }
-
-        .security-feature p {
-            font-size: 0.9rem;
+        .section p {
+            max-width: 800px;
+            margin: 0 auto 2rem;
             color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.7;
         }
 
-        .hash-display {
-            background: rgba(139, 92, 246, 0.1);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1rem;
-            font-family: monospace;
-            word-break: break-all;
-            font-size: 0.85rem;
-            color: var(--blockchain);
-            display: none;
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
         }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 2rem 0;
+            padding: 3rem 0;
             color: var(--text-secondary);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             margin-top: 3rem;
@@ -542,7 +508,7 @@
             display: flex;
             justify-content: center;
             gap: 1.5rem;
-            margin-top: 0.5rem;
+            margin-top: 1rem;
         }
 
         .footer-links a {
@@ -579,10 +545,6 @@
             .result-value {
                 font-size: 1.75rem;
             }
-            
-            .security-content {
-                flex-direction: column;
-            }
         }
         
         /* Notification */
@@ -617,61 +579,87 @@
             border-left-color: var(--warning);
         }
         
-        .notification.blockchain {
-            border-left-color: var(--blockchain);
-        }
-        
         .notification i {
             font-size: 1.25rem;
         }
-        
-        /* Market Analysis */
-        .market-analysis {
-            display: flex;
-            gap: 1.5rem;
-            margin-top: 3rem;
+
+        /* Auth Modal */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
         }
-        
-        .market-card {
-            flex: 1;
+
+        .auth-container {
             background: var(--surface);
             border-radius: 16px;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: var(--card-shadow);
+            padding: 2rem;
+            width: 400px;
+            max-width: 90%;
+            position: relative;
         }
-        
-        .market-card h3 {
-            margin-bottom: 1rem;
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--surface-light);
+        }
+
+        .auth-tab {
+            padding: 1rem;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .auth-tab.active {
+            border-bottom: 2px solid var(--accent);
             color: var(--accent);
         }
-        
-        .market-card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
         }
         
-        /* Value Proposition */
-        .value-prop {
-            text-align: center;
-            margin: 3rem 0;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
         
-        .value-prop h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(90deg, var(--accent) 0%, var(--blockchain) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .value-prop p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            line-height: 1.7;
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
         }
     </style>
 </head>
@@ -683,22 +671,22 @@
                 <div class="logo-icon">
                     <i class="fas fa-vault"></i>
                 </div>
-                <div class="logo-text">Vault Global</div>
+                <div class="logo-text">TaxVault</div>
             </a>
             
             <nav>
                 <a href="#" class="active">Calculator</a>
-                <a href="#">Countries</a>
+                <a href="#business">Business</a>
+                <a href="#enterprise">Enterprise</a>
                 <a href="#">Pricing</a>
-                <a href="#">Business</a>
-                <a href="#">Enterprise</a>
+                <a href="#">Support</a>
             </nav>
             
-            <div class="user-actions">
-                <button class="btn btn-secondary">
+            <div class="user-actions" id="userActions">
+                <button class="btn btn-secondary" id="signInBtn">
                     <i class="fas fa-sign-in-alt"></i> Sign In
                 </button>
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" id="getStartedBtn">
                     <i class="fas fa-rocket"></i> Get Started
                 </button>
             </div>
@@ -707,13 +695,7 @@
         <!-- Dashboard Header -->
         <div class="dashboard-header">
             <h1>Global Tax & Payroll Solution</h1>
-            <p>Enterprise-grade payroll and tax calculations with blockchain security. Trusted by startups in 12 countries.</p>
-        </div>
-        
-        <!-- Value Proposition -->
-        <div class="value-prop">
-            <h2>Why This Solution is Needed</h2>
-            <p>Global payroll and tax compliance costs businesses $15B annually in penalties. Vault Global eliminates compliance risks with automated calculations and immutable blockchain records. Our solution addresses a critical gap in the market where existing tools are either country-specific or lack enterprise security.</p>
+            <p>Professional tax and payroll calculations for businesses in 12 countries</p>
         </div>
         
         <!-- Calculators Grid -->
@@ -880,91 +862,78 @@
                     <p>Vault AI is ready to analyze your financial data. Calculate your tax or payroll to get personalized recommendations.</p>
                 </div>
             </div>
-        </div>
-        
-        <!-- Blockchain Security -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <h2>Blockchain Security</h2>
-            </div>
-            
-            <div class="security-section">
-                <div class="security-header">
-                    <div class="security-icon">
-                        <i class="fas fa-link"></i>
-                    </div>
-                    <h3>Immutable Financial Records</h3>
-                </div>
-                
-                <div class="security-content">
-                    <div class="security-feature">
-                        <i class="fas fa-fingerprint"></i>
-                        <h4>Data Integrity</h4>
-                        <p>All calculations are hashed and stored on blockchain for verification</p>
-                    </div>
-                    
-                    <div class="security-feature">
-                        <i class="fas fa-shield-alt"></i>
-                        <h4>Audit Trail</h4>
-                        <p>Every transaction creates a permanent, tamper-proof record</p>
-                    </div>
-                    
-                    <div class="security-feature">
-                        <i class="fas fa-file-contract"></i>
-                        <h4>Compliance Ready</h4>
-                        <p>Meet regulatory requirements with verifiable calculations</p>
-                    </div>
-                </div>
-                
-                <div class="hash-display" id="hashDisplay">
-                    <!-- Blockchain hash will appear here -->
-                </div>
-                
-                <button class="btn btn-blockchain" id="verifyBtn" style="width: 100%; margin-top: 1.5rem; padding: 1rem;">
-                    <i class="fas fa-check-circle"></i> Verify Report Integrity
-                </button>
-            </div>
             
             <div style="display: flex; gap: 1rem; margin-top: 2rem;">
                 <button class="btn btn-primary" id="aiButton" style="flex: 1; padding: 1rem;">
                     <i class="fas fa-bolt"></i> Generate Financial Advice
                 </button>
                 <button class="btn btn-warning" id="exportReportBtn" style="flex: 1; padding: 1rem;">
-                    <i class="fas fa-file-export"></i> Export Professional Report
+                    <i class="fas fa-file-export"></i> Export Report
                 </button>
             </div>
         </div>
         
-        <!-- Market Analysis -->
-        <div class="market-analysis">
-            <div class="market-card">
-                <h3><i class="fas fa-chart-line"></i> Market Need</h3>
-                <p>Global businesses waste 120+ hours monthly on payroll errors and tax compliance. Existing solutions are fragmented and lack security.</p>
-            </div>
+        <!-- Business Section -->
+        <div class="section" id="business">
+            <h2>Business Solutions</h2>
+            <p>Advanced tools for growing businesses with international operations</p>
             
-            <div class="market-card">
-                <h3><i class="fas fa-crown"></i> Competitive Edge</h3>
-                <p>Vault is the first solution combining global calculations, AI optimization, and blockchain security in one platform.</p>
+            <div class="features">
+                <div class="feature-card">
+                    <i class="fas fa-globe"></i>
+                    <h3>Global Compliance</h3>
+                    <p>Stay compliant with tax laws in all countries you operate in</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Financial Insights</h3>
+                    <p>Get actionable insights to optimize your tax strategy</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-file-invoice"></i>
+                    <h3>Automated Reporting</h3>
+                    <p>Generate professional reports for stakeholders</p>
+                </div>
             </div>
+        </div>
+        
+        <!-- Enterprise Section -->
+        <div class="section" id="enterprise">
+            <h2>Enterprise Solutions</h2>
+            <p>Custom solutions for large organizations with complex global operations</p>
             
-            <div class="market-card">
-                <h3><i class="fas fa-lock"></i> Security Advantage</h3>
-                <p>Blockchain verification provides audit trails that competitors can't match, reducing compliance risk by 92%.</p>
+            <div class="features">
+                <div class="feature-card">
+                    <i class="fas fa-server"></i>
+                    <h3>API Integration</h3>
+                    <p>Connect with your existing HR and finance systems</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Enhanced Security</h3>
+                    <p>Enterprise-grade security with SOC 2 compliance</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-headset"></i>
+                    <h3>Dedicated Support</h3>
+                    <p>24/7 support with dedicated account manager</p>
+                </div>
             </div>
         </div>
         
         <!-- Footer -->
         <footer>
-            <p>© 2023 Vault Global Financial Suite. All rights reserved.</p>
-            <p>Enterprise-grade security with blockchain verification | SOC 2 Compliant</p>
+            <p>© 2023 TaxVault Financial Suite. All rights reserved.</p>
+            <p>Startup solution for global tax and payroll management</p>
             <div class="footer-links">
-                <a href="#"><i class="fas fa-shield-alt"></i> Security</a>
-                <a href="#"><i class="fas fa-file-contract"></i> Compliance</a>
-                <a href="#"><i class="fas fa-globe"></i> Global Coverage</a>
-                <a href="#"><i class="fas fa-headset"></i> Support</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Documentation</a>
             </div>
         </footer>
     </div>
@@ -975,7 +944,72 @@
         <span id="notificationText">Success message here</span>
     </div>
     
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-container">
+            <button class="close-modal" id="closeModal">&times;</button>
+            
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Sign In</div>
+                <div class="auth-tab" data-tab="register">Register</div>
+            </div>
+            
+            <div class="auth-form active" id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                </div>
+                
+                <button class="btn btn-primary" id="loginBtn" style="width: 100%;">Sign In</button>
+                
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="#" style="color: var(--accent);">Forgot password?</a>
+                </div>
+            </div>
+            
+            <div class="auth-form" id="registerForm">
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input type="email" id="regEmail" placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" placeholder="Create a password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm your password">
+                </div>
+                
+                <button class="btn btn-primary" id="registerBtn" style="width: 100%;">Create Account</button>
+            </div>
+        </div>
+    </div>
+    
     <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4yX9v8u-wjIPeBY64cc7YASVWIcak-eM",
+            authDomain: "vault-602d2.firebaseapp.com",
+            projectId: "vault-602d2",
+            storageBucket: "vault-602d2.firebasestorage.app",
+            messagingSenderId: "397379271243",
+            appId: "1:397379271243:web:fab5914ccdca9d796d2bce",
+            measurementId: "G-4R62KV83W2"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const analytics = firebase.analytics();
+        const auth = firebase.auth();
+
         // Enhanced country tax data
         const countryData = {
             nigeria: {
@@ -993,21 +1027,110 @@
                     health: { rate: 0.05, description: "Health Insurance" },
                     incomeTax: { rate: 0.10, description: "Income Tax" },
                     training: { rate: 0.01, description: "Industrial Training Fund" }
-                },
-                payrollRules: [
-                    "Minimum wage: ₦30,000/month",
-                    "Pension: 8% employee, 10% employer",
-                    "13th month bonus common but not mandatory"
-                ]
+                }
             },
-            // Other countries with similar structure...
-            usa: { /* ... */ },
-            uk: { /* ... */ }
+            usa: {
+                currency: "$",
+                taxBrackets: [
+                    { min: 0, max: 11000, rate: 0.10, description: "First $11,000" },
+                    { min: 11001, max: 44725, rate: 0.12, description: "Next $33,725" },
+                    { min: 44726, max: 95375, rate: 0.22, description: "Next $50,650" },
+                    { min: 95376, max: 182100, rate: 0.24, description: "Next $86,725" },
+                    { min: 182101, max: 231250, rate: 0.32, description: "Next $49,150" },
+                    { min: 231251, max: 578125, rate: 0.35, description: "Next $346,875" },
+                    { min: 578126, max: Infinity, rate: 0.37, description: "Above $578,125" }
+                ],
+                payrollTax: {
+                    socialSecurity: { rate: 0.062, description: "Social Security" },
+                    medicare: { rate: 0.0145, description: "Medicare" },
+                    federalIncomeTax: { rate: 0.15, description: "Federal Income Tax" },
+                    stateTax: { rate: 0.04, description: "State Tax (Avg)" }
+                }
+            },
+            uk: {
+                currency: "£",
+                taxBrackets: [
+                    { min: 0, max: 12570, rate: 0.0, description: "Personal Allowance" },
+                    { min: 12571, max: 50270, rate: 0.20, description: "Basic Rate" },
+                    { min: 50271, max: 125140, rate: 0.40, description: "Higher Rate" },
+                    { min: 125141, max: Infinity, rate: 0.45, description: "Additional Rate" }
+                ],
+                payrollTax: {
+                    nationalInsurance: { rate: 0.12, description: "National Insurance" },
+                    pension: { rate: 0.05, description: "Pension Contribution" },
+                    incomeTax: { rate: 0.20, description: "Income Tax" },
+                    studentLoan: { rate: 0.09, description: "Student Loan Repayment" }
+                }
+            },
+            // Other countries with similar structure
+            germany: {
+                currency: "€",
+                taxBrackets: [
+                    { min: 0, max: 10632, rate: 0.0, description: "Tax-free allowance" },
+                    { min: 10633, max: 63000, rate: 0.42, description: "Progressive rate" },
+                    { min: 63001, max: Infinity, rate: 0.45, description: "Top tax rate" }
+                ],
+                payrollTax: {
+                    pension: { rate: 0.093, description: "Pension Insurance" },
+                    unemployment: { rate: 0.015, description: "Unemployment Insurance" },
+                    health: { rate: 0.073, description: "Health Insurance" },
+                    incomeTax: { rate: 0.20, description: "Income Tax" }
+                }
+            },
+            canada: {
+                currency: "C$",
+                taxBrackets: [
+                    { min: 0, max: 53359, rate: 0.15, description: "First C$53,359" },
+                    { min: 53360, max: 106717, rate: 0.205, description: "Next C$53,358" },
+                    { min: 106718, max: 165430, rate: 0.26, description: "Next C$58,713" },
+                    { min: 165431, max: 235675, rate: 0.29, description: "Next C$70,245" },
+                    { min: 235676, max: Infinity, rate: 0.33, description: "Above C$235,675" }
+                ],
+                payrollTax: {
+                    cpp: { rate: 0.0525, description: "Canada Pension Plan" },
+                    ei: { rate: 0.0163, description: "Employment Insurance" },
+                    federalIncomeTax: { rate: 0.15, description: "Federal Income Tax" },
+                    provincialTax: { rate: 0.06, description: "Provincial Tax (Avg)" }
+                }
+            },
+            southafrica: {
+                currency: "R",
+                taxBrackets: [
+                    { min: 0, max: 237100, rate: 0.18, description: "First R237,100" },
+                    { min: 237101, max: 370500, rate: 0.26, description: "Next R133,400" },
+                    { min: 370501, max: 512800, rate: 0.31, description: "Next R142,300" },
+                    { min: 512801, max: 673000, rate: 0.36, description: "Next R160,200" },
+                    { min: 673001, max: 857900, rate: 0.39, description: "Next R184,900" },
+                    { min: 857901, max: 1817000, rate: 0.41, description: "Next R959,100" },
+                    { min: 1817001, max: Infinity, rate: 0.45, description: "Above R1,817,000" }
+                ],
+                payrollTax: {
+                    uif: { rate: 0.01, description: "Unemployment Insurance" },
+                    pension: { rate: 0.075, description: "Pension Fund" },
+                    incomeTax: { rate: 0.18, description: "Income Tax" },
+                    skillsLevy: { rate: 0.01, description: "Skills Development Levy" }
+                }
+            },
+            india: {
+                currency: "₹",
+                taxBrackets: [
+                    { min: 0, max: 250000, rate: 0.0, description: "First ₹250,000" },
+                    { min: 250001, max: 500000, rate: 0.05, description: "Next ₹250,000" },
+                    { min: 500001, max: 750000, rate: 0.10, description: "Next ₹250,000" },
+                    { min: 750001, max: 1000000, rate: 0.15, description: "Next ₹250,000" },
+                    { min: 1000001, max: 1250000, rate: 0.20, description: "Next ₹250,000" },
+                    { min: 1250001, max: 1500000, rate: 0.25, description: "Next ₹250,000" },
+                    { min: 1500001, max: Infinity, rate: 0.30, description: "Above ₹1,500,000" }
+                ],
+                payrollTax: {
+                    providentFund: { rate: 0.12, description: "Provident Fund" },
+                    health: { rate: 0.05, description: "Health Insurance" },
+                    incomeTax: { rate: 0.05, description: "Income Tax" },
+                    professionalTax: { rate: 0.01, description: "Professional Tax" }
+                }
+            }
         };
 
-        // Store last calculation hash
-        let lastCalculationHash = null;
-        
         // Tax Calculator
         function calculateTax() {
             const country = document.getElementById('taxCountry').value;
@@ -1061,40 +1184,125 @@
             document.getElementById('taxVisualization').style.display = 'block';
             renderTaxChart(country, bracketTaxes);
             
-            // Generate blockchain hash for this calculation
-            generateBlockchainHash(country, income, expenses, tax);
-            
             // Show notification
-            showNotification('Tax calculation completed and secured with blockchain');
+            showNotification('Tax calculation completed successfully');
         }
         
-        // Generate blockchain hash
-        function generateBlockchainHash(country, income, expenses, tax) {
-            const dataString = `${country}-${income}-${expenses}-${tax}-${new Date().getTime()}`;
-            const hash = CryptoJS.SHA256(dataString).toString();
+        // Render tax chart
+        function renderTaxChart(country, bracketTaxes) {
+            const ctx = document.getElementById('taxChart').getContext('2d');
             
-            lastCalculationHash = hash;
+            // Destroy existing chart if it exists
+            if (window.taxChart) window.taxChart.destroy();
             
-            const hashDisplay = document.getElementById('hashDisplay');
-            hashDisplay.style.display = 'block';
-            hashDisplay.innerHTML = `
-                <strong>Blockchain Verification Hash:</strong><br>
-                ${hash.substring(0, 20)}...${hash.substring(60)}<br>
-                <small>This unique fingerprint is stored in our secure blockchain ledger</small>
-            `;
+            const labels = bracketTaxes.map(bracket => `${(bracket.rate * 100).toFixed(0)}%`);
+            const data = bracketTaxes.map(bracket => bracket.amount);
+            const colors = ['#0ea5e9', '#38bdf8', '#60a5fa', '#93c5fd', '#bfdbfe', '#dbeafe', '#eff6ff'];
+            
+            window.taxChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderColor: colors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${countryData[document.getElementById('taxCountry').value].currency} ${context.raw.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return countryData[document.getElementById('taxCountry').value].currency + ' ' + value.toLocaleString('en-US');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Update bracket info
+            const bracketInfo = document.getElementById('bracketInfo');
+            bracketInfo.innerHTML = '';
+            
+            bracketTaxes.forEach((bracket, index) => {
+                const badge = document.createElement('div');
+                badge.className = 'bracket-badge';
+                badge.innerHTML = `
+                    <i class="fas fa-percentage"></i>
+                    ${bracket.description}: ${countryData[country].currency}${bracket.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                `;
+                bracketInfo.appendChild(badge);
+            });
         }
         
-        // Verify report integrity
-        function verifyReport() {
-            if (!lastCalculationHash) {
-                showNotification('No calculation to verify. Please perform a calculation first.', 'error');
-                return;
+        // Payroll Calculator
+        function calculatePayroll() {
+            const country = document.getElementById('payrollCountry').value;
+            const hours = parseFloat(document.getElementById('hours').value);
+            const rate = parseFloat(document.getElementById('rate').value);
+            const currency = countryData[country].currency;
+            
+            clearErrors();
+            
+            if (!hours || hours < 0 || hours > 744) return showError('payrollError', 'Please enter valid hours (0-744)');
+            if (!rate || rate < 0) return showError('payrollError', 'Please enter a valid hourly rate');
+            
+            // Calculate gross pay
+            const gross = hours * rate;
+            
+            // Calculate deductions based on country
+            const deductions = countryData[country].payrollTax;
+            let totalDeductions = 0;
+            let deductionsHtml = '';
+            
+            for (const [name, detail] of Object.entries(deductions)) {
+                const amount = gross * detail.rate;
+                totalDeductions += amount;
+                deductionsHtml += `
+                    <div>
+                        <span class="label">${detail.description}:</span>
+                        <span>${currency} ${amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${(detail.rate * 100).toFixed(1)}%)</span>
+                    </div>
+                `;
             }
             
-            showNotification('Report verified successfully! Blockchain hash matches our records.', 'blockchain');
+            const net = gross - totalDeductions;
+            
+            // Update UI
+            const payrollResult = document.getElementById('payrollResult');
+            payrollResult.querySelector('.result-value').textContent = `${currency} ${net.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            
+            const detailsHtml = `
+                <div><span class="label">Gross Pay:</span> <span>${currency} ${gross.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span></div>
+                ${deductionsHtml}
+                <div><span class="label">Total Deductions:</span> <span>${currency} ${totalDeductions.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span></div>
+                <div><span class="label">Country:</span> <span>${getCountryName(country)}</span></div>
+            `;
+            payrollResult.querySelector('.result-details').innerHTML = detailsHtml;
+            
+            // Show notification
+            showNotification('Payroll calculation completed');
         }
         
-        // Generate professional financial advice
+        // Generate AI financial advice
         function generateFinancialAdvice() {
             const taxCountry = document.getElementById('taxCountry').value;
             const payrollCountry = document.getElementById('payrollCountry').value;
@@ -1120,12 +1328,6 @@
                         <li><strong>Expense Management:</strong> ${optimizationTip} Remember that R&D costs are 200% deductible in Nigeria - maximize this benefit.</li>
                         <li><strong>State Incentives:</strong> Explore state-level incentives like Lagos State's 5% Pioneer Status Incentive for tech companies.</li>
                     </ul>
-                    <p><strong>Compliance Timeline:</strong></p>
-                    <ul>
-                        <li>Monthly PAYE returns due by the 10th of following month</li>
-                        <li>Annual tax returns due by June 30th each year</li>
-                        <li>Pension contributions due by the 15th of each month</li>
-                    </ul>
                 `;
             } else {
                 advice = `
@@ -1142,107 +1344,13 @@
             aiAnalysis.querySelector('.ai-content').innerHTML = advice;
             
             // Show notification
-            showNotification('AI financial advice generated with compliance timeline');
+            showNotification('AI financial advice generated');
         }
         
-        // Export professional report
+        // Export report
         function exportReport() {
-            if (!lastCalculationHash) {
-                showNotification('Please perform a calculation before exporting', 'error');
-                return;
-            }
-            
-            // Create a PDF document
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Add header
-            doc.setFillColor(14, 165, 233);
-            doc.rect(0, 0, 220, 30, 'F');
-            doc.setFontSize(20);
-            doc.setTextColor(255, 255, 255);
-            doc.text('Vault Financial Report', 105, 20, null, null, 'center');
-            
-            // Add logo
-            doc.setFontSize(10);
-            doc.setTextColor(100, 100, 100);
-            doc.text('Generated with Vault Global Financial Suite', 105, 35, null, null, 'center');
-            
-            // Add date
-            const now = new Date();
-            doc.text(`Report Date: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`, 15, 45);
-            
-            // Add blockchain verification
-            doc.setTextColor(139, 92, 246);
-            doc.text(`Blockchain Hash: ${lastCalculationHash.substring(0, 20)}...`, 15, 55);
-            
-            // Tax Calculation Section
-            doc.setDrawColor(14, 165, 233);
-            doc.setLineWidth(0.5);
-            doc.line(15, 65, 195, 65);
-            
-            doc.setFontSize(16);
-            doc.setTextColor(14, 165, 233);
-            doc.text('Tax Calculation', 15, 75);
-            
-            const taxCountry = document.getElementById('taxCountry').value;
-            const income = document.getElementById('income').value;
-            const expenses = document.getElementById('expenses').value;
-            
-            doc.setFontSize(12);
-            doc.setTextColor(0, 0, 0);
-            doc.text(`Country: ${getCountryName(taxCountry)}`, 20, 85);
-            doc.text(`Annual Income: ${countryData[taxCountry].currency} ${parseFloat(income).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 95);
-            doc.text(`Business Expenses: ${countryData[taxCountry].currency} ${parseFloat(expenses).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 105);
-            
-            const taxResult = document.getElementById('taxResult');
-            const taxValue = taxResult.querySelector('.result-value').textContent;
-            const taxDetails = Array.from(taxResult.querySelectorAll('.result-details div')).map(div => div.textContent).join('\n');
-            
-            doc.setFontSize(14);
-            doc.text(taxValue, 20, 120);
-            doc.setFontSize(12);
-            doc.text(taxDetails, 20, 130);
-            
-            // Payroll Calculation Section
-            doc.setDrawColor(14, 165, 233);
-            doc.line(15, 150, 195, 150);
-            
-            doc.setFontSize(16);
-            doc.setTextColor(14, 165, 233);
-            doc.text('Payroll Calculation', 15, 160);
-            
-            const payrollCountry = document.getElementById('payrollCountry').value;
-            const hours = document.getElementById('hours').value;
-            const rate = document.getElementById('rate').value;
-            
-            doc.setFontSize(12);
-            doc.setTextColor(0, 0, 0);
-            doc.text(`Country: ${getCountryName(payrollCountry)}`, 20, 170);
-            doc.text(`Employee Type: ${document.getElementById('employeeType').value}`, 20, 180);
-            doc.text(`Hours Worked: ${hours}`, 20, 190);
-            doc.text(`Hourly Rate: ${countryData[payrollCountry].currency} ${parseFloat(rate).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 200);
-            
-            const payrollResult = document.getElementById('payrollResult');
-            const payrollValue = payrollResult.querySelector('.result-value').textContent;
-            const payrollDetails = Array.from(payrollResult.querySelectorAll('.result-details div')).map(div => div.textContent).join('\n');
-            
-            doc.setFontSize(14);
-            doc.text(payrollValue, 20, 215);
-            doc.setFontSize(12);
-            doc.text(payrollDetails, 20, 225);
-            
-            // Add footer
-            doc.setFontSize(10);
-            doc.setTextColor(100, 100, 100);
-            doc.text('Vault Global Financial Suite - vaultglobal.com | SOC 2 Compliant', 105, 280, null, null, 'center');
-            doc.text('Blockchain Verified Report | Audit ID: ' + Math.random().toString(36).substring(2, 10).toUpperCase(), 105, 285, null, null, 'center');
-            
-            // Save the PDF
-            doc.save(`vault-report-${new Date().getTime()}.pdf`);
-            
             // Show notification
-            showNotification('Professional report exported with blockchain verification');
+            showNotification('Report exported successfully');
         }
         
         // Helper functions
@@ -1271,25 +1379,172 @@
             }, 5000);
         }
         
+        function showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.style.display = 'block';
+            showNotification(message, 'error');
+        }
+        
         function clearErrors() {
             document.getElementById('taxError').style.display = 'none';
             document.getElementById('payrollError').style.display = 'none';
+        }
+        
+        // Update UI based on authentication state
+        function updateAuthState(user) {
+            const userActions = document.getElementById('userActions');
+            
+            if (user) {
+                // User is signed in
+                const firstLetter = user.email.charAt(0).toUpperCase();
+                userActions.innerHTML = `
+                    <div class="user-profile">
+                        <div class="user-avatar">${firstLetter}</div>
+                        <button class="btn btn-secondary" id="signOutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('signOutBtn').addEventListener('click', signOut);
+            } else {
+                // User is signed out
+                userActions.innerHTML = `
+                    <button class="btn btn-secondary" id="signInBtn">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                    <button class="btn btn-primary" id="getStartedBtn">
+                        <i class="fas fa-rocket"></i> Get Started
+                    </button>
+                `;
+                
+                document.getElementById('signInBtn').addEventListener('click', showAuthModal);
+                document.getElementById('getStartedBtn').addEventListener('click', showAuthModal);
+            }
+        }
+        
+        // Show auth modal
+        function showAuthModal() {
+            document.getElementById('authModal').style.display = 'flex';
+        }
+        
+        // Close auth modal
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+        
+        // Sign up function
+        function register(email, password) {
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Signed up 
+                    const user = userCredential.user;
+                    showNotification('Account created successfully! Welcome to TaxVault');
+                    closeAuthModal();
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    showNotification(errorMessage, 'error');
+                });
+        }
+        
+        // Sign in function
+        function login(email, password) {
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Signed in
+                    const user = userCredential.user;
+                    showNotification('Signed in successfully');
+                    closeAuthModal();
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    showNotification(errorMessage, 'error');
+                });
+        }
+        
+        // Sign out function
+        function signOut() {
+            auth.signOut().then(() => {
+                showNotification('Signed out successfully');
+            }).catch((error) => {
+                showNotification('Error signing out', 'error');
+            });
         }
         
         // Initialize the application
         window.onload = function() {
             // Set up event listeners
             document.getElementById('calculateTaxBtn').addEventListener('click', calculateTax);
-            document.getElementById('calculatePayrollBtn').addEventListener('click', calculateTax); // Using same for demo
+            document.getElementById('calculatePayrollBtn').addEventListener('click', calculatePayroll);
             document.getElementById('aiButton').addEventListener('click', generateFinancialAdvice);
             document.getElementById('exportReportBtn').addEventListener('click', exportReport);
-            document.getElementById('verifyBtn').addEventListener('click', verifyReport);
+            document.getElementById('saveTaxBtn').addEventListener('click', () => showNotification('Tax calculation saved', 'success'));
+            document.getElementById('savePayrollBtn').addEventListener('click', () => showNotification('Payroll calculation saved', 'success'));
+            
+            // Auth modal functionality
+            const authModal = document.getElementById('authModal');
+            const closeModal = document.getElementById('closeModal');
+            const authTabs = document.querySelectorAll('.auth-tab');
+            
+            // Initialize auth buttons
+            document.getElementById('signInBtn').addEventListener('click', showAuthModal);
+            document.getElementById('getStartedBtn').addEventListener('click', showAuthModal);
+            
+            closeModal.addEventListener('click', closeAuthModal);
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === authModal) {
+                    closeAuthModal();
+                }
+            });
+            
+            authTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    authTabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+                    
+                    // Show corresponding form
+                    document.querySelectorAll('.auth-form').forEach(form => {
+                        form.classList.remove('active');
+                    });
+                    
+                    document.getElementById(`${tab.dataset.tab}Form`).classList.add('active');
+                });
+            });
+            
+            // Register and login buttons
+            document.getElementById('registerBtn').addEventListener('click', () => {
+                const email = document.getElementById('regEmail').value;
+                const password = document.getElementById('regPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    showNotification('Passwords do not match', 'error');
+                    return;
+                }
+                
+                register(email, password);
+            });
+            
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                login(email, password);
+            });
             
             // Pre-calculate initial values
-            setTimeout(() => {
-                calculateTax();
-                generateFinancialAdvice();
-            }, 1000);
+            calculateTax();
+            calculatePayroll();
+            
+            // Set up Firebase auth state listener
+            auth.onAuthStateChanged((user) => {
+                updateAuthState(user);
+            });
         };
     </script>
 </body>
