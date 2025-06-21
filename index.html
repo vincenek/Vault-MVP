@@ -3,24 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vault Financial Suite | AI-Powered Financial Platform</title>
+    <title>Vault | Global Tax & Payroll Solution</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            --bg: #0f172a;
+            --primary: #0f172a;
             --surface: #1e293b;
             --surface-light: #334155;
             --accent: #0ea5e9;
             --accent-light: #38bdf8;
-            --ai: #10b981;
+            --success: #10b981;
+            --error: #ef4444;
             --text: #f1f5f9;
             --text-secondary: #94a3b8;
-            --error: #ef4444;
-            --success: #10b981;
-            --warning: #f59e0b;
             --card-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.2);
             --transition: all 0.3s ease;
         }
@@ -33,30 +30,25 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--bg) 0%, #0c1120 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, #0c1120 100%);
             color: var(--text);
             min-height: 100vh;
             line-height: 1.6;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 0 1.5rem;
         }
 
-        /* Navigation */
-        nav {
+        /* Header & Navigation */
+        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 2rem;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .logo {
@@ -85,12 +77,12 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .nav-links {
+        nav {
             display: flex;
             gap: 2rem;
         }
 
-        .nav-links a {
+        nav a {
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
@@ -98,17 +90,17 @@
             position: relative;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        nav a:hover, nav a.active {
             color: var(--text);
         }
 
-        .nav-links a.active::after {
+        nav a.active::after {
             content: '';
             position: absolute;
-            bottom: -8px;
+            bottom: -5px;
             left: 0;
             width: 100%;
-            height: 3px;
+            height: 2px;
             background: var(--accent);
             border-radius: 3px;
         }
@@ -150,36 +142,43 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
-        /* Dashboard Layout */
+        /* Dashboard */
         .dashboard-header {
             padding: 3rem 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        .dashboard-title h1 {
-            font-size: 2rem;
+        .dashboard-header h1 {
+            font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .dashboard-title p {
+        .dashboard-header p {
             color: var(--text-secondary);
             max-width: 600px;
+            font-size: 1.1rem;
         }
 
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Cards */
         .card {
             background: var(--surface);
-            padding: 1.75rem;
+            padding: 2rem;
             border-radius: 16px;
             box-shadow: var(--card-shadow);
             position: relative;
@@ -210,28 +209,38 @@
         }
 
         .card-header h2 {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             font-weight: 600;
         }
 
         .card-icon {
-            width: 42px;
-            height: 42px;
+            width: 48px;
+            height: 48px;
             background: rgba(14, 165, 233, 0.1);
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 0.75rem;
-            font-size: 1.25rem;
+            margin-right: 1rem;
+            font-size: 1.5rem;
             color: var(--accent);
         }
 
-        /* Inputs and Buttons */
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
         input, select {
             width: 100%;
-            padding: 0.9rem;
-            margin: 0.75rem 0;
+            padding: 0.9rem 1rem;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
@@ -245,7 +254,7 @@
             box-shadow: 0 0 12px rgba(14, 165, 233, 0.3);
         }
 
-        .input-group {
+        .input-with-icon {
             position: relative;
         }
 
@@ -257,149 +266,86 @@
             color: var(--text-secondary);
         }
 
-        button.card-btn {
-            width: 100%;
-            padding: 0.9rem;
-            margin-top: 1rem;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        button.card-btn:hover {
-            background: var(--accent-light);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        .country-flag {
+            width: 24px;
+            height: 16px;
+            display: inline-block;
+            margin-right: 8px;
+            border-radius: 2px;
+            vertical-align: middle;
         }
 
         /* Results */
-        .result {
-            margin-top: 1.25rem;
-            padding: 1.25rem;
+        .result-card {
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
             border-left: 3px solid var(--accent);
-            animation: fadeIn 0.4s ease;
         }
 
-        .result h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.75rem;
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .result-title {
+            font-size: 1.2rem;
+            font-weight: 600;
             color: var(--accent);
         }
 
         .result-value {
-            font-size: 1.75rem;
+            font-size: 2rem;
             font-weight: 700;
             margin: 0.5rem 0;
         }
 
         .result-details {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin-top: 0.5rem;
+            line-height: 1.7;
         }
 
-        .ai-result {
-            border-color: var(--ai);
-            background: rgba(16, 185, 129, 0.05);
-        }
-
-        .ai-result h3 {
-            color: var(--ai);
+        .result-details div {
+            margin-bottom: 0.3rem;
         }
 
         .error {
             color: var(--error);
             margin-top: 0.5rem;
             display: none;
-            animation: shake 0.4s ease;
-        }
-
-        /* Financial Dashboard */
-        .dashboard-chart {
-            height: 400px;
-            margin-top: 1rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: var(--surface);
-            padding: 1.5rem;
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.25);
-        }
-
-        .stat-title {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin: 0.25rem 0;
-        }
-
-        .stat-change {
-            display: flex;
-            align-items: center;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-
-        .change-up {
-            color: var(--success);
-        }
-
-        .change-down {
-            color: var(--error);
         }
 
         /* AI Advisor */
-        .ai-message {
-            background: rgba(16, 185, 129, 0.1);
+        .ai-advisor {
+            background: rgba(16, 185, 129, 0.05);
             border-radius: 12px;
-            padding: 1.25rem;
-            margin-top: 1.5rem;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-left: 3px solid var(--success);
         }
 
         .ai-header {
             display: flex;
             align-items: center;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .ai-icon {
-            width: 36px;
-            height: 36px;
-            background: rgba(16, 185, 129, 0.2);
+            width: 40px;
+            height: 40px;
+            background: rgba(16, 185, 129, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 0.75rem;
-            color: var(--ai);
+            margin-right: 1rem;
+            color: var(--success);
+            font-size: 1.2rem;
         }
 
         .ai-content {
@@ -415,183 +361,71 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Notifications */
-        .notification {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            background: var(--surface);
-            box-shadow: var(--card-shadow);
-            border-left: 4px solid var(--success);
-            z-index: 1000;
-            transform: translateX(120%);
-            transition: transform 0.3s ease;
-            max-width: 350px;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.error {
-            border-left-color: var(--error);
-        }
-
-        .notification-content {
-            display: flex;
-            align-items: center;
-        }
-
-        .notification-icon {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 3rem;
         }
 
         /* Responsive */
-        @media (max-width: 900px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .dashboard-header {
+        @media (max-width: 768px) {
+            header {
                 flex-direction: column;
-                align-items: flex-start;
                 gap: 1.5rem;
             }
             
-            .dashboard-chart {
-                height: 300px;
-            }
-        }
-
-        @media (max-width: 600px) {
             nav {
-                padding: 1rem;
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
             }
             
-            .user-actions {
-                display: none;
+            .dashboard-header h1 {
+                font-size: 2rem;
             }
             
-            .dashboard-title h1 {
-                font-size: 1.75rem;
-            }
-            
-            .stat-value {
-                font-size: 1.5rem;
+            .card {
+                padding: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Notification System -->
-    <div class="notification" id="notification">
-        <div class="notification-content">
-            <div class="notification-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <div class="notification-text"></div>
-        </div>
-    </div>
-
-    <!-- Navigation -->
-    <nav>
-        <a href="#" class="logo">
-            <div class="logo-icon">
-                <i class="fas fa-vault"></i>
-            </div>
-            <div class="logo-text">Vault</div>
-        </a>
-        
-        <div class="nav-links">
-            <a href="#" class="active">Dashboard</a>
-            <a href="#">Tax</a>
-            <a href="#">Payroll</a>
-            <a href="#">Reports</a>
-            <a href="#">Compliance</a>
-        </div>
-        
-        <div class="user-actions">
-            <button class="btn btn-secondary" id="notificationsBtn">
-                <i class="fas fa-bell"></i>
-                <span class="badge">3</span>
-            </button>
-            <button class="btn btn-secondary">
-                <i class="fas fa-cog"></i>
-            </button>
-            <div class="user-profile">
-                <img src="https://ui-avatars.com/api/?name=Kenechukwu&background=0ea5e9&color=fff" alt="User" class="avatar">
-            </div>
-        </div>
-    </nav>
-    
     <div class="container">
-        <!-- Dashboard Header -->
-        <div class="dashboard-header">
-            <div class="dashboard-title">
-                <h1>Financial Dashboard</h1>
-                <p>Monitor your financial health and optimize performance with AI-powered insights</p>
-            </div>
-            <div>
-                <button class="btn btn-primary" id="exportReportBtn">
-                    <i class="fas fa-file-export"></i> Export Report
+        <!-- Header -->
+        <header>
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-vault"></i>
+                </div>
+                <div class="logo-text">Vault Global</div>
+            </a>
+            
+            <nav>
+                <a href="#" class="active">Calculator</a>
+                <a href="#">Countries</a>
+                <a href="#">Pricing</a>
+                <a href="#">Business</a>
+                <a href="#">Enterprise</a>
+            </nav>
+            
+            <div class="user-actions">
+                <button class="btn btn-secondary">
+                    Sign In
+                </button>
+                <button class="btn btn-primary">
+                    Get Started
                 </button>
             </div>
-        </div>
-        
-        <!-- Stats Overview -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-title">Total Revenue</div>
-                <div class="stat-value" id="totalRevenue">$124,820</div>
-                <div class="stat-change change-up">
-                    <i class="fas fa-arrow-up"></i> <span id="revenueChange">12.4%</span> from last month
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-title">Net Profit</div>
-                <div class="stat-value" id="netProfit">$42,150</div>
-                <div class="stat-change change-up">
-                    <i class="fas fa-arrow-up"></i> <span id="profitChange">8.2%</span> from last month
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-title">Tax Liability</div>
-                <div class="stat-value" id="taxLiability">$18,720</div>
-                <div class="stat-change change-down">
-                    <i class="fas fa-arrow-down"></i> <span id="taxChange">3.1%</span> from last month
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-title">Cash Flow</div>
-                <div class="stat-value" id="cashFlow">$27,450</div>
-                <div class="stat-change change-up">
-                    <i class="fas fa-arrow-up"></i> <span id="cashChange">5.7%</span> from last month
-                </div>
-            </div>
+        </header>
+
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1>Global Tax & Payroll Calculator</h1>
+            <p>Calculate taxes and payroll for any country with real-time financial insights</p>
         </div>
         
         <!-- Calculators Grid -->
@@ -602,39 +436,60 @@
                     <div class="card-icon">
                         <i class="fas fa-file-invoice-dollar"></i>
                     </div>
-                    <h2>Tax Calculator</h2>
+                    <h2>Global Tax Calculator</h2>
                 </div>
                 
-                <div class="input-group">
-                    <input type="number" id="income" placeholder="Annual Income ($)" value="125000" min="0">
-                    <span class="input-icon">$</span>
-                </div>
-                
-                <div class="input-group">
-                    <input type="number" id="expenses" placeholder="Business Expenses ($)" value="45000" min="0">
-                    <span class="input-icon">$</span>
-                </div>
-                
-                <div class="input-group">
-                    <select id="taxRegion">
-                        <option value="federal">Federal Tax</option>
-                        <option value="california">California</option>
-                        <option value="newyork">New York</option>
-                        <option value="texas">Texas</option>
+                <div class="form-group">
+                    <label for="taxCountry">Select Country</label>
+                    <select id="taxCountry">
+                        <option value="nigeria">🇳🇬 Nigeria</option>
+                        <option value="usa">🇺🇸 United States</option>
+                        <option value="uk">🇬🇧 United Kingdom</option>
+                        <option value="germany">🇩🇪 Germany</option>
+                        <option value="canada">🇨🇦 Canada</option>
+                        <option value="southafrica">🇿🇦 South Africa</option>
+                        <option value="india">🇮🇳 India</option>
                     </select>
                 </div>
                 
-                <button class="card-btn" id="calculateTaxBtn">
+                <div class="form-group">
+                    <label for="income">Annual Income</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="income" placeholder="Enter amount in local currency" value="7500000">
+                        <span class="input-icon"><i class="fas fa-money-bill-wave"></i></span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="expenses">Business Expenses</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="expenses" placeholder="Enter amount in local currency" value="2500000">
+                        <span class="input-icon"><i class="fas fa-receipt"></i></span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" id="calculateTaxBtn" style="width: 100%; padding: 1rem;">
                     Calculate Tax Liability
                 </button>
                 
-                <div id="taxResult" class="result">
-                    <h3>Tax Liability</h3>
-                    <div class="result-value">$20,000.00</div>
-                    <div class="result-details">Based on taxable income of $80,000</div>
+                <div class="result-card" id="taxResult">
+                    <div class="result-header">
+                        <div class="result-title">Tax Liability</div>
+                        <div class="result-actions">
+                            <button class="btn btn-secondary" id="saveTaxBtn">
+                                <i class="fas fa-save"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="result-value">₦ 0.00</div>
+                    <div class="result-details">
+                        <div>Taxable Income: ₦ 0.00</div>
+                        <div>Effective Tax Rate: 0.0%</div>
+                        <div>Select a country and enter your financial details</div>
+                    </div>
                 </div>
                 
-                <div id="taxError" class="error"></div>
+                <div class="error" id="taxError"></div>
             </div>
             
             <!-- Payroll Calculator -->
@@ -643,332 +498,164 @@
                     <div class="card-icon">
                         <i class="fas fa-money-check-alt"></i>
                     </div>
-                    <h2>Payroll Calculator</h2>
+                    <h2>Global Payroll Calculator</h2>
                 </div>
                 
-                <div class="input-group">
-                    <input type="number" id="hours" placeholder="Hours Worked" value="160" min="0" max="744">
-                    <span class="input-icon"><i class="fas fa-clock"></i></span>
-                </div>
-                
-                <div class="input-group">
-                    <input type="number" id="rate" placeholder="Hourly Rate ($)" value="45" min="0" step="0.01">
-                    <span class="input-icon">$</span>
-                </div>
-                
-                <div class="input-group">
-                    <select id="payrollState">
-                        <option value="federal">Federal</option>
-                        <option value="california">California</option>
-                        <option value="newyork">New York</option>
-                        <option value="texas">Texas</option>
+                <div class="form-group">
+                    <label for="payrollCountry">Select Country</label>
+                    <select id="payrollCountry">
+                        <option value="nigeria">🇳🇬 Nigeria</option>
+                        <option value="usa">🇺🇸 United States</option>
+                        <option value="uk">🇬🇧 United Kingdom</option>
+                        <option value="germany">🇩🇪 Germany</option>
+                        <option value="canada">🇨🇦 Canada</option>
+                        <option value="southafrica">🇿🇦 South Africa</option>
+                        <option value="india">🇮🇳 India</option>
                     </select>
                 </div>
                 
-                <button class="card-btn" id="calculatePayrollBtn">
+                <div class="form-group">
+                    <label for="hours">Hours Worked</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="hours" placeholder="Enter hours" value="160">
+                        <span class="input-icon"><i class="fas fa-clock"></i></span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="rate">Hourly Rate</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="rate" placeholder="Enter rate in local currency" value="3500">
+                        <span class="input-icon"><i class="fas fa-coins"></i></span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" id="calculatePayrollBtn" style="width: 100%; padding: 1rem;">
                     Calculate Payroll
                 </button>
                 
-                <div id="payrollResult" class="result">
-                    <h3>Payroll Summary</h3>
-                    <div class="result-value">$6,120.00</div>
-                    <div class="result-details">
-                        Gross: $7,200.00<br>
-                        Taxes: $1,080.00<br>
-                        (15% estimated tax rate)
-                    </div>
-                </div>
-                
-                <div id="payrollError" class="error"></div>
-            </div>
-            
-            <!-- Depreciation Calculator -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h2>Asset Depreciation</h2>
-                </div>
-                
-                <div class="input-group">
-                    <input type="number" id="assetValue" placeholder="Asset Value ($)" value="25000" min="0" step="100">
-                    <span class="input-icon">$</span>
-                </div>
-                
-                <div class="input-group">
-                    <input type="number" id="assetLife" placeholder="Useful Life (years)" value="5" min="1" max="50">
-                    <span class="input-icon"><i class="fas fa-calendar"></i></span>
-                </div>
-                
-                <div class="input-group">
-                    <select id="depreciationMethod">
-                        <option value="straight">Straight-Line</option>
-                        <option value="declining">Declining Balance</option>
-                        <option value="sum">Sum-of-Years Digits</option>
-                    </select>
-                </div>
-                
-                <button class="card-btn" id="calculateDepreciationBtn">
-                    Calculate Depreciation
-                </button>
-                
-                <div id="depreciationResult" class="result">
-                    <h3>Depreciation</h3>
-                    <div class="result-value">$5,000.00/year</div>
-                    <div class="result-details">$416.67/month</div>
-                </div>
-                
-                <div id="depreciationError" class="error"></div>
-            </div>
-            
-            <!-- AI Advisor -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <h2>AI Financial Advisor</h2>
-                </div>
-                
-                <div id="aiAnalysis" class="ai-message">
-                    <div class="ai-header">
-                        <div class="ai-icon">
-                            <i class="fas fa-lightbulb"></i>
+                <div class="result-card" id="payrollResult">
+                    <div class="result-header">
+                        <div class="result-title">Payroll Summary</div>
+                        <div class="result-actions">
+                            <button class="btn btn-secondary" id="savePayrollBtn">
+                                <i class="fas fa-save"></i>
+                            </button>
                         </div>
-                        <h3>Financial Health Tips</h3>
                     </div>
-                    <div class="ai-content">
-                        <p>Vault AI is ready to analyze your financial data. Run a financial health checkup to get personalized recommendations.</p>
+                    <div class="result-value">₦ 0.00</div>
+                    <div class="result-details">
+                        <div>Gross Pay: ₦ 0.00</div>
+                        <div>Total Deductions: ₦ 0.00</div>
+                        <div>Select a country and enter hours/rate</div>
                     </div>
                 </div>
                 
-                <button class="card-btn" id="aiButton">
-                    <i class="fas fa-bolt"></i> Run Financial Health Checkup
+                <div class="error" id="payrollError"></div>
+            </div>
+        </div>
+        
+        <!-- AI Advisor & Export -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h2>AI Financial Advisor</h2>
+            </div>
+            
+            <div class="ai-advisor" id="aiAnalysis">
+                <div class="ai-header">
+                    <div class="ai-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Financial Optimization Tips</h3>
+                </div>
+                <div class="ai-content">
+                    <p>Vault AI is ready to analyze your financial data. Calculate your tax or payroll to get personalized recommendations.</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button class="btn btn-primary" id="aiButton" style="flex: 1; padding: 1rem;">
+                    <i class="fas fa-bolt"></i> Generate Financial Advice
+                </button>
+                <button class="btn btn-primary" id="exportReportBtn" style="flex: 1; padding: 1rem;">
+                    <i class="fas fa-file-export"></i> Export Full Report
                 </button>
             </div>
         </div>
         
-        <!-- Financial Chart -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon">
-                    <i class="fas fa-chart-bar"></i>
-                </div>
-                <h2>Financial Overview</h2>
-                <div class="chart-controls">
-                    <select id="chartPeriod">
-                        <option value="monthly">Monthly</option>
-                        <option value="quarterly">Quarterly</option>
-                        <option value="yearly">Yearly</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="dashboard-chart">
-                <canvas id="financeChart"></canvas>
-            </div>
-        </div>
-        
-        <!-- Recent Transactions -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon">
-                    <i class="fas fa-exchange-alt"></i>
-                </div>
-                <h2>Recent Transactions</h2>
-            </div>
-            
-            <div class="transactions">
-                <div class="transaction">
-                    <div class="transaction-icon">
-                        <i class="fas fa-arrow-down success"></i>
-                    </div>
-                    <div class="transaction-details">
-                        <div class="transaction-title">Client Payment</div>
-                        <div class="transaction-date">Today, 10:30 AM</div>
-                    </div>
-                    <div class="transaction-amount success">+$4,200.00</div>
-                </div>
-                
-                <div class="transaction">
-                    <div class="transaction-icon">
-                        <i class="fas fa-arrow-up error"></i>
-                    </div>
-                    <div class="transaction-details">
-                        <div class="transaction-title">Software Subscription</div>
-                        <div class="transaction-date">Yesterday, 2:15 PM</div>
-                    </div>
-                    <div class="transaction-amount error">-$299.00</div>
-                </div>
-                
-                <div class="transaction">
-                    <div class="transaction-icon">
-                        <i class="fas fa-arrow-up error"></i>
-                    </div>
-                    <div class="transaction-details">
-                        <div class="transaction-title">Office Supplies</div>
-                        <div class="transaction-date">May 15, 9:45 AM</div>
-                    </div>
-                    <div class="transaction-amount error">-$458.75</div>
-                </div>
-                
-                <div class="transaction">
-                    <div class="transaction-icon">
-                        <i class="fas fa-arrow-down success"></i>
-                    </div>
-                    <div class="transaction-details">
-                        <div class="transaction-title">Consulting Fee</div>
-                        <div class="transaction-date">May 14, 3:20 PM</div>
-                    </div>
-                    <div class="transaction-amount success">+$2,500.00</div>
-                </div>
-            </div>
-        </div>
+        <!-- Footer -->
+        <footer>
+            <p>© 2023 Vault Global Financial Suite. All rights reserved.</p>
+            <p>Designed for global businesses with a focus on Nigeria and international markets</p>
+        </footer>
     </div>
     
     <script>
-        // Initialize Chart
-        let chart;
-        const ctx = document.getElementById('financeChart').getContext('2d');
-        
-        // Financial data
-        let financialData = {
-            tax: 20000,
-            payroll: 6120,
-            assets: 5000,
-            history: [42000, 45000, 48000, 52000, 56000, 61000, 59000, 62000, 64000, 67000, 70000, 73000],
-            expenses: [32000, 31000, 33000, 34000, 35000, 36000, 37000, 38000, 39000, 40000, 41000, 42000]
-        };
-        
-        // Initialize the chart
-        function initChart() {
-            if (chart) chart.destroy();
-            
-            const period = document.getElementById('chartPeriod').value;
-            let labels, revenueData, expenseData;
-            
-            if (period === 'quarterly') {
-                labels = ['Q1', 'Q2', 'Q3', 'Q4'];
-                revenueData = [
-                    financialData.history.slice(0, 3).reduce((a, b) => a + b, 0),
-                    financialData.history.slice(3, 6).reduce((a, b) => a + b, 0),
-                    financialData.history.slice(6, 9).reduce((a, b) => a + b, 0),
-                    financialData.history.slice(9, 12).reduce((a, b) => a + b, 0)
-                ];
-                expenseData = [
-                    financialData.expenses.slice(0, 3).reduce((a, b) => a + b, 0),
-                    financialData.expenses.slice(3, 6).reduce((a, b) => a + b, 0),
-                    financialData.expenses.slice(6, 9).reduce((a, b) => a + b, 0),
-                    financialData.expenses.slice(9, 12).reduce((a, b) => a + b, 0)
-                ];
-            } else if (period === 'yearly') {
-                labels = ['2021', '2022', '2023'];
-                revenueData = [420000, 580000, 730000];
-                expenseData = [380000, 420000, 490000];
-            } else {
-                labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                revenueData = financialData.history;
-                expenseData = financialData.expenses;
-            }
-            
-            chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Revenue',
-                        data: revenueData,
-                        borderColor: '#0ea5e9',
-                        backgroundColor: 'rgba(14, 165, 233, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        borderWidth: 3
-                    }, {
-                        label: 'Expenses',
-                        data: expenseData,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        borderWidth: 3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                color: '#f1f5f9',
-                                font: {
-                                    size: 13
-                                }
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: '#1e293b',
-                            titleColor: '#f1f5f9',
-                            bodyColor: '#f1f5f9',
-                            borderColor: 'rgba(255, 255, 255, 0.1)',
-                            borderWidth: 1,
-                            padding: 12,
-                            boxPadding: 6,
-                            callbacks: {
-                                label: function(context) {
-                                    return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.05)'
-                            },
-                            ticks: {
-                                color: '#94a3b8',
-                                callback: function(value) {
-                                    return '$' + value.toLocaleString();
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: '#94a3b8'
-                            }
-                        }
-                    }
+        // Country tax data (simplified for prototype)
+        const countryData = {
+            nigeria: {
+                currency: "₦",
+                taxBrackets: [
+                    { min: 0, max: 300000, rate: 0.07 },
+                    { min: 300001, max: 600000, rate: 0.11 },
+                    { min: 600001, max: 1100000, rate: 0.15 },
+                    { min: 1100001, max: 1600000, rate: 0.19 },
+                    { min: 1600001, max: 3200000, rate: 0.21 },
+                    { min: 3200001, max: Infinity, rate: 0.24 }
+                ],
+                payrollTax: {
+                    pension: 0.08,
+                    health: 0.05,
+                    incomeTax: 0.10
                 }
-            });
-        }
-        
-        // Update financial stats
-        function updateStats() {
-            // Calculate revenue change
-            const currentRevenue = financialData.history[financialData.history.length - 1];
-            const prevRevenue = financialData.history[financialData.history.length - 2];
-            const revenueChange = ((currentRevenue - prevRevenue) / prevRevenue * 100).toFixed(1);
-            
-            // Update DOM elements
-            document.getElementById('totalRevenue').textContent = '$' + currentRevenue.toLocaleString();
-            document.getElementById('revenueChange').textContent = revenueChange + '%';
-            document.getElementById('netProfit').textContent = '$' + (currentRevenue * 0.34).toLocaleString();
-            document.getElementById('profitChange').textContent = (revenueChange * 0.8).toFixed(1) + '%';
-            document.getElementById('taxLiability').textContent = '$' + financialData.tax.toLocaleString();
-            document.getElementById('cashFlow').textContent = '$' + (currentRevenue * 0.22).toLocaleString();
-        }
-        
+            },
+            usa: {
+                currency: "$",
+                taxBrackets: [
+                    { min: 0, max: 11000, rate: 0.10 },
+                    { min: 11001, max: 44725, rate: 0.12 },
+                    { min: 44726, max: 95375, rate: 0.22 },
+                    { min: 95376, max: 182100, rate: 0.24 },
+                    { min: 182101, max: 231250, rate: 0.32 },
+                    { min: 231251, max: 578125, rate: 0.35 },
+                    { min: 578126, max: Infinity, rate: 0.37 }
+                ],
+                payrollTax: {
+                    socialSecurity: 0.062,
+                    medicare: 0.0145,
+                    federalIncomeTax: 0.15
+                }
+            },
+            uk: {
+                currency: "£",
+                taxBrackets: [
+                    { min: 0, max: 12570, rate: 0.0 },
+                    { min: 12571, max: 50270, rate: 0.20 },
+                    { min: 50271, max: 125140, rate: 0.40 },
+                    { min: 125141, max: Infinity, rate: 0.45 }
+                ],
+                payrollTax: {
+                    nationalInsurance: 0.12,
+                    pension: 0.05,
+                    incomeTax: 0.20
+                }
+            },
+            // Other countries with similar structure
+            germany: { currency: "€", taxBrackets: [], payrollTax: {} },
+            canada: { currency: "C$", taxBrackets: [], payrollTax: {} },
+            southafrica: { currency: "R", taxBrackets: [], payrollTax: {} },
+            india: { currency: "₹", taxBrackets: [], payrollTax: {} }
+        };
+
         // Tax Calculator
         function calculateTax() {
+            const country = document.getElementById('taxCountry').value;
             const income = parseFloat(document.getElementById('income').value);
             const expenses = parseFloat(document.getElementById('expenses').value);
-            const region = document.getElementById('taxRegion').value;
+            const currency = countryData[country].currency;
             
             clearErrors();
             
@@ -976,357 +663,204 @@
             if (expenses < 0) return showError('taxError', 'Expenses cannot be negative');
             
             // Calculate taxable income
-            const taxableIncome = income - (expenses || 0);
+            const taxableIncome = income - expenses;
             
-            // Calculate tax based on region
-            let taxRate;
-            switch(region) {
-                case 'california':
-                    taxRate = 0.28;
-                    break;
-                case 'newyork':
-                    taxRate = 0.26;
-                    break;
-                case 'texas':
-                    taxRate = 0.24;
-                    break;
-                default:
-                    taxRate = 0.25;
+            // Calculate tax based on country brackets
+            let tax = 0;
+            const brackets = countryData[country].taxBrackets;
+            
+            for (const bracket of brackets) {
+                if (taxableIncome > bracket.min) {
+                    const taxableAmount = Math.min(taxableIncome, bracket.max) - bracket.min;
+                    tax += taxableAmount * bracket.rate;
+                }
             }
-            
-            const tax = taxableIncome * taxRate;
-            
-            // Update financial data
-            financialData.tax = tax;
             
             // Update UI
-            document.getElementById('taxResult').innerHTML = `
-                <h3>Tax Liability</h3>
-                <div class="result-value">$${tax.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
-                <div class="result-details">Based on taxable income of $${taxableIncome.toLocaleString('en-US', {maximumFractionDigits: 2})} at ${(taxRate * 100).toFixed(1)}% rate</div>
+            const taxResult = document.getElementById('taxResult');
+            taxResult.querySelector('.result-value').textContent = `${currency} ${tax.toLocaleString('en-US', {maximumFractionDigits: 2})}`;
+            
+            const detailsHtml = `
+                <div>Taxable Income: ${currency} ${taxableIncome.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
+                <div>Effective Tax Rate: ${(tax / taxableIncome * 100).toFixed(1)}%</div>
+                <div>Country: ${getCountryName(country)}</div>
             `;
-            
-            // Update stats
-            updateStats();
-            
-            // Update tax liability in stats
-            document.getElementById('taxLiability').textContent = '$' + tax.toLocaleString();
-            
-            // Calculate tax change
-            const taxChange = ((tax - 18720) / 18720 * 100).toFixed(1);
-            document.getElementById('taxChange').textContent = taxChange + '%';
-            document.querySelector('#taxLiability + .stat-change').className = taxChange > 0 ? 'stat-change change-down' : 'stat-change change-up';
+            taxResult.querySelector('.result-details').innerHTML = detailsHtml;
             
             // Show notification
-            showNotification('Tax calculation completed successfully', 'success');
-            
-            // Generate AI tips
-            generateTaxAdvice(taxableIncome, tax, region);
-        }
-        
-        // Generate AI tax advice
-        function generateTaxAdvice(taxableIncome, tax, region) {
-            let advice = '';
-            
-            if (taxableIncome > 100000) {
-                advice = `
-                    <p>Based on your tax calculation in ${region.charAt(0).toUpperCase() + region.slice(1)}:</p>
-                    <ul>
-                        <li><strong>Maximize Retirement Contributions:</strong> Consider contributing the maximum to your 401(k) or SEP IRA to reduce taxable income</li>
-                        <li><strong>Charitable Contributions:</strong> Donating to qualified charities can provide deductions</li>
-                        <li><strong>Tax-Loss Harvesting:</strong> Offset capital gains with investment losses</li>
-                        <li><strong>HSA Contributions:</strong> Health Savings Accounts offer triple tax benefits</li>
-                    </ul>
-                `;
-            } else if (taxableIncome > 50000) {
-                advice = `
-                    <p>Based on your tax calculation in ${region.charAt(0).toUpperCase() + region.slice(1)}:</p>
-                    <ul>
-                        <li><strong>Education Credits:</strong> Explore American Opportunity or Lifetime Learning credits</li>
-                        <li><strong>Energy Efficiency Credits:</strong> Consider home improvements for energy tax credits</li>
-                        <li><strong>Business Expense Optimization:</strong> Review deductible expenses like home office or mileage</li>
-                        <li><strong>Retirement Savings:</strong> Increase contributions to traditional IRA for deductions</li>
-                    </ul>
-                `;
-            } else {
-                advice = `
-                    <p>Based on your tax calculation in ${region.charAt(0).toUpperCase() + region.slice(1)}:</p>
-                    <ul>
-                        <li><strong>Earned Income Tax Credit:</strong> You may qualify for EITC benefits</li>
-                        <li><strong>Saver's Credit:</strong> Get credit for retirement plan contributions</li>
-                        <li><strong>Education Benefits:</strong> Look into tuition and fees deduction</li>
-                        <li><strong>Standard Deduction:</strong> Ensure you're taking the maximum standard deduction</li>
-                    </ul>
-                `;
-            }
-            
-            document.getElementById('aiAnalysis').innerHTML = `
-                <div class="ai-header">
-                    <div class="ai-icon">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-                    <h3>Tax Optimization Advice</h3>
-                </div>
-                <div class="ai-content">
-                    ${advice}
-                </div>
-            `;
+            showNotification('Tax calculation completed successfully');
         }
         
         // Payroll Calculator
         function calculatePayroll() {
+            const country = document.getElementById('payrollCountry').value;
             const hours = parseFloat(document.getElementById('hours').value);
             const rate = parseFloat(document.getElementById('rate').value);
-            const state = document.getElementById('payrollState').value;
+            const currency = countryData[country].currency;
             
             clearErrors();
             
             if (!hours || hours < 0 || hours > 744) return showError('payrollError', 'Please enter valid hours (0-744)');
             if (!rate || rate < 0) return showError('payrollError', 'Please enter a valid hourly rate');
             
-            // Calculate tax rate based on state
-            let taxRate;
-            switch(state) {
-                case 'california':
-                    taxRate = 0.18;
-                    break;
-                case 'newyork':
-                    taxRate = 0.17;
-                    break;
-                case 'texas':
-                    taxRate = 0.16;
-                    break;
-                default:
-                    taxRate = 0.15;
-            }
-            
-            // Calculate additional payroll taxes
-            const socialSecurity = 0.062;
-            const medicare = 0.0145;
-            const totalTaxRate = taxRate + socialSecurity + medicare;
-            
+            // Calculate gross pay
             const gross = hours * rate;
-            const tax = gross * totalTaxRate;
-            const net = gross - tax;
             
-            // Update financial data
-            financialData.payroll = net;
+            // Calculate deductions based on country
+            const deductions = countryData[country].payrollTax;
+            let totalDeductions = 0;
+            let deductionsHtml = '';
             
-            // Update UI
-            document.getElementById('payrollResult').innerHTML = `
-                <h3>Payroll Summary</h3>
-                <div class="result-value">$${net.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
-                <div class="result-details">
-                    Gross: $${gross.toLocaleString('en-US', {maximumFractionDigits: 2})}<br>
-                    Federal Income Tax: $${(gross * taxRate).toLocaleString('en-US', {maximumFractionDigits: 2})} (${(taxRate * 100).toFixed(1)}%)<br>
-                    Social Security: $${(gross * socialSecurity).toLocaleString('en-US', {maximumFractionDigits: 2})} (6.2%)<br>
-                    Medicare: $${(gross * medicare).toLocaleString('en-US', {maximumFractionDigits: 2})} (1.45%)<br>
-                    State: ${state.charAt(0).toUpperCase() + state.slice(1)}
-                </div>
-            `;
-            
-            // Show notification
-            showNotification('Payroll calculation completed', 'success');
-        }
-        
-        // Depreciation Calculator
-        function calculateDepreciation() {
-            const value = parseFloat(document.getElementById('assetValue').value);
-            const life = parseFloat(document.getElementById('assetLife').value);
-            const method = document.getElementById('depreciationMethod').value;
-            
-            clearErrors();
-            
-            if (!value || value < 0) return showError('depreciationError', 'Please enter a valid asset value');
-            if (!life || life < 1 || life > 50) return showError('depreciationError', 'Useful life must be between 1-50 years');
-            
-            let yearlyDep, monthlyDep;
-            
-            switch(method) {
-                case 'declining':
-                    // Double declining balance method
-                    yearlyDep = (value / life) * 2;
-                    break;
-                case 'sum':
-                    // Sum-of-years digits method
-                    const sumOfYears = (life * (life + 1)) / 2;
-                    yearlyDep = (value * life) / sumOfYears;
-                    break;
-                default:
-                    // Straight-line method
-                    yearlyDep = value / life;
+            for (const [name, rate] of Object.entries(deductions)) {
+                const amount = gross * rate;
+                totalDeductions += amount;
+                deductionsHtml += `<div>${formatTaxName(name)}: ${currency} ${amount.toLocaleString('en-US', {maximumFractionDigits: 2})} (${(rate * 100).toFixed(1)}%)</div>`;
             }
             
-            monthlyDep = yearlyDep / 12;
-            
-            // Update financial data
-            financialData.assets = yearlyDep;
+            const net = gross - totalDeductions;
             
             // Update UI
-            document.getElementById('depreciationResult').innerHTML = `
-                <h3>Depreciation (${method === 'straight' ? 'Straight-Line' : method === 'declining' ? 'Declining Balance' : 'Sum-of-Years'})</h3>
-                <div class="result-value">$${yearlyDep.toLocaleString('en-US', {maximumFractionDigits: 2})}/year</div>
-                <div class="result-details">$${monthlyDep.toLocaleString('en-US', {maximumFractionDigits: 2})}/month</div>
+            const payrollResult = document.getElementById('payrollResult');
+            payrollResult.querySelector('.result-value').textContent = `${currency} ${net.toLocaleString('en-US', {maximumFractionDigits: 2})}`;
+            
+            const detailsHtml = `
+                <div>Gross Pay: ${currency} ${gross.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
+                ${deductionsHtml}
+                <div>Total Deductions: ${currency} ${totalDeductions.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
+                <div>Country: ${getCountryName(country)}</div>
+            `;
+            payrollResult.querySelector('.result-details').innerHTML = detailsHtml;
+            
+            // Show notification
+            showNotification('Payroll calculation completed');
+        }
+        
+        // Generate AI financial advice
+        function generateFinancialAdvice() {
+            const taxCountry = document.getElementById('taxCountry').value;
+            const payrollCountry = document.getElementById('payrollCountry').value;
+            
+            const aiAnalysis = document.getElementById('aiAnalysis');
+            aiAnalysis.querySelector('.ai-content').innerHTML = `
+                <p>Based on your current selections for ${getCountryName(taxCountry)} (Tax) and ${getCountryName(payrollCountry)} (Payroll):</p>
+                <ul>
+                    <li><strong>Tax Optimization:</strong> Consider maximizing deductible expenses to reduce taxable income</li>
+                    <li><strong>Payroll Efficiency:</strong> Review employee classifications to ensure proper tax treatment</li>
+                    <li><strong>International Considerations:</strong> If operating across borders, explore tax treaty benefits</li>
+                    <li><strong>Compliance:</strong> Ensure all filings meet ${getCountryName(taxCountry)} and ${getCountryName(payrollCountry)} regulations</li>
+                </ul>
+                <p><strong>Next Steps:</strong> Run calculations to get personalized recommendations based on your specific financial details.</p>
             `;
             
             // Show notification
-            showNotification('Depreciation calculated', 'success');
-        }
-        
-        // Financial Health Analysis
-        function runFinancialCheckup() {
-            const aiButton = document.getElementById('aiButton');
-            const originalText = aiButton.innerHTML;
-            aiButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing Financial Health...';
-            aiButton.disabled = true;
-            
-            setTimeout(() => {
-                // Generate AI analysis based on current data
-                const income = parseFloat(document.getElementById('income').value) || 125000;
-                const expenses = parseFloat(document.getElementById('expenses').value) || 45000;
-                const profitMargin = ((income - expenses) / income * 100).toFixed(1);
-                
-                // Different analysis based on profit margin
-                let analysis = '';
-                if (profitMargin > 30) {
-                    analysis = `
-                        <p>Your business is in excellent financial health with a ${profitMargin}% profit margin.</p>
-                        <p><strong>Recommendations:</strong></p>
-                        <ul>
-                            <li><strong>Reinvest Profits:</strong> Allocate 20% of profits into growth initiatives</li>
-                            <li><strong>Tax Optimization:</strong> Explore tax-advantaged retirement accounts</li>
-                            <li><strong>Diversify Revenue:</strong> Expand into complementary product lines</li>
-                            <li><strong>Strategic Acquisitions:</strong> Consider acquiring smaller competitors</li>
-                        </ul>
-                    `;
-                } else if (profitMargin > 15) {
-                    analysis = `
-                        <p>Your business has a healthy ${profitMargin}% profit margin with room for improvement.</p>
-                        <p><strong>Recommendations:</strong></p>
-                        <ul>
-                            <li><strong>Cost Optimization:</strong> Review recurring expenses for reduction opportunities</li>
-                            <li><strong>Pricing Strategy:</strong> Increase prices by 5-7% on your most popular services</li>
-                            <li><strong>Operational Efficiency:</strong> Implement automation to reduce labor costs</li>
-                            <li><strong>Customer Retention:</strong> Improve loyalty programs to increase repeat business</li>
-                        </ul>
-                    `;
-                } else {
-                    analysis = `
-                        <p>Your business has a ${profitMargin}% profit margin that requires strategic improvements.</p>
-                        <p><strong>Recommendations:</strong></p>
-                        <ul>
-                            <li><strong>Expense Audit:</strong> Identify and eliminate non-essential costs</li>
-                            <li><strong>Revenue Streams:</strong> Develop new offerings to diversify income</li>
-                            <li><strong>Debt Management:</strong> Refinance high-interest loans to reduce payments</li>
-                            <li><strong>Cash Flow Management:</strong> Improve invoicing and collections processes</li>
-                        </ul>
-                    `;
-                }
-                
-                document.getElementById('aiAnalysis').innerHTML = `
-                    <div class="ai-header">
-                        <div class="ai-icon">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <h3>Financial Health Report</h3>
-                    </div>
-                    <div class="ai-content">
-                        ${analysis}
-                    </div>
-                `;
-                
-                aiButton.innerHTML = originalText;
-                aiButton.disabled = false;
-                
-                // Show notification
-                showNotification('Financial health analysis completed', 'success');
-            }, 2000);
+            showNotification('Financial advice generated');
         }
         
         // Export report as PDF
         function exportReport() {
-            showNotification('Generating financial report...', 'success');
+            // Create a PDF document
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
             
-            setTimeout(() => {
-                // In a real application, this would use jsPDF to create a PDF
-                // For this prototype, we'll simulate the download
-                const link = document.createElement('a');
-                link.href = 'data:application/pdf;base64,JVBERi0xLjcKCjEgMCBvYmogICUgZW50cnkgcG9pbnQKPDwKICAvVHlwZSAvQ2F0YWxvZwog' + 
-                             'IC9QYWdlcyAyIDAgUgo+PgplbmRvYmoKCjIgMCBvYmoKPDwKICAvVHlwZSAvUGFnZXMK' + 
-                             'ICAvTWVkaWFCb3ggWyAwIDAgNTk1IDg0MiBdCiAgL0NvdW50IDEKICAvS2lkcyBbIDMg' + 
-                             'MCBSIF0KPj4KZW5kb2JqCgozIDAgb2JqCjw8CiAgL1R5cGUgL1BhZ2UKICAvUGFyZW50' + 
-                             'IDIgMCBSCiAgL1Jlc291cmNlcyA8PAogICAgL0ZvbnQgPDwKICAgICAgL0YxIDQgMCBS' + 
-                             'IAogICAgPj4KICA+PgogIC9Db250ZW50cyA1IDAgUgo+PgplbmRvYmoKCjQgMCBvYmoK' + 
-                             'PDwKICAvVHlwZSAvRm9udAogIC9TdWJ0eXBlIC9UeXBlMQogIC9CYXNlRm9udCAvSGVs' + 
-                             'dmV0aWNhCj4+CmVuZG9iagoKNSAwIG9iaiAgICAlIHBhZ2UgY29udGVudAo8PAogIC9M' + 
-                             'ZW5ndGggNDQKPj4Kc3RyZWFtCkJUCjcwIDUwIFRECi9GMSAxMiBUZgooRmluYW5jaWFs' + 
-                             'IFJlcG9ydCAtIFZhdWx0IENvbnN1bHRpbmcpIFRqCkVUCmVuZHN0cmVhbQplbmRvYmoK' + 
-                             'CnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDAwOSAwMDAwMCBuIAow' + 
-                             'MDAwMDAwMDc1IDAwMDAwIG4gCjAwMDAwMDAwMzEgMDAwMDAgbiAKMDAwMDAwMDEwNSAw' + 
-                             'MDAwMCBuIAowMDAwMDAwMTQxIDAwMDAwIG4gCnRyYWlsZXIKPDwKICAvUm9vdCAxIDAg' + 
-                             'UgogIC9TaXplIDYKPj4Kc3RhcnR4cmVmCjE3MQolJUVPRgo=';
-                link.download = 'vault-financial-report.pdf';
-                link.click();
-                
-                showNotification('Financial report exported successfully!', 'success');
-            }, 1500);
+            // Add title
+            doc.setFontSize(20);
+            doc.setTextColor(14, 165, 233);
+            doc.text('Vault Financial Report', 105, 20, null, null, 'center');
+            
+            // Add date
+            const now = new Date();
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`, 105, 30, null, null, 'center');
+            
+            // Add tax information
+            doc.setFontSize(16);
+            doc.setTextColor(0, 0, 0);
+            doc.text('Tax Calculation', 20, 50);
+            doc.setFontSize(12);
+            
+            const taxResult = document.getElementById('taxResult');
+            const taxText = taxResult.innerText;
+            const taxLines = doc.splitTextToSize(taxText, 170);
+            doc.text(taxLines, 20, 60);
+            
+            // Add payroll information
+            doc.setFontSize(16);
+            doc.text('Payroll Calculation', 20, 110);
+            doc.setFontSize(12);
+            
+            const payrollResult = document.getElementById('payrollResult');
+            const payrollText = payrollResult.innerText;
+            const payrollLines = doc.splitTextToSize(payrollText, 170);
+            doc.text(payrollLines, 20, 120);
+            
+            // Add AI analysis
+            doc.setFontSize(16);
+            doc.text('Financial Advice', 20, 170);
+            doc.setFontSize(12);
+            
+            const aiResult = document.getElementById('aiAnalysis').innerText;
+            const aiLines = doc.splitTextToSize(aiResult, 170);
+            doc.text(aiLines, 20, 180);
+            
+            // Add footer
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text('Vault Global Financial Suite - vaultglobal.com', 105, 280, null, null, 'center');
+            
+            // Save the PDF
+            doc.save('vault-financial-report.pdf');
+            
+            // Show notification
+            showNotification('Financial report exported successfully!');
         }
         
-        // Show notification
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            const content = notification.querySelector('.notification-text');
-            const icon = notification.querySelector('.notification-icon');
-            
-            content.textContent = message;
-            
-            if (type === 'error') {
-                notification.className = 'notification error';
-                icon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
-            } else {
-                notification.className = 'notification';
-                icon.innerHTML = '<i class="fas fa-check-circle"></i>';
-            }
-            
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
+        // Helper functions
+        function getCountryName(code) {
+            const names = {
+                nigeria: "Nigeria",
+                usa: "United States",
+                uk: "United Kingdom",
+                germany: "Germany",
+                canada: "Canada",
+                southafrica: "South Africa",
+                india: "India"
+            };
+            return names[code] || code;
         }
         
-        // Error Handling
+        function formatTaxName(name) {
+            return name.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+        }
+        
+        function showNotification(message) {
+            // In a real app, this would show a notification
+            alert(`Success: ${message}`);
+        }
+        
         function showError(elementId, message) {
             const element = document.getElementById(elementId);
             element.textContent = message;
             element.style.display = 'block';
-            showNotification(message, 'error');
         }
         
         function clearErrors() {
-            document.querySelectorAll('.error').forEach(el => {
-                el.textContent = '';
-                el.style.display = 'none';
-            });
+            document.getElementById('taxError').style.display = 'none';
+            document.getElementById('payrollError').style.display = 'none';
         }
         
         // Initialize the application
         window.onload = function() {
-            initChart();
-            updateStats();
-            
             // Set up event listeners
             document.getElementById('calculateTaxBtn').addEventListener('click', calculateTax);
             document.getElementById('calculatePayrollBtn').addEventListener('click', calculatePayroll);
-            document.getElementById('calculateDepreciationBtn').addEventListener('click', calculateDepreciation);
-            document.getElementById('aiButton').addEventListener('click', runFinancialCheckup);
+            document.getElementById('aiButton').addEventListener('click', generateFinancialAdvice);
             document.getElementById('exportReportBtn').addEventListener('click', exportReport);
-            document.getElementById('chartPeriod').addEventListener('change', initChart);
             
             // Pre-calculate initial values
             calculateTax();
             calculatePayroll();
-            calculateDepreciation();
+            generateFinancialAdvice();
         };
     </script>
 </body>
