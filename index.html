@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #0f172a;
@@ -16,6 +17,7 @@
             --accent-light: #38bdf8;
             --success: #10b981;
             --error: #ef4444;
+            --warning: #f59e0b;
             --text: #f1f5f9;
             --text-secondary: #94a3b8;
             --card-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.2);
@@ -119,6 +121,9 @@
             transition: var(--transition);
             border: none;
             font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .btn-primary {
@@ -142,9 +147,27 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
         /* Dashboard */
         .dashboard-header {
             padding: 3rem 0 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
         }
 
         .dashboard-header h1 {
@@ -312,12 +335,54 @@
 
         .result-details div {
             margin-bottom: 0.3rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .result-details .label {
+            font-weight: 500;
         }
 
         .error {
             color: var(--error);
             margin-top: 0.5rem;
             display: none;
+        }
+
+        /* Tax Visualization */
+        .tax-visualization {
+            margin-top: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .chart-container {
+            height: 200px;
+            position: relative;
+            margin: 1rem 0;
+        }
+
+        .bracket-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .bracket-badge {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .bracket-badge i {
+            font-size: 0.7rem;
         }
 
         /* AI Advisor */
@@ -359,6 +424,21 @@
 
         .ai-content li {
             margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .ai-content li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .ai-content li strong {
+            color: var(--success);
         }
 
         /* Footer */
@@ -368,6 +448,26 @@
             color: var(--text-secondary);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             margin-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-light);
         }
 
         /* Responsive */
@@ -390,6 +490,45 @@
             .card {
                 padding: 1.5rem;
             }
+            
+            .result-value {
+                font-size: 1.75rem;
+            }
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            border-left: 4px solid var(--success);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            border-left-color: var(--error);
+        }
+        
+        .notification.warning {
+            border-left-color: var(--warning);
+        }
+        
+        .notification i {
+            font-size: 1.25rem;
         }
     </style>
 </head>
@@ -469,7 +608,7 @@
                 </div>
                 
                 <button class="btn btn-primary" id="calculateTaxBtn" style="width: 100%; padding: 1rem;">
-                    Calculate Tax Liability
+                    <i class="fas fa-calculator"></i> Calculate Tax Liability
                 </button>
                 
                 <div class="result-card" id="taxResult">
@@ -477,15 +616,23 @@
                         <div class="result-title">Tax Liability</div>
                         <div class="result-actions">
                             <button class="btn btn-secondary" id="saveTaxBtn">
-                                <i class="fas fa-save"></i>
+                                <i class="fas fa-save"></i> Save
                             </button>
                         </div>
                     </div>
                     <div class="result-value">₦ 0.00</div>
                     <div class="result-details">
-                        <div>Taxable Income: ₦ 0.00</div>
-                        <div>Effective Tax Rate: 0.0%</div>
-                        <div>Select a country and enter your financial details</div>
+                        <div><span class="label">Taxable Income:</span> <span>₦ 0.00</span></div>
+                        <div><span class="label">Effective Tax Rate:</span> <span>0.0%</span></div>
+                        <div><span class="label">Country:</span> <span>Select a country</span></div>
+                    </div>
+                    
+                    <div class="tax-visualization" id="taxVisualization" style="display: none;">
+                        <h3>Tax Breakdown</h3>
+                        <div class="chart-container">
+                            <canvas id="taxChart"></canvas>
+                        </div>
+                        <div class="bracket-info" id="bracketInfo"></div>
                     </div>
                 </div>
                 
@@ -531,7 +678,7 @@
                 </div>
                 
                 <button class="btn btn-primary" id="calculatePayrollBtn" style="width: 100%; padding: 1rem;">
-                    Calculate Payroll
+                    <i class="fas fa-calculator"></i> Calculate Payroll
                 </button>
                 
                 <div class="result-card" id="payrollResult">
@@ -539,15 +686,15 @@
                         <div class="result-title">Payroll Summary</div>
                         <div class="result-actions">
                             <button class="btn btn-secondary" id="savePayrollBtn">
-                                <i class="fas fa-save"></i>
+                                <i class="fas fa-save"></i> Save
                             </button>
                         </div>
                     </div>
                     <div class="result-value">₦ 0.00</div>
                     <div class="result-details">
-                        <div>Gross Pay: ₦ 0.00</div>
-                        <div>Total Deductions: ₦ 0.00</div>
-                        <div>Select a country and enter hours/rate</div>
+                        <div><span class="label">Gross Pay:</span> <span>₦ 0.00</span></div>
+                        <div><span class="label">Total Deductions:</span> <span>₦ 0.00</span></div>
+                        <div><span class="label">Country:</span> <span>Select a country</span></div>
                     </div>
                 </div>
                 
@@ -580,7 +727,7 @@
                 <button class="btn btn-primary" id="aiButton" style="flex: 1; padding: 1rem;">
                     <i class="fas fa-bolt"></i> Generate Financial Advice
                 </button>
-                <button class="btn btn-primary" id="exportReportBtn" style="flex: 1; padding: 1rem;">
+                <button class="btn btn-warning" id="exportReportBtn" style="flex: 1; padding: 1rem;">
                     <i class="fas fa-file-export"></i> Export Full Report
                 </button>
             </div>
@@ -590,64 +737,175 @@
         <footer>
             <p>© 2023 Vault Global Financial Suite. All rights reserved.</p>
             <p>Designed for global businesses with a focus on Nigeria and international markets</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Documentation</a>
+            </div>
         </footer>
     </div>
     
+    <!-- Notification Element -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText">Success message here</span>
+    </div>
+    
     <script>
-        // Country tax data (simplified for prototype)
+        // Country tax data (updated with comprehensive rules)
         const countryData = {
             nigeria: {
                 currency: "₦",
                 taxBrackets: [
-                    { min: 0, max: 300000, rate: 0.07 },
-                    { min: 300001, max: 600000, rate: 0.11 },
-                    { min: 600001, max: 1100000, rate: 0.15 },
-                    { min: 1100001, max: 1600000, rate: 0.19 },
-                    { min: 1600001, max: 3200000, rate: 0.21 },
-                    { min: 3200001, max: Infinity, rate: 0.24 }
+                    { min: 0, max: 300000, rate: 0.07, description: "First ₦300,000" },
+                    { min: 300001, max: 600000, rate: 0.11, description: "Next ₦300,000" },
+                    { min: 600001, max: 1100000, rate: 0.15, description: "Next ₦500,000" },
+                    { min: 1100001, max: 1600000, rate: 0.19, description: "Next ₦500,000" },
+                    { min: 1600001, max: 3200000, rate: 0.21, description: "Next ₦1,600,000" },
+                    { min: 3200001, max: Infinity, rate: 0.24, description: "Above ₦3,200,000" }
                 ],
                 payrollTax: {
-                    pension: 0.08,
-                    health: 0.05,
-                    incomeTax: 0.10
-                }
+                    pension: { rate: 0.08, description: "Pension Contribution" },
+                    health: { rate: 0.05, description: "Health Insurance" },
+                    incomeTax: { rate: 0.10, description: "Income Tax" },
+                    training: { rate: 0.01, description: "Industrial Training Fund" }
+                },
+                payrollRules: [
+                    "Minimum wage: ₦30,000/month",
+                    "Pension: 8% employee, 10% employer",
+                    "13th month bonus common but not mandatory"
+                ]
             },
             usa: {
                 currency: "$",
                 taxBrackets: [
-                    { min: 0, max: 11000, rate: 0.10 },
-                    { min: 11001, max: 44725, rate: 0.12 },
-                    { min: 44726, max: 95375, rate: 0.22 },
-                    { min: 95376, max: 182100, rate: 0.24 },
-                    { min: 182101, max: 231250, rate: 0.32 },
-                    { min: 231251, max: 578125, rate: 0.35 },
-                    { min: 578126, max: Infinity, rate: 0.37 }
+                    { min: 0, max: 11000, rate: 0.10, description: "First $11,000" },
+                    { min: 11001, max: 44725, rate: 0.12, description: "Next $33,725" },
+                    { min: 44726, max: 95375, rate: 0.22, description: "Next $50,650" },
+                    { min: 95376, max: 182100, rate: 0.24, description: "Next $86,725" },
+                    { min: 182101, max: 231250, rate: 0.32, description: "Next $49,150" },
+                    { min: 231251, max: 578125, rate: 0.35, description: "Next $346,875" },
+                    { min: 578126, max: Infinity, rate: 0.37, description: "Above $578,125" }
                 ],
                 payrollTax: {
-                    socialSecurity: 0.062,
-                    medicare: 0.0145,
-                    federalIncomeTax: 0.15
-                }
+                    socialSecurity: { rate: 0.062, description: "Social Security" },
+                    medicare: { rate: 0.0145, description: "Medicare" },
+                    federalIncomeTax: { rate: 0.15, description: "Federal Income Tax" },
+                    stateTax: { rate: 0.04, description: "State Tax (Avg)" }
+                },
+                payrollRules: [
+                    "Federal minimum wage: $7.25/hour",
+                    "Overtime: 1.5x after 40 hours",
+                    "Social Security tax capped at $160,200"
+                ]
             },
             uk: {
                 currency: "£",
                 taxBrackets: [
-                    { min: 0, max: 12570, rate: 0.0 },
-                    { min: 12571, max: 50270, rate: 0.20 },
-                    { min: 50271, max: 125140, rate: 0.40 },
-                    { min: 125141, max: Infinity, rate: 0.45 }
+                    { min: 0, max: 12570, rate: 0.0, description: "Personal Allowance" },
+                    { min: 12571, max: 50270, rate: 0.20, description: "Basic Rate" },
+                    { min: 50271, max: 125140, rate: 0.40, description: "Higher Rate" },
+                    { min: 125141, max: Infinity, rate: 0.45, description: "Additional Rate" }
                 ],
                 payrollTax: {
-                    nationalInsurance: 0.12,
-                    pension: 0.05,
-                    incomeTax: 0.20
-                }
+                    nationalInsurance: { rate: 0.12, description: "National Insurance" },
+                    pension: { rate: 0.05, description: "Pension Contribution" },
+                    incomeTax: { rate: 0.20, description: "Income Tax" },
+                    studentLoan: { rate: 0.09, description: "Student Loan Repayment" }
+                },
+                payrollRules: [
+                    "National Living Wage: £10.42/hour (23+)",
+                    "Auto-enrollment pension: min 5% employee, 3% employer",
+                    "Tax year: April 6 to April 5"
+                ]
             },
-            // Other countries with similar structure
-            germany: { currency: "€", taxBrackets: [], payrollTax: {} },
-            canada: { currency: "C$", taxBrackets: [], payrollTax: {} },
-            southafrica: { currency: "R", taxBrackets: [], payrollTax: {} },
-            india: { currency: "₹", taxBrackets: [], payrollTax: {} }
+            germany: {
+                currency: "€",
+                taxBrackets: [
+                    { min: 0, max: 10632, rate: 0.0, description: "Tax-free allowance" },
+                    { min: 10633, max: 63000, rate: 0.42, description: "Progressive rate" },
+                    { min: 63001, max: Infinity, rate: 0.45, description: "Top tax rate" }
+                ],
+                payrollTax: {
+                    pension: { rate: 0.093, description: "Pension Insurance" },
+                    unemployment: { rate: 0.015, description: "Unemployment Insurance" },
+                    health: { rate: 0.073, description: "Health Insurance" },
+                    incomeTax: { rate: 0.20, description: "Income Tax" }
+                },
+                payrollRules: [
+                    "Minimum wage: €12.00/hour",
+                    "Solidarity surcharge: 5.5% of income tax",
+                    "Church tax: 8-9% in some states"
+                ]
+            },
+            canada: {
+                currency: "C$",
+                taxBrackets: [
+                    { min: 0, max: 53359, rate: 0.15, description: "First C$53,359" },
+                    { min: 53360, max: 106717, rate: 0.205, description: "Next C$53,358" },
+                    { min: 106718, max: 165430, rate: 0.26, description: "Next C$58,713" },
+                    { min: 165431, max: 235675, rate: 0.29, description: "Next C$70,245" },
+                    { min: 235676, max: Infinity, rate: 0.33, description: "Above C$235,675" }
+                ],
+                payrollTax: {
+                    cpp: { rate: 0.0525, description: "Canada Pension Plan" },
+                    ei: { rate: 0.0163, description: "Employment Insurance" },
+                    federalIncomeTax: { rate: 0.15, description: "Federal Income Tax" },
+                    provincialTax: { rate: 0.06, description: "Provincial Tax (Avg)" }
+                },
+                payrollRules: [
+                    "Minimum wage varies by province ($15.50-$16.75)",
+                    "CPP contribution capped at C$66,600",
+                    "EI premium capped at C$61,500"
+                ]
+            },
+            southafrica: {
+                currency: "R",
+                taxBrackets: [
+                    { min: 0, max: 237100, rate: 0.18, description: "First R237,100" },
+                    { min: 237101, max: 370500, rate: 0.26, description: "Next R133,400" },
+                    { min: 370501, max: 512800, rate: 0.31, description: "Next R142,300" },
+                    { min: 512801, max: 673000, rate: 0.36, description: "Next R160,200" },
+                    { min: 673001, max: 857900, rate: 0.39, description: "Next R184,900" },
+                    { min: 857901, max: 1817000, rate: 0.41, description: "Next R959,100" },
+                    { min: 1817001, max: Infinity, rate: 0.45, description: "Above R1,817,000" }
+                ],
+                payrollTax: {
+                    uif: { rate: 0.01, description: "Unemployment Insurance" },
+                    pension: { rate: 0.075, description: "Pension Fund" },
+                    incomeTax: { rate: 0.18, description: "Income Tax" },
+                    skillsLevy: { rate: 0.01, description: "Skills Development Levy" }
+                },
+                payrollRules: [
+                    "Minimum wage: R25.42/hour",
+                    "UIF contribution capped at R177.12/month",
+                    "Annual bonus taxed separately"
+                ]
+            },
+            india: {
+                currency: "₹",
+                taxBrackets: [
+                    { min: 0, max: 250000, rate: 0.0, description: "First ₹250,000" },
+                    { min: 250001, max: 500000, rate: 0.05, description: "Next ₹250,000" },
+                    { min: 500001, max: 750000, rate: 0.10, description: "Next ₹250,000" },
+                    { min: 750001, max: 1000000, rate: 0.15, description: "Next ₹250,000" },
+                    { min: 1000001, max: 1250000, rate: 0.20, description: "Next ₹250,000" },
+                    { min: 1250001, max: 1500000, rate: 0.25, description: "Next ₹250,000" },
+                    { min: 1500001, max: Infinity, rate: 0.30, description: "Above ₹1,500,000" }
+                ],
+                payrollTax: {
+                    providentFund: { rate: 0.12, description: "Provident Fund" },
+                    health: { rate: 0.05, description: "Health Insurance" },
+                    incomeTax: { rate: 0.05, description: "Income Tax" },
+                    professionalTax: { rate: 0.01, description: "Professional Tax" }
+                },
+                payrollRules: [
+                    "Minimum wage varies by state and sector",
+                    "Provident Fund: 12% employee, 12% employer",
+                    "Gratuity payable after 5 years of service"
+                ]
+            }
         };
 
         // Tax Calculator
@@ -667,28 +925,109 @@
             
             // Calculate tax based on country brackets
             let tax = 0;
+            let bracketTaxes = [];
             const brackets = countryData[country].taxBrackets;
             
             for (const bracket of brackets) {
                 if (taxableIncome > bracket.min) {
                     const taxableAmount = Math.min(taxableIncome, bracket.max) - bracket.min;
-                    tax += taxableAmount * bracket.rate;
+                    const bracketTax = taxableAmount * bracket.rate;
+                    tax += bracketTax;
+                    bracketTaxes.push({
+                        amount: bracketTax,
+                        rate: bracket.rate,
+                        description: bracket.description
+                    });
+                } else {
+                    break;
                 }
             }
             
+            // Calculate effective tax rate
+            const effectiveRate = taxableIncome > 0 ? (tax / taxableIncome * 100) : 0;
+            
             // Update UI
             const taxResult = document.getElementById('taxResult');
-            taxResult.querySelector('.result-value').textContent = `${currency} ${tax.toLocaleString('en-US', {maximumFractionDigits: 2})}`;
+            taxResult.querySelector('.result-value').textContent = `${currency} ${tax.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             
             const detailsHtml = `
-                <div>Taxable Income: ${currency} ${taxableIncome.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
-                <div>Effective Tax Rate: ${(tax / taxableIncome * 100).toFixed(1)}%</div>
-                <div>Country: ${getCountryName(country)}</div>
+                <div><span class="label">Taxable Income:</span> <span>${currency} ${taxableIncome.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span></div>
+                <div><span class="label">Effective Tax Rate:</span> <span>${effectiveRate.toFixed(1)}%</span></div>
+                <div><span class="label">Country:</span> <span>${getCountryName(country)}</span></div>
             `;
             taxResult.querySelector('.result-details').innerHTML = detailsHtml;
             
+            // Show tax visualization
+            document.getElementById('taxVisualization').style.display = 'block';
+            renderTaxChart(country, bracketTaxes);
+            
             // Show notification
             showNotification('Tax calculation completed successfully');
+        }
+        
+        // Render tax chart
+        function renderTaxChart(country, bracketTaxes) {
+            const ctx = document.getElementById('taxChart').getContext('2d');
+            
+            // Destroy existing chart if it exists
+            if (window.taxChart) window.taxChart.destroy();
+            
+            const labels = bracketTaxes.map(bracket => `${(bracket.rate * 100).toFixed(0)}%`);
+            const data = bracketTaxes.map(bracket => bracket.amount);
+            const colors = ['#0ea5e9', '#38bdf8', '#60a5fa', '#93c5fd', '#bfdbfe', '#dbeafe', '#eff6ff'];
+            
+            window.taxChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderColor: colors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${countryData[document.getElementById('taxCountry').value].currency} ${context.raw.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return countryData[document.getElementById('taxCountry').value].currency + ' ' + value.toLocaleString('en-US');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Update bracket info
+            const bracketInfo = document.getElementById('bracketInfo');
+            bracketInfo.innerHTML = '';
+            
+            bracketTaxes.forEach((bracket, index) => {
+                const badge = document.createElement('div');
+                badge.className = 'bracket-badge';
+                badge.innerHTML = `
+                    <i class="fas fa-percentage"></i>
+                    ${bracket.description}: ${countryData[country].currency}${bracket.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                `;
+                bracketInfo.appendChild(badge);
+            });
         }
         
         // Payroll Calculator
@@ -711,23 +1050,28 @@
             let totalDeductions = 0;
             let deductionsHtml = '';
             
-            for (const [name, rate] of Object.entries(deductions)) {
-                const amount = gross * rate;
+            for (const [name, detail] of Object.entries(deductions)) {
+                const amount = gross * detail.rate;
                 totalDeductions += amount;
-                deductionsHtml += `<div>${formatTaxName(name)}: ${currency} ${amount.toLocaleString('en-US', {maximumFractionDigits: 2})} (${(rate * 100).toFixed(1)}%)</div>`;
+                deductionsHtml += `
+                    <div>
+                        <span class="label">${detail.description}:</span>
+                        <span>${currency} ${amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} (${(detail.rate * 100).toFixed(1)}%)</span>
+                    </div>
+                `;
             }
             
             const net = gross - totalDeductions;
             
             // Update UI
             const payrollResult = document.getElementById('payrollResult');
-            payrollResult.querySelector('.result-value').textContent = `${currency} ${net.toLocaleString('en-US', {maximumFractionDigits: 2})}`;
+            payrollResult.querySelector('.result-value').textContent = `${currency} ${net.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             
             const detailsHtml = `
-                <div>Gross Pay: ${currency} ${gross.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
+                <div><span class="label">Gross Pay:</span> <span>${currency} ${gross.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span></div>
                 ${deductionsHtml}
-                <div>Total Deductions: ${currency} ${totalDeductions.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>
-                <div>Country: ${getCountryName(country)}</div>
+                <div><span class="label">Total Deductions:</span> <span>${currency} ${totalDeductions.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span></div>
+                <div><span class="label">Country:</span> <span>${getCountryName(country)}</span></div>
             `;
             payrollResult.querySelector('.result-details').innerHTML = detailsHtml;
             
@@ -739,21 +1083,42 @@
         function generateFinancialAdvice() {
             const taxCountry = document.getElementById('taxCountry').value;
             const payrollCountry = document.getElementById('payrollCountry').value;
+            const income = parseFloat(document.getElementById('income').value) || 0;
+            const expenses = parseFloat(document.getElementById('expenses').value) || 0;
             
             const aiAnalysis = document.getElementById('aiAnalysis');
-            aiAnalysis.querySelector('.ai-content').innerHTML = `
-                <p>Based on your current selections for ${getCountryName(taxCountry)} (Tax) and ${getCountryName(payrollCountry)} (Payroll):</p>
-                <ul>
-                    <li><strong>Tax Optimization:</strong> Consider maximizing deductible expenses to reduce taxable income</li>
-                    <li><strong>Payroll Efficiency:</strong> Review employee classifications to ensure proper tax treatment</li>
-                    <li><strong>International Considerations:</strong> If operating across borders, explore tax treaty benefits</li>
-                    <li><strong>Compliance:</strong> Ensure all filings meet ${getCountryName(taxCountry)} and ${getCountryName(payrollCountry)} regulations</li>
-                </ul>
-                <p><strong>Next Steps:</strong> Run calculations to get personalized recommendations based on your specific financial details.</p>
-            `;
+            
+            // Generate context-aware advice
+            let advice = '';
+            
+            if (taxCountry === 'nigeria' || payrollCountry === 'nigeria') {
+                advice = `
+                    <p>Based on your Nigeria-focused calculations:</p>
+                    <ul>
+                        <li><strong>Tax Optimization:</strong> Consider registering with the Nigerian Investment Promotion Commission for tax holidays in priority sectors.</li>
+                        <li><strong>Payroll Efficiency:</strong> Ensure compliance with the Pension Reform Act 2014 - 8% employee, 10% employer contributions.</li>
+                        <li><strong>Expense Management:</strong> Maximize deductible expenses including R&D costs which are 200% deductible in Nigeria.</li>
+                        ${expenses > 0 ? `<li><strong>Expense Analysis:</strong> Your current expense ratio is ${((expenses/income)*100).toFixed(1)}%. Nigerian businesses average 65-75% - optimize where possible.</li>` : ''}
+                    </ul>
+                    <p><strong>Compliance Tip:</strong> File monthly PAYE returns by the 10th of the following month to avoid penalties.</p>
+                `;
+            } else {
+                advice = `
+                    <p>Based on your global financial data:</p>
+                    <ul>
+                        <li><strong>Tax Optimization:</strong> Consider transfer pricing strategies if operating across borders.</li>
+                        <li><strong>Payroll Efficiency:</strong> Review employee classifications to ensure proper tax treatment.</li>
+                        <li><strong>Compliance:</strong> Ensure all filings meet ${getCountryName(taxCountry)} and ${getCountryName(payrollCountry)} regulations.</li>
+                        ${income > 10000000 ? `<li><strong>Scale Advantage:</strong> At your revenue level, consider establishing a holding company structure for tax efficiency.</li>` : ''}
+                    </ul>
+                    <p><strong>Next Steps:</strong> Consult with a cross-border tax specialist to maximize treaty benefits.</p>
+                `;
+            }
+            
+            aiAnalysis.querySelector('.ai-content').innerHTML = advice;
             
             // Show notification
-            showNotification('Financial advice generated');
+            showNotification('AI financial advice generated');
         }
         
         // Export report as PDF
@@ -779,29 +1144,53 @@
             doc.text('Tax Calculation', 20, 50);
             doc.setFontSize(12);
             
+            const taxCountry = document.getElementById('taxCountry').value;
+            const income = document.getElementById('income').value;
+            const expenses = document.getElementById('expenses').value;
+            
+            doc.text(`Country: ${getCountryName(taxCountry)}`, 20, 60);
+            doc.text(`Annual Income: ${countryData[taxCountry].currency} ${parseFloat(income).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 68);
+            doc.text(`Business Expenses: ${countryData[taxCountry].currency} ${parseFloat(expenses).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 76);
+            
             const taxResult = document.getElementById('taxResult');
-            const taxText = taxResult.innerText;
-            const taxLines = doc.splitTextToSize(taxText, 170);
-            doc.text(taxLines, 20, 60);
+            const taxValue = taxResult.querySelector('.result-value').textContent;
+            const taxDetails = Array.from(taxResult.querySelectorAll('.result-details div')).map(div => div.textContent).join('\n');
+            
+            doc.setFontSize(14);
+            doc.text(taxValue, 20, 90);
+            doc.setFontSize(12);
+            doc.text(taxDetails, 20, 100);
             
             // Add payroll information
             doc.setFontSize(16);
-            doc.text('Payroll Calculation', 20, 110);
+            doc.text('Payroll Calculation', 20, 130);
             doc.setFontSize(12);
             
+            const payrollCountry = document.getElementById('payrollCountry').value;
+            const hours = document.getElementById('hours').value;
+            const rate = document.getElementById('rate').value;
+            
+            doc.text(`Country: ${getCountryName(payrollCountry)}`, 20, 140);
+            doc.text(`Hours Worked: ${hours}`, 20, 148);
+            doc.text(`Hourly Rate: ${countryData[payrollCountry].currency} ${parseFloat(rate).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 156);
+            
             const payrollResult = document.getElementById('payrollResult');
-            const payrollText = payrollResult.innerText;
-            const payrollLines = doc.splitTextToSize(payrollText, 170);
-            doc.text(payrollLines, 20, 120);
+            const payrollValue = payrollResult.querySelector('.result-value').textContent;
+            const payrollDetails = Array.from(payrollResult.querySelectorAll('.result-details div')).map(div => div.textContent).join('\n');
+            
+            doc.setFontSize(14);
+            doc.text(payrollValue, 20, 170);
+            doc.setFontSize(12);
+            doc.text(payrollDetails, 20, 180);
             
             // Add AI analysis
             doc.setFontSize(16);
-            doc.text('Financial Advice', 20, 170);
+            doc.text('Financial Advice', 20, 210);
             doc.setFontSize(12);
             
             const aiResult = document.getElementById('aiAnalysis').innerText;
             const aiLines = doc.splitTextToSize(aiResult, 170);
-            doc.text(aiLines, 20, 180);
+            doc.text(aiLines, 20, 220);
             
             // Add footer
             doc.setFontSize(10);
@@ -829,19 +1218,23 @@
             return names[code] || code;
         }
         
-        function formatTaxName(name) {
-            return name.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-        }
-        
-        function showNotification(message) {
-            // In a real app, this would show a notification
-            alert(`Success: ${message}`);
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.className = 'notification';
+            }, 3000);
         }
         
         function showError(elementId, message) {
             const element = document.getElementById(elementId);
             element.textContent = message;
             element.style.display = 'block';
+            showNotification(message, 'error');
         }
         
         function clearErrors() {
@@ -856,11 +1249,12 @@
             document.getElementById('calculatePayrollBtn').addEventListener('click', calculatePayroll);
             document.getElementById('aiButton').addEventListener('click', generateFinancialAdvice);
             document.getElementById('exportReportBtn').addEventListener('click', exportReport);
+            document.getElementById('saveTaxBtn').addEventListener('click', () => showNotification('Tax calculation saved', 'success'));
+            document.getElementById('savePayrollBtn').addEventListener('click', () => showNotification('Payroll calculation saved', 'success'));
             
             // Pre-calculate initial values
             calculateTax();
             calculatePayroll();
-            generateFinancialAdvice();
         };
     </script>
 </body>
