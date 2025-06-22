@@ -620,6 +620,56 @@
             align-items: center;
             gap: 0.5rem;
         }
+        
+        /* Testimonial */
+        .testimonial {
+            background: rgba(14, 165, 233, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-left: 3px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--surface-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .testimonial-content {
+            flex: 1;
+        }
+        
+        .testimonial-content p {
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--accent-light);
+        }
+        
+        .testimonial-role {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .testimonial {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -825,6 +875,18 @@
                     <button class="btn btn-warning" id="exportReportBtn" style="flex: 1; padding: 1rem;">
                         <i class="fas fa-file-export"></i> Export Report
                     </button>
+                </div>
+            </div>
+            
+            <!-- Testimonial -->
+            <div class="testimonial">
+                <div class="testimonial-avatar">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="testimonial-content">
+                    <p>"TaxVault saved our company over $15,000 in tax penalties and countless hours of manual calculations. The multi-country support is a game-changer for our international team."</p>
+                    <div class="testimonial-author">Sarah Johnson</div>
+                    <div class="testimonial-role">CFO, TechGlobal Inc.</div>
                 </div>
             </div>
         </div>
@@ -1473,22 +1535,6 @@
         function clearErrors() {
             document.getElementById('taxError').style.display = 'none';
             document.getElementById('payrollError').style.display = 'none';
-        }
-        
-        // Update UI based on auth state
-        function updateAuthUI(user) {
-            const userInfo = document.getElementById('userInfo');
-            const authButtons = document.getElementById('authButtons');
-            
-            if (user) {
-                // User is signed in
-                userInfo.style.display = 'flex';
-                authButtons.style.display = 'none';
-            } else {
-                // User is signed out
-                userInfo.style.display = 'none';
-                authButtons.style.display = 'block';
-            }
         }
         
         // Initialize the application
