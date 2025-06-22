@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaxVault | Global Tax & Payroll Solution</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #0f172a;
@@ -17,7 +16,6 @@
             --accent-light: #38bdf8;
             --success: #10b981;
             --error: #ef4444;
-            --warning: #f59e0b;
             --text: #f1f5f9;
             --text-secondary: #94a3b8;
             --card-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.2);
@@ -85,34 +83,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        nav {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        nav a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        nav a:hover, nav a.active {
-            color: var(--text);
-        }
-
-        nav a.active::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--accent);
-            border-radius: 3px;
-        }
-
         .user-actions {
             display: flex;
             align-items: center;
@@ -154,7 +124,7 @@
         }
 
         .btn-warning {
-            background: var(--warning);
+            background: #f59e0b;
             color: white;
         }
 
@@ -169,7 +139,7 @@
 
         .dashboard-header h1 {
             font-size: 2.5rem;
-            font-weight: 700;
+            font-weight: 800;
             margin-bottom: 1rem;
             background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
             -webkit-background-clip: text;
@@ -267,7 +237,7 @@
             border-radius: 8px;
             color: var(--text);
             font-size: 1rem;
-            transition: var(--transition;
+            transition: var(--transition);
         }
 
         input:focus, select:focus {
@@ -476,12 +446,6 @@
                 gap: 1.5rem;
             }
             
-            nav {
-                gap: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
             .dashboard-header h1 {
                 font-size: 2rem;
             }
@@ -524,7 +488,7 @@
         }
         
         .notification.warning {
-            border-left-color: var(--warning);
+            border-left-color: #f59e0b;
         }
         
         .notification i {
@@ -576,7 +540,7 @@
             cursor: pointer;
             flex: 1;
             text-align: center;
-            transition: var(--transition;
+            transition: var(--transition);
         }
 
         .auth-tab.active {
@@ -591,11 +555,38 @@
         .auth-form.active {
             display: block;
         }
-
-        .auth-form .btn {
-            width: 100%;
-            padding: 1rem;
+        
+        .auth-message {
             margin-top: 1rem;
+            text-align: center;
+            color: var(--error);
+            display: none;
+        }
+        
+        .app-section {
+            min-height: calc(100vh - 100px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        @media (max-width: 480px) {
+            .btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+            
+            .dashboard-header {
+                padding: 2rem 0 1rem;
+            }
+            
+            .card {
+                padding: 1.25rem;
+            }
+            
+            .result-card {
+                padding: 1rem;
+            }
         }
     </style>
 </head>
@@ -610,10 +601,6 @@
                 <div class="logo-text">TaxVault</div>
             </a>
             
-            <nav>
-                <a href="#" class="active">Calculator</a>
-            </nav>
-            
             <div class="user-actions">
                 <button class="btn btn-secondary" id="signInBtn">
                     <i class="fas fa-sign-in-alt"></i> Sign In
@@ -624,184 +611,168 @@
             </div>
         </header>
 
-        <!-- Dashboard Header -->
-        <div class="dashboard-header">
-            <h1>Global Tax & Payroll Solution</h1>
-            <p>Professional tax and payroll calculations for businesses in 12 countries</p>
-        </div>
-        
-        <!-- Calculators Grid -->
-        <div class="dashboard-grid">
-            <!-- Tax Calculator -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-file-invoice-dollar"></i>
-                    </div>
-                    <h2>Global Tax Calculator</h2>
-                </div>
-                
-                <div class="form-group">
-                    <label for="taxCountry">Select Country</label>
-                    <select id="taxCountry">
-                        <option value="nigeria">🇳🇬 Nigeria</option>
-                        <option value="usa">🇺🇸 United States</option>
-                        <option value="uk">🇬🇧 United Kingdom</option>
-                        <option value="germany">🇩🇪 Germany</option>
-                        <option value="canada">🇨🇦 Canada</option>
-                        <option value="southafrica">🇿🇦 South Africa</option>
-                        <option value="india">🇮🇳 India</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="income">Annual Income</label>
-                    <div class="input-with-icon">
-                        <input type="number" id="income" placeholder="Enter amount in local currency" value="7500000">
-                        <span class="input-icon"><i class="fas fa-money-bill-wave"></i></span>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="expenses">Business Expenses</label>
-                    <div class="input-with-icon">
-                        <input type="number" id="expenses" placeholder="Enter amount in local currency" value="2500000">
-                        <span class="input-icon"><i class="fas fa-receipt"></i></span>
-                    </div>
-                </div>
-                
-                <button class="btn btn-primary" id="calculateTaxBtn" style="width: 100%; padding: 1rem;">
-                    <i class="fas fa-calculator"></i> Calculate Tax Liability
-                </button>
-                
-                <div class="result-card" id="taxResult">
-                    <div class="result-header">
-                        <div class="result-title">Tax Liability</div>
-                        <div class="result-actions">
-                            <button class="btn btn-secondary" id="saveTaxBtn">
-                                <i class="fas fa-save"></i> Save
-                            </button>
+        <!-- Main App Section -->
+        <div class="app-section">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <h1>Global Tax & Payroll Solution</h1>
+                <p>Professional tax and payroll calculations for businesses in 12 countries</p>
+            </div>
+            
+            <!-- Calculators Grid -->
+            <div class="dashboard-grid">
+                <!-- Tax Calculator -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
                         </div>
-                    </div>
-                    <div class="result-value">₦ 0.00</div>
-                    <div class="result-details">
-                        <div><span class="label">Taxable Income:</span> <span>₦ 0.00</span></div>
-                        <div><span class="label">Effective Tax Rate:</span> <span>0.0%</span></div>
-                        <div><span class="label">Country:</span> <span>Select a country</span></div>
+                        <h2>Global Tax Calculator</h2>
                     </div>
                     
-                    <div class="tax-visualization" id="taxVisualization" style="display: none;">
-                        <h3>Tax Breakdown</h3>
-                        <div class="chart-container">
-                            <canvas id="taxChart"></canvas>
-                        </div>
-                        <div class="bracket-info" id="bracketInfo"></div>
+                    <div class="form-group">
+                        <label for="taxCountry">Select Country</label>
+                        <select id="taxCountry">
+                            <option value="nigeria">🇳🇬 Nigeria</option>
+                            <option value="usa">🇺🇸 United States</option>
+                            <option value="uk">🇬🇧 United Kingdom</option>
+                            <option value="germany">🇩🇪 Germany</option>
+                            <option value="canada">🇨🇦 Canada</option>
+                            <option value="southafrica">🇿🇦 South Africa</option>
+                            <option value="india">🇮🇳 India</option>
+                        </select>
                     </div>
+                    
+                    <div class="form-group">
+                        <label for="income">Annual Income</label>
+                        <div class="input-with-icon">
+                            <input type="number" id="income" placeholder="Enter amount in local currency" value="7500000">
+                            <span class="input-icon"><i class="fas fa-money-bill-wave"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="expenses">Business Expenses</label>
+                        <div class="input-with-icon">
+                            <input type="number" id="expenses" placeholder="Enter amount in local currency" value="2500000">
+                            <span class="input-icon"><i class="fas fa-receipt"></i></span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="calculateTaxBtn" style="width: 100%; padding: 1rem;">
+                        <i class="fas fa-calculator"></i> Calculate Tax Liability
+                    </button>
+                    
+                    <div class="result-card" id="taxResult">
+                        <div class="result-header">
+                            <div class="result-title">Tax Liability</div>
+                        </div>
+                        <div class="result-value">₦ 0.00</div>
+                        <div class="result-details">
+                            <div><span class="label">Taxable Income:</span> <span>₦ 0.00</span></div>
+                            <div><span class="label">Effective Tax Rate:</span> <span>0.0%</span></div>
+                            <div><span class="label">Country:</span> <span>Select a country</span></div>
+                        </div>
+                        
+                        <div class="tax-visualization" id="taxVisualization" style="display: none;">
+                            <h3>Tax Breakdown</h3>
+                            <div class="chart-container">
+                                <canvas id="taxChart"></canvas>
+                            </div>
+                            <div class="bracket-info" id="bracketInfo"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="error" id="taxError"></div>
                 </div>
                 
-                <div class="error" id="taxError"></div>
+                <!-- Payroll Calculator -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-money-check-alt"></i>
+                        </div>
+                        <h2>Global Payroll Calculator</h2>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="payrollCountry">Select Country</label>
+                        <select id="payrollCountry">
+                            <option value="nigeria">🇳🇬 Nigeria</option>
+                            <option value="usa">🇺🇸 United States</option>
+                            <option value="uk">🇬🇧 United Kingdom</option>
+                            <option value="germany">🇩🇪 Germany</option>
+                            <option value="canada">🇨🇦 Canada</option>
+                            <option value="southafrica">🇿🇦 South Africa</option>
+                            <option value="india">🇮🇳 India</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="hours">Hours Worked</label>
+                        <div class="input-with-icon">
+                            <input type="number" id="hours" placeholder="Enter hours" value="160">
+                            <span class="input-icon"><i class="fas fa-clock"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rate">Hourly Rate</label>
+                        <div class="input-with-icon">
+                            <input type="number" id="rate" placeholder="Enter rate in local currency" value="3500">
+                            <span class="input-icon"><i class="fas fa-coins"></i></span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="calculatePayrollBtn" style="width: 100%; padding: 1rem;">
+                        <i class="fas fa-calculator"></i> Calculate Payroll
+                    </button>
+                    
+                    <div class="result-card" id="payrollResult">
+                        <div class="result-header">
+                            <div class="result-title">Payroll Summary</div>
+                        </div>
+                        <div class="result-value">₦ 0.00</div>
+                        <div class="result-details">
+                            <div><span class="label">Gross Pay:</span> <span>₦ 0.00</span></div>
+                            <div><span class="label">Total Deductions:</span> <span>₦ 0.00</span></div>
+                            <div><span class="label">Country:</span> <span>Select a country</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="error" id="payrollError"></div>
+                </div>
             </div>
             
-            <!-- Payroll Calculator -->
+            <!-- AI Advisor -->
             <div class="card">
                 <div class="card-header">
                     <div class="card-icon">
-                        <i class="fas fa-money-check-alt"></i>
+                        <i class="fas fa-robot"></i>
                     </div>
-                    <h2>Global Payroll Calculator</h2>
+                    <h2>AI Financial Advisor</h2>
                 </div>
                 
-                <div class="form-group">
-                    <label for="payrollCountry">Select Country</label>
-                    <select id="payrollCountry">
-                        <option value="nigeria">🇳🇬 Nigeria</option>
-                        <option value="usa">🇺🇸 United States</option>
-                        <option value="uk">🇬🇧 United Kingdom</option>
-                        <option value="germany">🇩🇪 Germany</option>
-                        <option value="canada">🇨🇦 Canada</option>
-                        <option value="southafrica">🇿🇦 South Africa</option>
-                        <option value="india">🇮🇳 India</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="employeeType">Employee Type</label>
-                    <select id="employeeType">
-                        <option value="fulltime">Full-time</option>
-                        <option value="contractor">Contractor</option>
-                        <option value="executive">Executive</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="hours">Hours Worked</label>
-                    <div class="input-with-icon">
-                        <input type="number" id="hours" placeholder="Enter hours" value="160">
-                        <span class="input-icon"><i class="fas fa-clock"></i></span>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="rate">Hourly Rate</label>
-                    <div class="input-with-icon">
-                        <input type="number" id="rate" placeholder="Enter rate in local currency" value="3500">
-                        <span class="input-icon"><i class="fas fa-coins"></i></span>
-                    </div>
-                </div>
-                
-                <button class="btn btn-primary" id="calculatePayrollBtn" style="width: 100%; padding: 1rem;">
-                    <i class="fas fa-calculator"></i> Calculate Payroll
-                </button>
-                
-                <div class="result-card" id="payrollResult">
-                    <div class="result-header">
-                        <div class="result-title">Payroll Summary</div>
-                        <div class="result-actions">
-                            <button class="btn btn-secondary" id="savePayrollBtn">
-                                <i class="fas fa-save"></i> Save
-                            </button>
+                <div class="ai-advisor" id="aiAnalysis">
+                    <div class="ai-header">
+                        <div class="ai-icon">
+                            <i class="fas fa-lightbulb"></i>
                         </div>
+                        <h3>Strategic Financial Optimization</h3>
                     </div>
-                    <div class="result-value">₦ 0.00</div>
-                    <div class="result-details">
-                        <div><span class="label">Gross Pay:</span> <span>₦ 0.00</span></div>
-                        <div><span class="label">Total Deductions:</span> <span>₦ 0.00</span></div>
-                        <div><span class="label">Country:</span> <span>Select a country</span></div>
+                    <div class="ai-content">
+                        <p>Vault AI is ready to analyze your financial data. Calculate your tax or payroll to get personalized recommendations.</p>
                     </div>
                 </div>
                 
-                <div class="error" id="payrollError"></div>
-            </div>
-        </div>
-        
-        <!-- AI Advisor -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-icon">
-                    <i class="fas fa-robot"></i>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button class="btn btn-primary" id="aiButton" style="flex: 1; padding: 1rem;">
+                        <i class="fas fa-bolt"></i> Generate Advice
+                    </button>
+                    <button class="btn btn-warning" id="exportReportBtn" style="flex: 1; padding: 1rem;">
+                        <i class="fas fa-file-export"></i> Export Report
+                    </button>
                 </div>
-                <h2>AI Financial Advisor</h2>
-            </div>
-            
-            <div class="ai-advisor" id="aiAnalysis">
-                <div class="ai-header">
-                    <div class="ai-icon">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-                    <h3>Strategic Financial Optimization</h3>
-                </div>
-                <div class="ai-content">
-                    <p>Vault AI is ready to analyze your financial data. Calculate your tax or payroll to get personalized recommendations.</p>
-                </div>
-            </div>
-            
-            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                <button class="btn btn-primary" id="aiButton" style="flex: 1; padding: 1rem;">
-                    <i class="fas fa-bolt"></i> Generate Financial Advice
-                </button>
-                <button class="btn btn-warning" id="exportReportBtn" style="flex: 1; padding: 1rem;">
-                    <i class="fas fa-file-export"></i> Export Report
-                </button>
             </div>
         </div>
         
@@ -844,7 +815,8 @@
                     <input type="password" id="password" placeholder="Enter your password">
                 </div>
                 
-                <button class="btn btn-primary" id="loginBtn">Sign In</button>
+                <button class="btn btn-primary" id="loginBtn" style="width: 100%;">Sign In</button>
+                <div class="auth-message" id="loginMessage"></div>
                 
                 <div style="text-align: center; margin-top: 1rem;">
                     <a href="#" style="color: var(--accent);">Forgot password?</a>
@@ -859,7 +831,7 @@
                 
                 <div class="form-group">
                     <label for="regPassword">Password</label>
-                    <input type="password" id="regPassword" placeholder="Create a password">
+                    <input type="password" id="regPassword" placeholder="Create a password (min 6 chars)">
                 </div>
                 
                 <div class="form-group">
@@ -867,16 +839,15 @@
                     <input type="password" id="confirmPassword" placeholder="Confirm your password">
                 </div>
                 
-                <button class="btn btn-primary" id="registerBtn">Create Account</button>
+                <button class="btn btn-primary" id="registerBtn" style="width: 100%;">Create Account</button>
+                <div class="auth-message" id="registerMessage"></div>
             </div>
         </div>
     </div>
     
-    <!-- Import Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
-    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script>
         // Firebase configuration
         const firebaseConfig = {
@@ -891,9 +862,10 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const analytics = firebase.analytics();
         const auth = firebase.auth();
-        
+    </script>
+    
+    <script>
         // Enhanced country tax data
         const countryData = {
             nigeria: {
@@ -946,7 +918,7 @@
                     studentLoan: { rate: 0.09, description: "Student Loan Repayment" }
                 }
             },
-            // Other countries with similar structure
+            // Other countries
             germany: {
                 currency: "€",
                 taxBrackets: [
@@ -1243,43 +1215,50 @@
             doc.setTextColor(255, 255, 255);
             doc.text('TaxVault Financial Report', 105, 20, null, null, 'center');
             
+            // Add logo
+            doc.setFontSize(10);
+            doc.setTextColor(240, 240, 240);
+            doc.text('Generated with TaxVault Global Financial Suite', 105, 35, null, null, 'center');
+            
             // Add date
             const now = new Date();
-            doc.setFontSize(10);
-            doc.setTextColor(255, 255, 255);
-            doc.text(`Generated: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`, 105, 28, null, null, 'center');
-            
-            // Reset styles
-            doc.setTextColor(0, 0, 0);
+            doc.text(`Report Date: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`, 15, 45);
             
             // Tax Calculation Section
+            doc.setDrawColor(14, 165, 233);
+            doc.setLineWidth(0.5);
+            doc.line(15, 55, 195, 55);
+            
             doc.setFontSize(16);
             doc.setTextColor(14, 165, 233);
-            doc.text('Tax Calculation', 15, 45);
+            doc.text('Tax Calculation', 15, 65);
             
             const taxCountry = document.getElementById('taxCountry').value;
             const income = document.getElementById('income').value;
             const expenses = document.getElementById('expenses').value;
-            const currency = countryData[taxCountry].currency;
             
             doc.setFontSize(12);
             doc.setTextColor(0, 0, 0);
-            doc.text(`Country: ${getCountryName(taxCountry)}`, 20, 55);
-            doc.text(`Annual Income: ${currency} ${parseFloat(income).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 65);
-            doc.text(`Business Expenses: ${currency} ${parseFloat(expenses).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 75);
+            doc.text(`Country: ${getCountryName(taxCountry)}`, 20, 75);
+            doc.text(`Annual Income: ${countryData[taxCountry].currency} ${parseFloat(income).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 85);
+            doc.text(`Business Expenses: ${countryData[taxCountry].currency} ${parseFloat(expenses).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 95);
             
-            const taxValue = document.getElementById('taxResult').querySelector('.result-value').textContent;
-            const taxDetails = Array.from(document.getElementById('taxResult').querySelectorAll('.result-details div')).map(div => div.textContent).join('\n');
+            const taxResult = document.getElementById('taxResult');
+            const taxValue = taxResult.querySelector('.result-value').textContent;
+            const taxDetails = Array.from(taxResult.querySelectorAll('.result-details div')).map(div => div.textContent).join('\n');
             
             doc.setFontSize(14);
-            doc.text(`Tax Liability: ${taxValue}`, 20, 90);
+            doc.text(taxValue, 20, 110);
             doc.setFontSize(12);
-            doc.text(taxDetails, 20, 100);
+            doc.text(taxDetails, 20, 120);
             
             // Payroll Calculation Section
+            doc.setDrawColor(14, 165, 233);
+            doc.line(15, 140, 195, 140);
+            
             doc.setFontSize(16);
             doc.setTextColor(14, 165, 233);
-            doc.text('Payroll Calculation', 15, 130);
+            doc.text('Payroll Calculation', 15, 150);
             
             const payrollCountry = document.getElementById('payrollCountry').value;
             const hours = document.getElementById('hours').value;
@@ -1287,29 +1266,30 @@
             
             doc.setFontSize(12);
             doc.setTextColor(0, 0, 0);
-            doc.text(`Country: ${getCountryName(payrollCountry)}`, 20, 140);
-            doc.text(`Employee Type: ${document.getElementById('employeeType').value}`, 20, 150);
-            doc.text(`Hours Worked: ${hours}`, 20, 160);
-            doc.text(`Hourly Rate: ${countryData[payrollCountry].currency} ${parseFloat(rate).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 170);
+            doc.text(`Country: ${getCountryName(payrollCountry)}`, 20, 160);
+            doc.text(`Hours Worked: ${hours}`, 20, 170);
+            doc.text(`Hourly Rate: ${countryData[payrollCountry].currency} ${parseFloat(rate).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 180);
             
-            const payrollValue = document.getElementById('payrollResult').querySelector('.result-value').textContent;
-            const payrollDetails = Array.from(document.getElementById('payrollResult').querySelectorAll('.result-details div')).map(div => div.textContent).join('\n');
+            const payrollResult = document.getElementById('payrollResult');
+            const payrollValue = payrollResult.querySelector('.result-value').textContent;
+            const payrollDetails = Array.from(payrollResult.querySelectorAll('.result-details div')).map(div => div.textContent).join('\n');
             
             doc.setFontSize(14);
-            doc.text(`Net Pay: ${payrollValue}`, 20, 185);
+            doc.text(payrollValue, 20, 195);
             doc.setFontSize(12);
-            doc.text(payrollDetails, 20, 195);
+            doc.text(payrollDetails, 20, 205);
             
             // Add footer
             doc.setFontSize(10);
             doc.setTextColor(100, 100, 100);
-            doc.text('TaxVault Financial Suite - taxvault.com', 105, 280, null, null, 'center');
+            doc.text('TaxVault Global Financial Suite - taxvault.com', 105, 280, null, null, 'center');
+            doc.text('Professional Report | Confidential', 105, 285, null, null, 'center');
             
             // Save the PDF
             doc.save(`taxvault-report-${new Date().getTime()}.pdf`);
             
             // Show notification
-            showNotification('Professional report exported');
+            showNotification('Professional report exported successfully');
         }
         
         // Helper functions
@@ -1357,8 +1337,6 @@
             document.getElementById('calculatePayrollBtn').addEventListener('click', calculatePayroll);
             document.getElementById('aiButton').addEventListener('click', generateFinancialAdvice);
             document.getElementById('exportReportBtn').addEventListener('click', exportReport);
-            document.getElementById('saveTaxBtn').addEventListener('click', () => showNotification('Tax calculation saved', 'success'));
-            document.getElementById('savePayrollBtn').addEventListener('click', () => showNotification('Payroll calculation saved', 'success'));
             
             // Auth modal functionality
             const authModal = document.getElementById('authModal');
@@ -1368,6 +1346,8 @@
             const authTabs = document.querySelectorAll('.auth-tab');
             const loginBtn = document.getElementById('loginBtn');
             const registerBtn = document.getElementById('registerBtn');
+            const loginMessage = document.getElementById('loginMessage');
+            const registerMessage = document.getElementById('registerMessage');
             
             signInBtn.addEventListener('click', () => {
                 authModal.style.display = 'flex';
@@ -1401,16 +1381,21 @@
                     });
                     
                     document.getElementById(`${tab.dataset.tab}Form`).classList.add('active');
+                    
+                    // Clear messages
+                    loginMessage.style.display = 'none';
+                    registerMessage.style.display = 'none';
                 });
             });
             
-            // Firebase authentication
+            // Login functionality
             loginBtn.addEventListener('click', () => {
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
                 
                 if (!email || !password) {
-                    showNotification('Please fill in all fields', 'error');
+                    loginMessage.textContent = "Please fill in all fields";
+                    loginMessage.style.display = 'block';
                     return;
                 }
                 
@@ -1420,22 +1405,32 @@
                         authModal.style.display = 'none';
                     })
                     .catch((error) => {
-                        showNotification(error.message, 'error');
+                        loginMessage.textContent = error.message;
+                        loginMessage.style.display = 'block';
                     });
             });
             
+            // Registration functionality
             registerBtn.addEventListener('click', () => {
                 const email = document.getElementById('regEmail').value;
                 const password = document.getElementById('regPassword').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
                 
                 if (!email || !password || !confirmPassword) {
-                    showNotification('Please fill in all fields', 'error');
+                    registerMessage.textContent = "Please fill in all fields";
+                    registerMessage.style.display = 'block';
                     return;
                 }
                 
                 if (password !== confirmPassword) {
-                    showNotification('Passwords do not match', 'error');
+                    registerMessage.textContent = "Passwords do not match";
+                    registerMessage.style.display = 'block';
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    registerMessage.textContent = "Password must be at least 6 characters";
+                    registerMessage.style.display = 'block';
                     return;
                 }
                 
@@ -1445,19 +1440,9 @@
                         authModal.style.display = 'none';
                     })
                     .catch((error) => {
-                        showNotification(error.message, 'error');
+                        registerMessage.textContent = error.message;
+                        registerMessage.style.display = 'block';
                     });
-            });
-            
-            // Check auth state
-            auth.onAuthStateChanged((user) => {
-                if (user) {
-                    document.getElementById('signInBtn').style.display = 'none';
-                    document.getElementById('getStartedBtn').innerHTML = '<i class="fas fa-user"></i> My Account';
-                } else {
-                    document.getElementById('signInBtn').style.display = 'inline-flex';
-                    document.getElementById('getStartedBtn').innerHTML = '<i class="fas fa-rocket"></i> Get Started';
-                }
             });
             
             // Pre-calculate initial values
