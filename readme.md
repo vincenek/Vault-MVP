@@ -50,4 +50,4 @@ TaxVault is a comprehensive global tax and payroll solution designed specificall
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/taxvault.git
+   git clone https://github.com/vincenek/taxvault.git
