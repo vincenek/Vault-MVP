@@ -568,11 +568,6 @@
             gap: 0.75rem;
         }
         
-        .user-email {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-        
         @media (max-width: 480px) {
             .btn {
                 padding: 0.6rem 1rem;
@@ -590,32 +585,41 @@
             .result-card {
                 padding: 1rem;
             }
-            
-            .user-info {
-                flex-direction: column;
-                align-items: flex-end;
-            }
         }
         
-        /* Country Flags */
-        .country-flag {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            vertical-align: middle;
-            background-size: cover;
-            background-position: center;
-            border-radius: 3px;
+        /* Professional Badges */
+        .professional-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
         }
         
-        .flag-nigeria { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="60" height="30"><rect width="60" height="30" fill="#008751"/><rect width="20" height="30" fill="white"/><rect x="40" width="20" height="30" fill="#008751"/></svg>'); }
-        .flag-usa { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="60" height="30"><rect width="60" height="30" fill="#b22234"/><rect width="60" height="2" fill="white" y="2"/><rect width="60" height="2" fill="white" y="6"/><rect width="60" height="2" fill="white" y="10"/><rect width="60" height="2" fill="white" y="14"/><rect width="60" height="2" fill="white" y="18"/><rect width="60" height="2" fill="white" y="22"/><rect width="60" height="2" fill="white" y="26"/><rect width="25" height="14" fill="#3c3b6e"/><circle cx="12.5" cy="7" r="1.5" fill="white"/><circle cx="17.5" cy="7" r="1.5" fill="white"/><circle cx="7.5" cy="7" r="1.5" fill="white"/><circle cx="2.5" cy="7" r="1.5" fill="white"/><circle cx="12.5" cy="11" r="1.5" fill="white"/><circle cx="17.5" cy="11" r="1.5" fill="white"/><circle cx="7.5" cy="11" r="1.5" fill="white"/><circle cx="22.5" cy="11" r="1.5" fill="white"/></svg>'); }
-        .flag-uk { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="60" height="30"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="white" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect width="24" height="30" fill="white" x="18"/><rect width="60" height="6" fill="white" y="12"/><rect width="60" height="6" fill="#C8102E" y="12" opacity="0.7"/><rect width="6" height="30" fill="white" x="27"/><rect width="6" height="30" fill="#C8102E" x="27" opacity="0.7"/></svg>'); }
-        .flag-germany { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="60" height="30"><rect width="60" height="10" y="0" fill="#000000"/><rect width="60" height="10" y="10" fill="#DD0000"/><rect width="60" height="10" y="20" fill="#FFCE00"/></svg>'); }
-        .flag-canada { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="60" height="30"><rect width="60" height="30" fill="#FF0000"/><rect width="20" height="30" fill="white" x="20"/><path d="M25,5 L35,15 L30,15 L35,25 L25,25 L30,15 L25,5" fill="#FF0000"/></svg>'); }
-        .flag-southafrica { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="60" height="30"><rect width="60" height="30" fill="#000000"/><rect width="60" height="10" y="10" fill="#FF0000"/><rect width="60" height="10" y="20" fill="#0038A8"/><path d="M0,0 L60,30" stroke="#00843D" stroke-width="10" stroke-linecap="square"/><path d="M0,0 L60,30" stroke="white" stroke-width="6" stroke-linecap="square"/><path d="M0,0 L60,30" stroke="#FFB612" stroke-width="2" stroke-linecap="square"/><path d="M60,0 L0,30" stroke="#00843D" stroke-width="10" stroke-linecap="square"/><path d="M60,0 L0,30" stroke="white" stroke-width="6" stroke-linecap="square"/><path d="M60,0 L0,30" stroke="#FFB612" stroke-width="2" stroke-linecap="square"/></svg>'); }
-        .flag-india { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="60" height="30"><rect width="60" height="10" y="0" fill="#FF9933"/><rect width="60" height="10" y="10" fill="white"/><rect width="60" height="10" y="20" fill="#138808"/><circle cx="30" cy="15" r="4" fill="#000080"/></svg>'); }
+        .professional-badge i {
+            color: var(--accent);
+        }
+        
+        /* Country Compliance */
+        .compliance-section {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 3px solid #f59e0b;
+        }
+        
+        .compliance-section h4 {
+            color: #f59e0b;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -630,12 +634,19 @@
             </a>
             
             <div class="user-actions">
-                <button class="btn btn-secondary" id="signInBtn">
-                    <i class="fas fa-sign-in-alt"></i> Sign In
-                </button>
-                <button class="btn btn-primary" id="getStartedBtn">
-                    <i class="fas fa-rocket"></i> Get Started
-                </button>
+                <div class="user-info" id="userInfo" style="display: none;">
+                    <button class="btn btn-secondary" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+                <div id="authButtons">
+                    <button class="btn btn-secondary" id="signInBtn">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                    <button class="btn btn-primary" id="getStartedBtn">
+                        <i class="fas fa-rocket"></i> Get Started
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -645,6 +656,10 @@
             <div class="dashboard-header">
                 <h1>Professional Tax & Payroll Solution</h1>
                 <p>Enterprise-grade calculations for businesses in 12 countries</p>
+                <div class="professional-badge">
+                    <i class="fas fa-certificate"></i>
+                    Compliant with IFRS, GAAP, and local tax regulations
+                </div>
             </div>
             
             <!-- Calculators Grid -->
@@ -661,13 +676,13 @@
                     <div class="form-group">
                         <label for="taxCountry">Select Country</label>
                         <select id="taxCountry">
-                            <option value="nigeria"><span class="country-flag flag-nigeria"></span> Nigeria</option>
-                            <option value="usa"><span class="country-flag flag-usa"></span> United States</option>
-                            <option value="uk"><span class="country-flag flag-uk"></span> United Kingdom</option>
-                            <option value="germany"><span class="country-flag flag-germany"></span> Germany</option>
-                            <option value="canada"><span class="country-flag flag-canada"></span> Canada</option>
-                            <option value="southafrica"><span class="country-flag flag-southafrica"></span> South Africa</option>
-                            <option value="india"><span class="country-flag flag-india"></span> India</option>
+                            <option value="nigeria">🇳🇬 Nigeria</option>
+                            <option value="usa">🇺🇸 United States</option>
+                            <option value="uk">🇬🇧 United Kingdom</option>
+                            <option value="germany">🇩🇪 Germany</option>
+                            <option value="canada">🇨🇦 Canada</option>
+                            <option value="southafrica">🇿🇦 South Africa</option>
+                            <option value="india">🇮🇳 India</option>
                         </select>
                     </div>
                     
@@ -709,6 +724,11 @@
                             </div>
                             <div class="bracket-info" id="bracketInfo"></div>
                         </div>
+                        
+                        <div class="compliance-section" id="taxCompliance">
+                            <h4><i class="fas fa-shield-alt"></i> Country Compliance</h4>
+                            <p>Select a country to see compliance requirements</p>
+                        </div>
                     </div>
                     
                     <div class="error" id="taxError"></div>
@@ -726,13 +746,13 @@
                     <div class="form-group">
                         <label for="payrollCountry">Select Country</label>
                         <select id="payrollCountry">
-                            <option value="nigeria"><span class="country-flag flag-nigeria"></span> Nigeria</option>
-                            <option value="usa"><span class="country-flag flag-usa"></span> United States</option>
-                            <option value="uk"><span class="country-flag flag-uk"></span> United Kingdom</option>
-                            <option value="germany"><span class="country-flag flag-germany"></span> Germany</option>
-                            <option value="canada"><span class="country-flag flag-canada"></span> Canada</option>
-                            <option value="southafrica"><span class="country-flag flag-southafrica"></span> South Africa</option>
-                            <option value="india"><span class="country-flag flag-india"></span> India</option>
+                            <option value="nigeria">🇳🇬 Nigeria</option>
+                            <option value="usa">🇺🇸 United States</option>
+                            <option value="uk">🇬🇧 United Kingdom</option>
+                            <option value="germany">🇩🇪 Germany</option>
+                            <option value="canada">🇨🇦 Canada</option>
+                            <option value="southafrica">🇿🇦 South Africa</option>
+                            <option value="india">🇮🇳 India</option>
                         </select>
                     </div>
                     
@@ -765,6 +785,11 @@
                             <div><span class="label">Gross Pay:</span> <span>₦ 0.00</span></div>
                             <div><span class="label">Total Deductions:</span> <span>₦ 0.00</span></div>
                             <div><span class="label">Country:</span> <span>Select a country</span></div>
+                        </div>
+                        
+                        <div class="compliance-section" id="payrollCompliance">
+                            <h4><i class="fas fa-shield-alt"></i> Country Compliance</h4>
+                            <p>Select a country to see compliance requirements</p>
                         </div>
                     </div>
                     
@@ -822,62 +847,30 @@
         <span id="notificationText">Success message here</span>
     </div>
     
-    <!-- Auth Modal -->
-    <div class="auth-modal" id="authModal">
-        <div class="auth-container">
-            <button class="close-modal" id="closeModal">&times;</button>
-            
-            <div class="auth-tabs">
-                <div class="auth-tab active" data-tab="login">Sign In</div>
-                <div class="auth-tab" data-tab="register">Register</div>
-            </div>
-            
-            <div class="auth-form active" id="loginForm">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="Enter your email">
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter your password">
-                </div>
-                
-                <button class="btn btn-primary" id="loginBtn" style="width: 100%;">Sign In</button>
-                <div class="auth-message" id="loginMessage"></div>
-                
-                <div style="text-align: center; margin-top: 1rem;">
-                    <a href="#" style="color: var(--accent);">Forgot password?</a>
-                </div>
-            </div>
-            
-            <div class="auth-form" id="registerForm">
-                <div class="form-group">
-                    <label for="regEmail">Email</label>
-                    <input type="email" id="regEmail" placeholder="Enter your email">
-                </div>
-                
-                <div class="form-group">
-                    <label for="regPassword">Password</label>
-                    <input type="password" id="regPassword" placeholder="Create a password (min 6 chars)">
-                </div>
-                
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" placeholder="Confirm your password">
-                </div>
-                
-                <button class="btn btn-primary" id="registerBtn" style="width: 100%;">Create Account</button>
-                <div class="auth-message" id="registerMessage"></div>
-            </div>
-        </div>
-    </div>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4yX9v8u-wjIPeBY64cc7YASVWIcak-eM",
+            authDomain: "vault-602d2.firebaseapp.com",
+            projectId: "vault-602d2",
+            storageBucket: "vault-602d2.firebasestorage.app",
+            messagingSenderId: "397379271243",
+            appId: "1:397379271243:web:fab5914ccdca9d796d2bce",
+            measurementId: "G-4R62KV83W2"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+    </script>
     
     <script>
-        // Enhanced country tax data with professional accounting standards
+        // Enhanced country tax data with compliance information
         const countryData = {
             nigeria: {
-                name: "Nigeria",
                 currency: "₦",
                 taxBrackets: [
                     { min: 0, max: 300000, rate: 0.07, description: "First ₦300,000" },
@@ -888,16 +881,15 @@
                     { min: 3200001, max: Infinity, rate: 0.24, description: "Above ₦3,200,000" }
                 ],
                 payrollTax: {
-                    pension: { rate: 0.08, description: "Pension Contribution (PENCOM)" },
-                    health: { rate: 0.05, description: "National Health Insurance Scheme" },
-                    incomeTax: { rate: 0.10, description: "Personal Income Tax" },
+                    pension: { rate: 0.08, description: "Pension Contribution" },
+                    health: { rate: 0.05, description: "Health Insurance" },
+                    incomeTax: { rate: 0.10, description: "Income Tax" },
                     training: { rate: 0.01, description: "Industrial Training Fund" }
                 },
-                accountingBody: "Institute of Chartered Accountants of Nigeria (ICAN)",
-                complianceInfo: "Monthly PAYE returns due by 10th of following month"
+                taxCompliance: "Companies Income Tax Act (CITA) compliance. Annual returns due within 6 months of financial year end. VAT filing required monthly.",
+                payrollCompliance: "PENCOM Act compliance. PAYE remittance due by 10th of following month. NSITF contributions required."
             },
             usa: {
-                name: "United States",
                 currency: "$",
                 taxBrackets: [
                     { min: 0, max: 11000, rate: 0.10, description: "First $11,000" },
@@ -914,11 +906,10 @@
                     federalIncomeTax: { rate: 0.15, description: "Federal Income Tax" },
                     stateTax: { rate: 0.04, description: "State Tax (Avg)" }
                 },
-                accountingBody: "American Institute of CPAs (AICPA)",
-                complianceInfo: "Federal tax returns due April 15th"
+                taxCompliance: "IRS Form 1120 filing required. Estimated quarterly payments. GAAP compliance required for financial statements.",
+                payrollCompliance: "Form 941 quarterly filing. W-2 annual reporting. State unemployment insurance requirements vary by state."
             },
             uk: {
-                name: "United Kingdom",
                 currency: "£",
                 taxBrackets: [
                     { min: 0, max: 12570, rate: 0.0, description: "Personal Allowance" },
@@ -928,15 +919,14 @@
                 ],
                 payrollTax: {
                     nationalInsurance: { rate: 0.12, description: "National Insurance" },
-                    pension: { rate: 0.05, description: "Workplace Pension" },
+                    pension: { rate: 0.05, description: "Pension Contribution" },
                     incomeTax: { rate: 0.20, description: "Income Tax" },
                     studentLoan: { rate: 0.09, description: "Student Loan Repayment" }
                 },
-                accountingBody: "Institute of Chartered Accountants in England and Wales (ICAEW)",
-                complianceInfo: "Self-Assessment tax returns due January 31st"
+                taxCompliance: "Corporation Tax filing through CT600 form. Annual accounts must comply with UK GAAP or IFRS.",
+                payrollCompliance: "RTI (Real Time Information) submissions required. PAYE reporting through HMRC. Auto-enrolment pension compliance."
             },
             germany: {
-                name: "Germany",
                 currency: "€",
                 taxBrackets: [
                     { min: 0, max: 10632, rate: 0.0, description: "Tax-free allowance" },
@@ -949,11 +939,10 @@
                     health: { rate: 0.073, description: "Health Insurance" },
                     incomeTax: { rate: 0.20, description: "Income Tax" }
                 },
-                accountingBody: "Institut der Wirtschaftsprüfer (IDW)",
-                complianceInfo: "Monthly VAT returns due by 10th of following month"
+                taxCompliance: "Trade Tax (Gewerbesteuer) and Corporate Income Tax (Körperschaftsteuer) compliance. Financial statements must follow HGB.",
+                payrollCompliance: "Monthly ELSTER reporting. Social security contributions to Krankenkasse. Detailed payroll records required for 10 years."
             },
             canada: {
-                name: "Canada",
                 currency: "C$",
                 taxBrackets: [
                     { min: 0, max: 53359, rate: 0.15, description: "First C$53,359" },
@@ -968,11 +957,10 @@
                     federalIncomeTax: { rate: 0.15, description: "Federal Income Tax" },
                     provincialTax: { rate: 0.06, description: "Provincial Tax (Avg)" }
                 },
-                accountingBody: "Chartered Professional Accountants of Canada (CPA Canada)",
-                complianceInfo: "Corporate tax returns due 6 months after fiscal year-end"
+                taxCompliance: "T2 Corporation Income Tax Return filing. GST/HST quarterly returns. ASPE or IFRS compliance required.",
+                payrollCompliance: "PD7A remittance filing. T4 information returns. Provincial workers compensation requirements vary."
             },
             southafrica: {
-                name: "South Africa",
                 currency: "R",
                 taxBrackets: [
                     { min: 0, max: 237100, rate: 0.18, description: "First R237,100" },
@@ -984,16 +972,15 @@
                     { min: 1817001, max: Infinity, rate: 0.45, description: "Above R1,817,000" }
                 ],
                 payrollTax: {
-                    uif: { rate: 0.01, description: "Unemployment Insurance Fund" },
+                    uif: { rate: 0.01, description: "Unemployment Insurance" },
                     pension: { rate: 0.075, description: "Pension Fund" },
                     incomeTax: { rate: 0.18, description: "Income Tax" },
                     skillsLevy: { rate: 0.01, description: "Skills Development Levy" }
                 },
-                accountingBody: "South African Institute of Chartered Accountants (SAICA)",
-                complianceInfo: "Provisional tax payments due August and February"
+                taxCompliance: "Companies must file annual income tax returns (ITR14). VAT registration required for turnover > R1 million.",
+                payrollCompliance: "Monthly EMP201 returns. Annual IRP5/IT3(a) certificates. SDL contributions to SETAs."
             },
             india: {
-                name: "India",
                 currency: "₹",
                 taxBrackets: [
                     { min: 0, max: 250000, rate: 0.0, description: "First ₹250,000" },
@@ -1005,13 +992,13 @@
                     { min: 1500001, max: Infinity, rate: 0.30, description: "Above ₹1,500,000" }
                 ],
                 payrollTax: {
-                    providentFund: { rate: 0.12, description: "Employee Provident Fund" },
+                    providentFund: { rate: 0.12, description: "Provident Fund" },
                     health: { rate: 0.05, description: "Health Insurance" },
                     incomeTax: { rate: 0.05, description: "Income Tax" },
                     professionalTax: { rate: 0.01, description: "Professional Tax" }
                 },
-                accountingBody: "Institute of Chartered Accountants of India (ICAI)",
-                complianceInfo: "GST returns due 20th of following month"
+                taxCompliance: "Companies Act 2013 compliance. GST filing required monthly/quarterly. Tax audit required for turnover > ₹1 crore.",
+                payrollCompliance: "Monthly PF and ESIC filings. Form 24Q quarterly TDS returns. Professional tax varies by state."
             }
         };
 
@@ -1060,11 +1047,15 @@
             const detailsHtml = `
                 <div><span class="label">Taxable Income:</span> <span>${currency} ${taxableIncome.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span></div>
                 <div><span class="label">Effective Tax Rate:</span> <span>${effectiveRate.toFixed(1)}%</span></div>
-                <div><span class="label">Country:</span> <span>${countryData[country].name}</span></div>
-                <div><span class="label">Accounting Standard:</span> <span>${countryData[country].accountingBody}</span></div>
-                <div><span class="label">Compliance:</span> <span>${countryData[country].complianceInfo}</span></div>
+                <div><span class="label">Country:</span> <span>${getCountryName(country)}</span></div>
             `;
             taxResult.querySelector('.result-details').innerHTML = detailsHtml;
+            
+            // Update compliance section
+            document.getElementById('taxCompliance').innerHTML = `
+                <h4><i class="fas fa-shield-alt"></i> ${getCountryName(country)} Compliance</h4>
+                <p>${countryData[country].taxCompliance}</p>
+            `;
             
             // Show tax visualization
             document.getElementById('taxVisualization').style.display = 'block';
@@ -1106,7 +1097,7 @@
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    return `${countryData[document.getElementById('taxCountry').value].currency} ${context.raw.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})`;
+                                    return `${countryData[document.getElementById('taxCountry').value].currency} ${context.raw.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
                                 }
                             }
                         }
@@ -1180,17 +1171,21 @@
                 <div><span class="label">Gross Pay:</span> <span>${currency} ${gross.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span></div>
                 ${deductionsHtml}
                 <div><span class="label">Total Deductions:</span> <span>${currency} ${totalDeductions.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span></div>
-                <div><span class="label">Country:</span> <span>${countryData[country].name}</span></div>
-                <div><span class="label">Accounting Standard:</span> <span>${countryData[country].accountingBody}</span></div>
-                <div><span class="label">Compliance:</span> <span>${countryData[country].complianceInfo}</span></div>
+                <div><span class="label">Country:</span> <span>${getCountryName(country)}</span></div>
             `;
             payrollResult.querySelector('.result-details').innerHTML = detailsHtml;
+            
+            // Update compliance section
+            document.getElementById('payrollCompliance').innerHTML = `
+                <h4><i class="fas fa-shield-alt"></i> ${getCountryName(country)} Payroll Compliance</h4>
+                <p>${countryData[country].payrollCompliance}</p>
+            `;
             
             // Show notification
             showNotification('Payroll calculation completed');
         }
         
-        // Enhanced AI financial advice
+        // Enhanced AI financial advice with country-specific details
         function generateFinancialAdvice() {
             const taxCountry = document.getElementById('taxCountry').value;
             const payrollCountry = document.getElementById('payrollCountry').value;
@@ -1208,6 +1203,7 @@
             // Generate context-aware advice
             let advice = '';
             
+            // Nigeria-specific advice
             if (taxCountry === 'nigeria' || payrollCountry === 'nigeria') {
                 const expenseRatio = income > 0 ? (expenses/income)*100 : 0;
                 const optimizationTip = expenseRatio > 70 ? 
@@ -1234,17 +1230,43 @@
                         <li>Pension contributions due by 15th monthly</li>
                     </ul>
                 `;
-            } else {
+            } 
+            // US-specific advice
+            else if (taxCountry === 'usa' || payrollCountry === 'usa') {
+                const stateTaxSavings = taxableIncome * 0.03;
+                advice = `
+                    <p><strong>US Tax & Payroll Optimization</strong></p>
+                    <ul>
+                        <li><strong>S-Corp Election:</strong> Consider electing S-Corp status to reduce self-employment taxes, potentially saving $${(grossPay * 0.0765).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} annually.</li>
+                        
+                        <li><strong>Retirement Plans:</strong> Establish a 401(k) plan to defer up to $22,500 annually, reducing taxable income.</li>
+                        
+                        <li><strong>State Nexus Optimization:</strong> Review your business activities to minimize state tax obligations. Proper planning could save $${stateTaxSavings.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}.</li>
+                        
+                        <li><strong>R&D Tax Credit:</strong> Document qualified research expenses to claim up to 20% credit on incremental research spending.</li>
+                        
+                        <li><strong>Payroll Compliance:</strong> Ensure proper worker classification to avoid penalties. Misclassification penalties can exceed $1,000 per employee.</li>
+                    </ul>
+                    <p><strong>Compliance Deadlines:</strong></p>
+                    <ul>
+                        <li>Quarterly estimated tax payments (Form 1040-ES)</li>
+                        <li>Annual corporate return (Form 1120) due March 15</li>
+                        <li>W-2 distribution to employees by January 31</li>
+                    </ul>
+                `;
+            }
+            // General international advice
+            else {
                 const intlTaxRate = taxableIncome > 0 ? ((income - expenses) / income * 100).toFixed(1) : 0;
                 
                 advice = `
                     <p><strong>Global Tax & Payroll Strategy</strong></p>
                     <ul>
-                        <li><strong>Cross-Border Holding Structure:</strong> Establish a holding company in ${countryData[taxCountry].name} to reduce effective tax rate from ${intlTaxRate}% to ${(intlTaxRate * 0.75).toFixed(1)}% through treaty benefits.</li>
+                        <li><strong>Cross-Border Holding Structure:</strong> Establish a holding company in ${getCountryName(taxCountry)} to reduce effective tax rate from ${intlTaxRate}% to ${(intlTaxRate * 0.75).toFixed(1)}% through treaty benefits.</li>
                         
-                        <li><strong>Contractor Compliance:</strong> Audit all contractor agreements in ${countryData[payrollCountry].name} to avoid misclassification penalties that average 30% of payroll costs.</li>
+                        <li><strong>Contractor Compliance:</strong> Audit all contractor agreements in ${getCountryName(payrollCountry)} to avoid misclassification penalties that average 30% of payroll costs.</li>
                         
-                        <li><strong>Digital Services Tax Mitigation:</strong> Implement automated DST calculator to reduce overpayment by 18% across ${countryData[taxCountry].name} and ${countryData[payrollCountry].name} operations.</li>
+                        <li><strong>Digital Services Tax Mitigation:</strong> Implement automated DST calculator to reduce overpayment by 18% across ${getCountryName(taxCountry)} and ${getCountryName(payrollCountry)} operations.</li>
                         
                         <li><strong>Currency Hedging:</strong> Lock in forward rates for 60% of payroll obligations to reduce FX risk exposure by ${countryData[payrollCountry].currency}${(grossPay * 0.6).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} monthly.</li>
                         
@@ -1265,22 +1287,25 @@
             showNotification('Advanced financial advice generated');
         }
         
-        // Professional PDF report
+        // Professional PDF report with improved layout
         function exportReport() {
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4');
+            const doc = new jsPDF();
+            const margin = 15;
+            let yPos = margin;
             
             // Report header
             doc.setFillColor(14, 165, 233);
-            doc.rect(0, 0, 210, 30, 'F');
-            doc.setFontSize(20);
+            doc.rect(0, 0, 220, 20, 'F');
+            doc.setFontSize(16);
             doc.setTextColor(255, 255, 255);
-            doc.text('TaxVault Financial Report', 105, 20, null, null, 'center');
+            doc.text('TaxVault Financial Report', 105, 12, null, null, 'center');
             
             // Report details
             doc.setFontSize(10);
             doc.setTextColor(240, 240, 240);
-            doc.text('Professional Accounting Report - CONFIDENTIAL', 105, 28, null, null, 'center');
+            doc.text('Professional Accounting Report - CONFIDENTIAL', 105, 18, null, null, 'center');
+            yPos = 30;
             
             // Report date
             const now = new Date();
@@ -1294,89 +1319,116 @@
             
             doc.setFontSize(10);
             doc.setTextColor(100, 100, 100);
-            doc.text(`Report Generated: ${formattedDate}`, 15, 40);
+            doc.text(`Report Generated: ${formattedDate}`, margin, yPos);
+            yPos += 10;
             
             // Tax Calculation Section
             doc.setDrawColor(14, 165, 233);
             doc.setLineWidth(0.5);
-            doc.line(15, 45, 195, 45);
+            doc.line(margin, yPos, 210 - margin, yPos);
+            yPos += 5;
             
-            doc.setFontSize(16);
+            doc.setFontSize(14);
             doc.setTextColor(14, 165, 233);
-            doc.text('Tax Calculation Analysis', 15, 55);
+            doc.text('Tax Calculation Analysis', margin, yPos);
+            yPos += 10;
             
             const taxCountry = document.getElementById('taxCountry').value;
             const income = parseFloat(document.getElementById('income').value) || 0;
             const expenses = parseFloat(document.getElementById('expenses').value) || 0;
             const taxableIncome = income - expenses;
+            const currency = countryData[taxCountry].currency;
             
-            doc.setFontSize(12);
+            doc.setFontSize(11);
             doc.setTextColor(0, 0, 0);
-            doc.text(`Jurisdiction: ${countryData[taxCountry].name}`, 20, 65);
-            doc.text(`Accounting Standard: ${countryData[taxCountry].accountingBody}`, 20, 72);
-            doc.text(`Annual Revenue: ${countryData[taxCountry].currency} ${income.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 79);
-            doc.text(`Allowable Expenses: ${countryData[taxCountry].currency} ${expenses.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 86);
-            doc.text(`Taxable Income: ${countryData[taxCountry].currency} ${taxableIncome.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 93);
+            doc.text(`Jurisdiction: ${getCountryName(taxCountry)}`, margin, yPos);
+            yPos += 7;
+            doc.text(`Annual Revenue: ${currency} ${income.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, margin, yPos);
+            yPos += 7;
+            doc.text(`Allowable Expenses: ${currency} ${expenses.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, margin, yPos);
+            yPos += 7;
+            doc.text(`Taxable Income: ${currency} ${taxableIncome.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, margin, yPos);
+            yPos += 10;
             
             const taxResult = document.getElementById('taxResult');
             const taxValue = taxResult.querySelector('.result-value').textContent;
             const effectiveRate = taxResult.querySelector('.result-details div:nth-child(2) span:last-child').textContent;
             
-            doc.setFontSize(14);
-            doc.text(`Tax Liability: ${taxValue}`, 20, 105);
             doc.setFontSize(12);
-            doc.text(`Effective Tax Rate: ${effectiveRate}`, 20, 112);
+            doc.text(`Tax Liability: ${taxValue}`, margin, yPos);
+            yPos += 7;
+            doc.setFontSize(11);
+            doc.text(`Effective Tax Rate: ${effectiveRate}`, margin, yPos);
+            yPos += 15;
             
             // Payroll Calculation Section
             doc.setDrawColor(14, 165, 233);
-            doc.line(15, 120, 195, 120);
+            doc.line(margin, yPos, 210 - margin, yPos);
+            yPos += 5;
             
-            doc.setFontSize(16);
+            doc.setFontSize(14);
             doc.setTextColor(14, 165, 233);
-            doc.text('Payroll Calculation', 15, 130);
+            doc.text('Payroll Calculation', margin, yPos);
+            yPos += 10;
             
             const payrollCountry = document.getElementById('payrollCountry').value;
             const hours = parseFloat(document.getElementById('hours').value) || 0;
             const rateVal = parseFloat(document.getElementById('rate').value) || 0;
             const grossPay = hours * rateVal;
+            const payrollCurrency = countryData[payrollCountry].currency;
             
-            doc.setFontSize(12);
+            doc.setFontSize(11);
             doc.setTextColor(0, 0, 0);
-            doc.text(`Jurisdiction: ${countryData[payrollCountry].name}`, 20, 140);
-            doc.text(`Accounting Standard: ${countryData[payrollCountry].accountingBody}`, 20, 147);
-            doc.text(`Hours Worked: ${hours}`, 20, 154);
-            doc.text(`Hourly Rate: ${countryData[payrollCountry].currency} ${rateVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 161);
-            doc.text(`Gross Pay: ${countryData[payrollCountry].currency} ${grossPay.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, 20, 168);
+            doc.text(`Jurisdiction: ${getCountryName(payrollCountry)}`, margin, yPos);
+            yPos += 7;
+            doc.text(`Hours Worked: ${hours}`, margin, yPos);
+            yPos += 7;
+            doc.text(`Hourly Rate: ${payrollCurrency} ${rateVal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, margin, yPos);
+            yPos += 7;
+            doc.text(`Gross Pay: ${payrollCurrency} ${grossPay.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`, margin, yPos);
+            yPos += 10;
             
             const payrollResult = document.getElementById('payrollResult');
             const payrollValue = payrollResult.querySelector('.result-value').textContent;
             const totalDeductions = payrollResult.querySelector('.result-details div:last-child span:last-child').textContent;
             
-            doc.setFontSize(14);
-            doc.text(`Net Pay: ${payrollValue}`, 20, 180);
             doc.setFontSize(12);
-            doc.text(`Total Deductions: ${totalDeductions}`, 20, 187);
+            doc.text(`Net Pay: ${payrollValue}`, margin, yPos);
+            yPos += 7;
+            doc.setFontSize(11);
+            doc.text(`Total Deductions: ${totalDeductions}`, margin, yPos);
+            yPos += 15;
             
             // Financial Advice Summary
             doc.setDrawColor(14, 165, 233);
-            doc.line(15, 195, 195, 195);
+            doc.line(margin, yPos, 210 - margin, yPos);
+            yPos += 5;
             
-            doc.setFontSize(16);
+            doc.setFontSize(14);
             doc.setTextColor(14, 165, 233);
-            doc.text('Strategic Financial Advice', 15, 205);
+            doc.text('Strategic Financial Advice', margin, yPos);
+            yPos += 10;
             
             const aiContent = document.getElementById('aiAnalysis').querySelector('.ai-content').innerText;
-            const adviceLines = doc.splitTextToSize(aiContent, 180);
-            doc.setFontSize(11);
+            doc.setFontSize(10);
             doc.setTextColor(0, 0, 0);
-            doc.text(adviceLines, 20, 215);
+            const splitText = doc.splitTextToSize(aiContent, 180);
+            
+            for (let i = 0; i < splitText.length; i++) {
+                if (yPos > 280) {
+                    doc.addPage();
+                    yPos = margin;
+                }
+                doc.text(splitText[i], margin, yPos);
+                yPos += 7;
+            }
             
             // Footer
             doc.setFontSize(9);
             doc.setTextColor(100, 100, 100);
-            doc.text('© 2023 TaxVault Global Financial Suite | taxvault.com', 105, 280, null, null, 'center');
-            doc.text('Report ID: ' + Math.random().toString(36).substring(2, 10).toUpperCase(), 105, 285, null, null, 'center');
-            doc.text('This report is generated for accounting purposes only', 105, 290, null, null, 'center');
+            doc.text('© 2023 TaxVault Global Financial Suite | taxvault.com', 105, 287, null, null, 'center');
+            doc.text('Report ID: ' + Math.random().toString(36).substring(2, 10).toUpperCase(), 105, 292, null, null, 'center');
+            doc.text('This report is generated for accounting purposes only', 105, 297, null, null, 'center');
             
             // Save the PDF
             doc.save(`taxvault-report-${new Date().getTime()}.pdf`);
@@ -1386,6 +1438,19 @@
         }
         
         // Helper functions
+        function getCountryName(code) {
+            const names = {
+                nigeria: "Nigeria",
+                usa: "United States",
+                uk: "United Kingdom",
+                germany: "Germany",
+                canada: "Canada",
+                southafrica: "South Africa",
+                india: "India"
+            };
+            return names[code] || code;
+        }
+        
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             const notificationText = document.getElementById('notificationText');
@@ -1410,6 +1475,22 @@
             document.getElementById('payrollError').style.display = 'none';
         }
         
+        // Update UI based on auth state
+        function updateAuthUI(user) {
+            const userInfo = document.getElementById('userInfo');
+            const authButtons = document.getElementById('authButtons');
+            
+            if (user) {
+                // User is signed in
+                userInfo.style.display = 'flex';
+                authButtons.style.display = 'none';
+            } else {
+                // User is signed out
+                userInfo.style.display = 'none';
+                authButtons.style.display = 'block';
+            }
+        }
+        
         // Initialize the application
         window.onload = function() {
             // Set up event listeners
@@ -1418,106 +1499,9 @@
             document.getElementById('aiButton').addEventListener('click', generateFinancialAdvice);
             document.getElementById('exportReportBtn').addEventListener('click', exportReport);
             
-            // Auth modal functionality
-            const authModal = document.getElementById('authModal');
-            const signInBtn = document.getElementById('signInBtn');
-            const getStartedBtn = document.getElementById('getStartedBtn');
-            const closeModal = document.getElementById('closeModal');
-            const authTabs = document.querySelectorAll('.auth-tab');
-            const loginBtn = document.getElementById('loginBtn');
-            const registerBtn = document.getElementById('registerBtn');
-            const loginMessage = document.getElementById('loginMessage');
-            const registerMessage = document.getElementById('registerMessage');
-            
-            signInBtn.addEventListener('click', () => {
-                authModal.style.display = 'flex';
-            });
-            
-            getStartedBtn.addEventListener('click', () => {
-                authModal.style.display = 'flex';
-            });
-            
-            closeModal.addEventListener('click', () => {
-                authModal.style.display = 'none';
-            });
-            
-            window.addEventListener('click', (e) => {
-                if (e.target === authModal) {
-                    authModal.style.display = 'none';
-                }
-            });
-            
-            authTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // Remove active class from all tabs
-                    authTabs.forEach(t => t.classList.remove('active'));
-                    
-                    // Add active class to clicked tab
-                    tab.classList.add('active');
-                    
-                    // Show corresponding form
-                    document.querySelectorAll('.auth-form').forEach(form => {
-                        form.classList.remove('active');
-                    });
-                    
-                    document.getElementById(`${tab.dataset.tab}Form`).classList.add('active');
-                    
-                    // Clear messages
-                    loginMessage.style.display = 'none';
-                    registerMessage.style.display = 'none';
-                });
-            });
-            
-            // Login functionality
-            loginBtn.addEventListener('click', () => {
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                
-                if (!email || !password) {
-                    loginMessage.textContent = "Please fill in all fields";
-                    loginMessage.style.display = 'block';
-                    return;
-                }
-                
-                // Simulate authentication
-                showNotification('Signed in successfully!');
-                authModal.style.display = 'none';
-            });
-            
-            // Registration functionality
-            registerBtn.addEventListener('click', () => {
-                const email = document.getElementById('regEmail').value;
-                const password = document.getElementById('regPassword').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
-                
-                if (!email || !password || !confirmPassword) {
-                    registerMessage.textContent = "Please fill in all fields";
-                    registerMessage.style.display = 'block';
-                    return;
-                }
-                
-                if (password !== confirmPassword) {
-                    registerMessage.textContent = "Passwords do not match";
-                    registerMessage.style.display = 'block';
-                    return;
-                }
-                
-                if (password.length < 6) {
-                    registerMessage.textContent = "Password must be at least 6 characters";
-                    registerMessage.style.display = 'block';
-                    return;
-                }
-                
-                // Simulate registration
-                showNotification('Account created successfully!');
-                authModal.style.display = 'none';
-            });
-            
             // Pre-calculate initial values
-            setTimeout(() => {
-                calculateTax();
-                calculatePayroll();
-            }, 500);
+            calculateTax();
+            calculatePayroll();
         };
     </script>
 </body>
